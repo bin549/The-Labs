@@ -104,6 +104,7 @@ public class LabDetector : InteractableItem {
         personCameraController.GetPersonController().mPlayerCamera.gameObject.SetActive(false);
         personCameraController.Cursor.SetActive(false);
         this.OnInitLabItems();
+        
         this.virtualCamera.enabled = true;
         base.interactableObject.LineRenderer.enabled = false;
         Cursor.lockState = CursorLockMode.None;

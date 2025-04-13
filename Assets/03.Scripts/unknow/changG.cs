@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class changG : MonoBehaviour {
+    private const float DEFAULT_GRAVITY = -9.8f;
+    private const float ALTERNATE_GRAVITY = -10f;
+
     public void OnClick(bool isOn) {
-        if (isOn) {
-            Physics.gravity = new Vector3(0, -10, 0);
-        } else {
-            Physics.gravity = new Vector3(0, -9.8f, 0);
-        }
+        Physics.gravity = new Vector3(0, isOn ? ALTERNATE_GRAVITY : DEFAULT_GRAVITY, 0);
     }
 }
