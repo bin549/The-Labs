@@ -15,6 +15,10 @@ run/main_scene="uid://p5vg4aeef8ba"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
+
 [display]
 
 window/size/viewport_width=1920
@@ -27,6 +31,10 @@ project/assembly_name="The Labs"
 [editor]
 
 naming/scene_name_casing=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
 
 [input]
 

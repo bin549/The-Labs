@@ -75,3 +75,4 @@ size = Vector3(3, 3, 3)
 [node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 
 [editable path="Player"]
+[editable path="Player/visuals/mixamo_base"]
