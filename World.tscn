@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=16 format=3 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://textures/grids/Orange/texture_09.png" id="2_2dftf"]
 [ext_resource type="Texture2D" uid="uid://cm5m7nr7dugjd" path="res://textures/grids/Purple/texture_09.png" id="3_bcbcq"]
 [ext_resource type="Texture2D" uid="uid://djg8y25y06h5n" path="res://textures/grids/Green/texture_09.png" id="4_js7pq"]
+[ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_p1v5b"]
 [ext_resource type="PackedScene" uid="uid://culo8llo32adv" path="res://scenes/Player.tscn" id="5_eu7l1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_js7pq"]
@@ -34,9 +35,27 @@ albedo_texture = ExtResource("2_2dftf")
 albedo_texture = ExtResource("3_bcbcq")
 uv1_triplanar = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wygdx"]
+render_priority = 0
+shader = ExtResource("4_p1v5b")
+shader_parameter/step_count = 3
+shader_parameter/thickness = 3.0
+shader_parameter/edge_color = Color(1, 1, 1, 1)
+shader_parameter/fade_start = 100.0
+shader_parameter/fade_length = 200.0
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eu7l1"]
 albedo_texture = ExtResource("4_js7pq")
 uv1_triplanar = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p1v5b"]
+render_priority = 0
+shader = ExtResource("4_p1v5b")
+shader_parameter/step_count = 3
+shader_parameter/thickness = 3.0
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/fade_start = 100.0
+shader_parameter/fade_length = 200.0
 
 [node name="world" type="Node3D"]
 
@@ -63,12 +82,14 @@ use_collision = true
 [node name="box2" type="CSGBox3D" parent="map"]
 transform = Transform3D(0.34202018, 0, -0.93969274, 0, 1, 0, 0.93969274, 0, 0.34202018, -6.6, 1, -13.5)
 material_override = SubResource("StandardMaterial3D_js7pq")
+material_overlay = SubResource("ShaderMaterial_wygdx")
 use_collision = true
 size = Vector3(2, 2, 2)
 
 [node name="box3" type="CSGBox3D" parent="map"]
 transform = Transform3D(0.34202018, 0, -0.93969274, 0, 1, 0, 0.93969274, 0, 0.34202018, 3.5000005, 1.5, -13.5)
 material_override = SubResource("StandardMaterial3D_eu7l1")
+material_overlay = SubResource("ShaderMaterial_p1v5b")
 use_collision = true
 size = Vector3(3, 3, 3)
 

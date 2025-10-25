@@ -39,7 +39,7 @@ public partial class Player : CharacterBody3D {
         Vector3 velocity = Velocity;
         if (!IsOnFloor())
             velocity.Y -= gravity * (float)delta;
-        if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+        if (Input.IsActionJustPressed("jump") && IsOnFloor())
             velocity.Y = JUMP_VELOCITY;
         Vector2 input_dir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         bool isRunning = Input.IsActionPressed("run");
@@ -59,7 +59,6 @@ public partial class Player : CharacterBody3D {
         Velocity = velocity;
         MoveAndSlide();
     }
-
 
     private void PlayAnimation(string animationName) {
         if (animationPlayer.CurrentAnimation != animationName) {
