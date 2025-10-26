@@ -1,20 +1,18 @@
-[gd_scene load_steps=19 format=3 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=26 format=3 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://textures/grids/Orange/texture_09.png" id="2_2dftf"]
 [ext_resource type="Texture2D" uid="uid://cm5m7nr7dugjd" path="res://textures/grids/Purple/texture_09.png" id="3_bcbcq"]
+[ext_resource type="Script" uid="uid://b0dr1esg6fplp" path="res://globals/Interactable.cs" id="4_f5c0m"]
 [ext_resource type="Texture2D" uid="uid://djg8y25y06h5n" path="res://textures/grids/Green/texture_09.png" id="4_js7pq"]
 [ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_p1v5b"]
-[ext_resource type="PackedScene" uid="uid://culo8llo32adv" path="res://scenes/Player.tscn" id="5_eu7l1"]
-[ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://World.cs" id="6_world"]
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="8_pcam"]
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_tween"]
-[sub_resource type="Resource" id="Resource_pcam_tween"]
-script = ExtResource("9_tween")
-duration = 0.4
-transition = 1
-ease = 2
+[ext_resource type="PackedScene" uid="uid://culo8llo32adv" path="res://scenes/Player/Player.tscn" id="5_eu7l1"]
+[ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="8_pcam"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_tween"]
+[ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://globals/InteractionManager.cs" id="10_interact_mgr"]
+[ext_resource type="Script" uid="uid://bdmar3sn531o0" path="res://scenes/PauseMenu/PauseMenu.cs" id="12_pause"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_js7pq"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -39,6 +37,18 @@ uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcbcq"]
 albedo_texture = ExtResource("2_2dftf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b2ar6"]
+render_priority = 0
+shader = ExtResource("4_p1v5b")
+shader_parameter/step_count = 3
+shader_parameter/thickness = 3.0000000298024
+shader_parameter/edge_color = Color(1, 1, 1, 1)
+shader_parameter/fade_start = 100.0
+shader_parameter/fade_length = 200.0
+
+[sub_resource type="Resource" id="Resource_ee7l0"]
+script = ExtResource("9_tween")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_js7pq"]
 albedo_texture = ExtResource("3_bcbcq")
@@ -66,6 +76,11 @@ shader_parameter/edge_color = Color(0, 0, 0, 1)
 shader_parameter/fade_start = 100.0
 shader_parameter/fade_length = 200.0
 
+[sub_resource type="Resource" id="Resource_pcam_tween"]
+script = ExtResource("9_tween")
+duration = 0.4
+transition = 1
+
 [node name="world" type="Node3D"]
 script = ExtResource("6_world")
 
@@ -87,7 +102,27 @@ size = Vector3(1000, 1, 1000)
 [node name="box" type="CSGBox3D" parent="map"]
 transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, -6.6, 0.5, -7.2000003)
 material_override = SubResource("StandardMaterial3D_bcbcq")
+material_overlay = SubResource("ShaderMaterial_b2ar6")
 use_collision = true
+script = ExtResource("4_f5c0m")
+DisplayName = "测试箱子"
+ActionName = "查看"
+VisualRootPath = NodePath(".")
+NameLabelPath = NodePath("NameLabel")
+FocusCameraPath = NodePath("FocusCamera")
+
+[node name="NameLabel" type="Label3D" parent="map/box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+pixel_size = 0.01
+
+[node name="FocusCamera" type="Camera3D" parent="map/box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.2, 2.2)
+
+[node name="PhantomCamera3D" type="Node3D" parent="map/box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17755914)
+script = ExtResource("8_pcam")
+priority = 1
+tween_resource = SubResource("Resource_ee7l0")
 
 [node name="box2" type="CSGBox3D" parent="map"]
 transform = Transform3D(0.34202018, 0, -0.93969274, 0, 1, 0, 0.93969274, 0, 0.34202018, -6.6, 1, -13.5)
@@ -106,25 +141,64 @@ size = Vector3(3, 3, 3)
 [node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 
 [node name="Camera3D2" type="Camera3D" parent="Player/CameraPivot" index="1"]
+
+[node name="PhantomCamThird" type="Node3D" parent="Player/CameraPivot" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5086738, 0, 1.5237582)
+script = ExtResource("8_pcam")
+priority = 10
+tween_resource = SubResource("Resource_pcam_tween")
+
+[node name="PhantomCamFirst" type="Node3D" parent="Player/CameraPivot" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17755914)
+script = ExtResource("8_pcam")
+priority = 5
+tween_resource = SubResource("Resource_pcam_tween")
 
 [node name="MainCamera3D" type="Camera3D" parent="."]
+physics_interpolation_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5086738, 1.3619635, 1.5237582)
 current = true
 
 [node name="PhantomCameraHost" type="Node" parent="MainCamera3D"]
+process_priority = 300
+process_physics_priority = 300
 script = ExtResource("7_host")
 
-[node name="PhantomCamThird" type="Node3D" parent="Player/CameraPivot"]
-script = ExtResource("8_pcam")
-priority = 10
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5086738, 0, 1.5237582)
-tween_resource = SubResource("Resource_pcam_tween")
+[node name="InteractionManager" type="Node" parent="."]
+script = ExtResource("10_interact_mgr")
+CameraPath = NodePath("../MainCamera3D")
+HintLabel3DPath = NodePath("../Hint3D")
 
-[node name="PhantomCamFirst" type="Node3D" parent="Player/CameraPivot"]
-script = ExtResource("8_pcam")
-priority = 5
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17755914)
-tween_resource = SubResource("Resource_pcam_tween")
+[node name="Hint3D" type="Label3D" parent="."]
+visible = false
+
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 300.0
+mouse_filter = 1
+script = ExtResource("12_pause")
+
+[node name="Panel" type="Panel" parent="PauseMenu"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 300.0
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenu/Panel"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 380.0
+offset_bottom = 280.0
+
+[node name="Resume" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "继续"
+
+[node name="Quit" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "退出"
 
 [editable path="Player"]
 [editable path="Player/visuals/mixamo_base"]

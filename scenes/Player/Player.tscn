@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://culo8llo32adv"]
 
 [ext_resource type="PackedScene" uid="uid://bdq6ajic6fjrf" path="res://models/mixamo_base.glb" id="1_p0vlq"]
-[ext_resource type="Script" uid="uid://b8iekfj3s5xek" path="res://scenes/Player.cs" id="1_v6fml"]
+[ext_resource type="Script" uid="uid://b8iekfj3s5xek" path="res://scenes/Player/Player.cs" id="1_v6fml"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v6fml"]
 radius = 0.3

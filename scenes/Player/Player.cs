@@ -21,17 +21,14 @@ public partial class Player : CharacterBody3D {
 
     public override void _Input(InputEvent @event) {
         if (@event is InputEventMouseMotion mouseEvent) {
-            RotateY(-Mathf.DegToRad(mouseEvent.Relative.X * MOUSE_SENSITIVITY_HORIZONTAL));
-            // visuals.Rotation = new Vector3(visuals.Rotation.X, Rotation.Y, visuals.Rotation.Z);
             cameraPivot = GetNode<Node3D>("CameraPivot");
+            var im = GetTree().Root.GetNodeOrNull<InteractionManager>("/root/world/InteractionManager");
+            if (im == null || im.PlayerControlEnabled) {
+                RotateY(-Mathf.DegToRad(mouseEvent.Relative.X * MOUSE_SENSITIVITY_HORIZONTAL));
+            }
             pitch -= mouseEvent.Relative.Y * MOUSE_SENSITIVITY_VERTICLE;
             pitch = Mathf.Clamp(pitch, -90f, 90f);
             cameraPivot.Rotation = new Vector3(Mathf.DegToRad(pitch), 0, 0);
-        }
-        if (@event is InputEventKey keyEvent && keyEvent.Pressed) {
-            if (keyEvent.Keycode == Key.Escape) {
-                GetTree().Quit();
-            }
         }
     }
 
