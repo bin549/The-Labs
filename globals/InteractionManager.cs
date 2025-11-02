@@ -23,7 +23,6 @@ public partial class InteractionManager : Node {
     public bool PlayerControlEnabled { get; private set; } = true;
 
     public override void _Ready() {
-        EnsureInputAction();
         _camera = GetNodeOrNull<Camera3D>(CameraPath);
         if (_camera == null) {
             GD.PushWarning("InteractionManager: Camera not found.");
@@ -41,8 +40,6 @@ public partial class InteractionManager : Node {
         if (Input.IsActionJustPressed("interact") && _focused != null && !IsInteracting) {
             _previousCamera = _camera;
             _focused.Interact(_camera);
-            _activeInteractionCam = _focused.GetActiveCameraNode();
-            ResetInteractionAngles();
             IsInteracting = true;
             PlayerControlEnabled = false;
             Input.MouseMode = Input.MouseModeEnum.Visible;
@@ -119,14 +116,6 @@ public partial class InteractionManager : Node {
         Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 
-    private void ResetInteractionAngles() {
-        if (_activeInteractionCam != null) {
-            _yaw = _activeInteractionCam.RotationDegrees.Y;
-            _pitch = _activeInteractionCam.RotationDegrees.X;
-        }
-        _lastMousePos = GetViewport().GetMousePosition();
-    }
-
     private Interactable FindInteractable(Node node) {
         Node current = node;
         while (current != null) {
@@ -134,14 +123,5 @@ public partial class InteractionManager : Node {
             current = current.GetParent();
         }
         return null;
-    }
-
-    private void EnsureInputAction() {
-        const string action = "interact";
-        if (!InputMap.HasAction(action)) {
-            InputMap.AddAction(action);
-            var ev = new InputEventKey { Keycode = Key.E };
-            InputMap.ActionAddEvent(action, ev);
-        }
     }
 }

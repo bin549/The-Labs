@@ -1,5 +1,4 @@
 using Godot;
-using System.Collections.Generic;
 using PhantomCamera;
 
 public partial class Interactable : Node3D {
@@ -8,77 +7,61 @@ public partial class Interactable : Node3D {
     [Export]
     public string ActionName { get; set; } = "交互";
     [Export]
-    public NodePath VisualRootPath { get; set; } = new NodePath();
-    [Export]
-    public Color OutlineColor { get; set; } = new Color(1, 1, 1);
-    [Export]
-    public float OutlineThickness { get; set; } = 3.0f;
-    [Export]
     public NodePath NameLabelPath { get; set; } = new NodePath();
     [Export]
     public NodePath LinePath { get; set; } = new NodePath();
-    private Node3D _visualRoot;
-    private readonly Dictionary<GeometryInstance3D, Material> _originalOverlays = new();
-    private Shader _outlineShader;
     private ShaderMaterial _outlineMat;
-    private Label3D _nameLabel;
-    private Node3D _lineNode;
-    private Node3D _phantomCamNode;
-    private int? _savedPhantomPriority;
-    private bool _usedPhantom;
+    private Label3D nameLabel;
+    private Node3D lineNode;
+    private PhantomCamera3D phantomCam;
+    private bool isActivate;
 
     public override void _Ready() {
-        _visualRoot = GetNodeOrNull<Node3D>(VisualRootPath);
-        _nameLabel = GetNodeOrNull<Label3D>(NameLabelPath);
-        _lineNode = GetNodeOrNull<Node3D>(LinePath);
-        _phantomCamNode = GetNodeOrNull<Node3D>("PhantomCamera3D");
-        if (_nameLabel != null) {
-            _nameLabel.Text = DisplayName;
-            _nameLabel.Visible = true;
+        this.nameLabel = GetNodeOrNull<Label3D>(NameLabelPath);
+        this.lineNode = GetNodeOrNull<Node3D>(LinePath);
+        if (this.nameLabel != null) {
+            this.nameLabel.Text = DisplayName;
+            this.nameLabel.Visible = true;
         }
-        if (_lineNode != null) {
-            _lineNode.Visible = true;
+        if (this.lineNode != null) {
+            this.lineNode.Visible = true;
         }
+    }
+
+    private void InitPhantomCamera() {
+        var phantomCamNode = GetNodeOrNull<Node3D>("PhantomCamera3D");
+        if (phantomCamNode != null) this.phantomCam = phantomCamNode.AsPhantomCamera3D();
     }
 
     public virtual void OnFocusEnter() {
         ApplyOutline(true);
-        if (_nameLabel != null) {
-            _nameLabel.Text = $"[E] {ActionName}";
+        if (this.nameLabel != null) {
+            this.nameLabel.Text = $"[E] {ActionName}";
         }
     }
 
     public virtual void OnFocusExit() {
         ApplyOutline(false);
-        if (_nameLabel != null) {
-            _nameLabel.Text = DisplayName;
+        if (this.nameLabel != null) {
+            this.nameLabel.Text = DisplayName;
         }
     }
 
     public virtual void Interact(Node3D interactor) {
-        GD.Print($"Interact with {DisplayName}");
-        if (_phantomCamNode != null) {
-            var pcam = _phantomCamNode.AsPhantomCamera3D();
-            if (_savedPhantomPriority == null) _savedPhantomPriority = pcam.Priority;
-            pcam.Priority = (_savedPhantomPriority ?? 0) + 1000;
-            _usedPhantom = true;
+        if (this.phantomCam != null) {
+            this.phantomCam.Priority = 999;
+            this.isActivate = true;
             return;
         }
     }
 
     public virtual void ExitInteraction() {
-        if (_usedPhantom && _phantomCamNode != null) {
-            var pcam = _phantomCamNode.AsPhantomCamera3D();
-            if (_savedPhantomPriority != null) pcam.Priority = _savedPhantomPriority.Value;
+        if (this.isActivate && this.phantomCam != null) {
+            this.phantomCam.Priority = 1;
         }
-        _usedPhantom = false;
-        _savedPhantomPriority = null;
-        if (_nameLabel != null) _nameLabel.Text = DisplayName;
+        this.isActivate = false;
+        if (this.nameLabel != null) this.nameLabel.Text = DisplayName;
         ApplyOutline(false);
-    }
-
-    public Node3D GetActiveCameraNode() {
-        return _phantomCamNode;
     }
 
     private void ApplyOutline(bool enable) {

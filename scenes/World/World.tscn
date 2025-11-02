@@ -1,14 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=19 format=3 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://textures/grids/Orange/texture_09.png" id="2_2dftf"]
 [ext_resource type="Script" uid="uid://b0dr1esg6fplp" path="res://scenes/Interactable/Interactable.cs" id="4_f5c0m"]
 [ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_p1v5b"]
+[ext_resource type="PackedScene" uid="uid://cni4dh48mykc1" path="res://scenes/Player/Player.tscn" id="5_eu7l1"]
 [ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
 [ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="8_pcam"]
-[ext_resource type="Script" uid="uid://b8iekfj3s5xek" path="res://scenes/Player/Player.cs" id="8_ri80g"]
-[ext_resource type="PackedScene" uid="uid://bdq6ajic6fjrf" path="res://models/mixamo_base.glb" id="9_bbv3w"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_tween"]
 [ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://globals/InteractionManager.cs" id="10_interact_mgr"]
 [ext_resource type="PackedScene" uid="uid://bigqesy83pc7m" path="res://scenes/PauseMenu/PauseMenu.tscn" id="13_bbv3w"]
@@ -46,14 +45,6 @@ shader_parameter/size = 1.0
 [sub_resource type="Resource" id="Resource_ee7l0"]
 script = ExtResource("9_tween")
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_v6fml"]
-radius = 0.3
-
-[sub_resource type="Resource" id="Resource_pcam_tween"]
-script = ExtResource("9_tween")
-duration = 0.4
-transition = 1
-
 [node name="world" type="Node3D"]
 script = ExtResource("6_world")
 
@@ -74,7 +65,7 @@ size = Vector3(1000, 1, 1000)
 
 [node name="Labs" type="Node3D" parent="."]
 
-[node name="box" type="CSGBox3D" parent="Labs"]
+[node name="LabItem" type="CSGBox3D" parent="Labs"]
 transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, -6.6, 0.5, -7.2000003)
 material_override = SubResource("StandardMaterial3D_bcbcq")
 material_overlay = SubResource("ShaderMaterial_b2ar6")
@@ -82,122 +73,19 @@ use_collision = true
 script = ExtResource("4_f5c0m")
 DisplayName = "测试箱子"
 ActionName = "查看"
-VisualRootPath = NodePath(".")
 NameLabelPath = NodePath("NameLabel")
 
-[node name="NameLabel" type="Label3D" parent="Labs/box"]
+[node name="NameLabel" type="Label3D" parent="Labs/LabItem"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 pixel_size = 0.01
 
-[node name="PhantomCamera3D" type="Node3D" parent="Labs/box"]
+[node name="PhantomCamera3D" type="Node3D" parent="Labs/LabItem"]
 transform = Transform3D(1, 0, 0, 0, 0.9622655, 0.2721123, 0, -0.2721123, 0.9622655, -1.1920929e-07, 1.5659313, 2.307831)
 script = ExtResource("8_pcam")
 priority = 1
 tween_resource = SubResource("Resource_ee7l0")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-script = ExtResource("8_ri80g")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CylinderShape3D_v6fml")
-
-[node name="visuals" type="Node3D" parent="Player"]
-
-[node name="mixamo_base" parent="Player/visuals" instance=ExtResource("9_bbv3w")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
-
-[node name="Skeleton3D" parent="Player/visuals/mixamo_base/Armature" index="0"]
-bones/0/position = Vector3(3.87042, -2.0678072, -97.729805)
-bones/0/rotation = Quaternion(-0.7096254, 0.054406136, -0.013554568, 0.70234466)
-bones/1/rotation = Quaternion(-0.0318001, 0.000939918, -0.0081548, 0.9994606)
-bones/2/rotation = Quaternion(0.0967145, 0.0016346899, -0.006202718, 0.9952916)
-bones/3/rotation = Quaternion(0.10953148, 0.0015546316, -0.006223292, 0.9939626)
-bones/4/rotation = Quaternion(-0.09114806, -0.012409427, -0.02986527, 0.9953121)
-bones/5/rotation = Quaternion(-0.1518397, -0.033765584, 0.022545394, 0.98757094)
-bones/7/rotation = Quaternion(-0.4708136, 0.55625063, -0.54136795, -0.41933364)
-bones/8/rotation = Quaternion(0.49557537, 0.06392267, -0.04464834, 0.8650581)
-bones/9/position = Vector3(-2.234178e-06, 27.84151, -1.782038e-05)
-bones/9/rotation = Quaternion(-0.0012929651, 0.0012064388, -0.47046334, 0.8824178)
-bones/10/rotation = Quaternion(-0.1783375, -0.29735306, 0.061975382, 0.9359146)
-bones/11/position = Vector3(2.6818461, 2.4648025, 1.5739567)
-bones/11/rotation = Quaternion(0.3209164, 0.08087293, -0.32788154, 0.88485366)
-bones/12/position = Vector3(-1.4692058e-06, 4.188993, -4.521132e-07)
-bones/12/rotation = Quaternion(-0.021081889, -0.00033957695, -0.0034381566, 0.99977183)
-bones/13/position = Vector3(2.051599e-06, 3.4162602, -2.9280377e-06)
-bones/13/rotation = Quaternion(3.9301813e-07, -0.0008076072, 2.556335e-07, 0.9999997)
-bones/15/rotation = Quaternion(0.06289683, -0.09488323, -0.11286407, 0.9870678)
-bones/16/position = Vector3(1.9121715e-06, 3.699996, 7.460335e-07)
-bones/16/rotation = Quaternion(0.035560768, 9.196739e-05, 0.005654369, 0.9993515)
-bones/17/rotation = Quaternion(8.106571e-06, -1.0256191e-07, 5.5311837e-08, 1)
-bones/19/rotation = Quaternion(0.029827444, 0.015593866, 0.014124587, 0.9993337)
-bones/20/position = Vector3(4.3609275e-06, 3.7000096, -1.4887547e-05)
-bones/20/rotation = Quaternion(0.1860579, 0.0008707169, -0.007252466, 0.9825117)
-bones/21/position = Vector3(1.6204433e-07, 2.94999, -2.0387948e-05)
-bones/21/rotation = Quaternion(2.579734e-06, -9.266661e-08, 5.5264543e-08, 1)
-bones/23/rotation = Quaternion(0.1591444, 0.026067536, 0.11661169, 0.97999763)
-bones/24/position = Vector3(4.1635685e-06, 3.3792682, -1.4082626e-05)
-bones/24/rotation = Quaternion(0.14101478, -0.0006329156, -0.019420013, 0.9898168)
-bones/25/position = Vector3(7.5738826e-06, 2.8896904, -1.3750447e-06)
-bones/25/rotation = Quaternion(2.6521502e-06, -3.9493898e-08, -1.8120045e-07, 1)
-bones/27/rotation = Quaternion(0.26116368, 0.089770205, 0.19013815, 0.94211584)
-bones/28/position = Vector3(-4.374291e-06, 3.6000087, -1.580761e-05)
-bones/28/rotation = Quaternion(0.11187521, -0.0029845056, -0.04465788, 0.99271387)
-bones/29/position = Vector3(2.367556e-06, 2.0999796, -8.73801e-06)
-bones/29/rotation = Quaternion(3.5592702e-06, -3.2619573e-07, -4.68106e-07, 1)
-bones/31/rotation = Quaternion(0.60754085, 0.531092, -0.51033145, 0.2973168)
-bones/32/position = Vector3(-1.0776099e-06, 10.837703, -6.062159e-06)
-bones/32/rotation = Quaternion(0.29858217, -0.079304844, 0.039519086, 0.95026195)
-bones/33/position = Vector3(4.303556e-07, 27.841532, -8.29645e-06)
-bones/33/rotation = Quaternion(-0.0012944521, -0.0006678472, 0.46372813, 0.88597643)
-bones/34/position = Vector3(6.5152785e-06, 28.328842, -4.9452365e-06)
-bones/34/rotation = Quaternion(-0.116801836, 0.18820423, 0.13490438, 0.9657833)
-bones/35/rotation = Quaternion(0.36830282, 0.018865993, 0.305233, 0.87796926)
-bones/36/position = Vector3(-3.6512718e-06, 4.1870975, 2.2262824e-05)
-bones/36/rotation = Quaternion(-0.019160552, 0.00065549376, 0.0031315954, 0.99981135)
-bones/37/position = Vector3(4.886762e-07, 3.4183962, -1.3119225e-06)
-bones/37/rotation = Quaternion(6.00121e-07, 0.0007450719, 3.9493898e-08, 0.99999976)
-bones/39/position = Vector3(-2.2598593, 9.109327, 0.5180257)
-bones/39/rotation = Quaternion(0.09647971, 0.05772929, 0.078422435, 0.99056)
-bones/40/position = Vector3(3.9524843e-06, 3.7000053, -1.043797e-05)
-bones/40/rotation = Quaternion(0.09268491, -0.000245844, -0.0058184993, 0.9956785)
-bones/41/position = Vector3(4.1530125e-06, 2.850012, -7.9098645e-06)
-bones/41/rotation = Quaternion(5.87686e-08, -1.17172036e-07, -1.2716557e-08, 1)
-bones/43/position = Vector3(-3.584854e-05, 9.533412, -4.2106127e-05)
-bones/43/rotation = Quaternion(0.036023367, 0.011990986, -0.06263687, 0.99731404)
-bones/44/rotation = Quaternion(0.1388934, -0.0006675776, 0.007049622, 0.9902821)
-bones/45/rotation = Quaternion(-2.485013e-06, -2.2072348e-07, -4.556196e-07, 1)
-bones/47/position = Vector3(1.8650866, 9.104545, 0.043019343)
-bones/47/rotation = Quaternion(0.068418354, 0.007784558, -0.096967526, 0.99290264)
-bones/48/rotation = Quaternion(0.2070597, 0.003637502, 0.024888989, 0.9780049)
-bones/49/position = Vector3(2.5423174e-07, 2.9499974, -2.0084786e-05)
-bones/49/rotation = Quaternion(-2.6018458e-06, -4.0372828e-07, -3.91039e-07, 1)
-bones/51/rotation = Quaternion(0.13531852, -0.028025426, -0.24077378, 0.9606933)
-bones/52/rotation = Quaternion(0.25087598, 0.0063158087, 0.053712185, 0.9665074)
-bones/53/rotation = Quaternion(7.2129174e-06, 3.5529953e-07, 5.2465106e-07, 1)
-bones/55/rotation = Quaternion(-0.13695107, 0.16563001, 0.96600914, 0.14365765)
-bones/56/rotation = Quaternion(-0.36835068, 0.003011607, 0.012077581, 0.92960364)
-bones/57/rotation = Quaternion(0.5849077, 0.087514035, 0.055504877, 0.8044524)
-bones/58/rotation = Quaternion(0.3301986, 0.004256223, -0.00025956612, 0.9439019)
-bones/60/rotation = Quaternion(-0.03549283, 0.2012491, 0.9752369, -0.08457008)
-bones/61/rotation = Quaternion(-0.2723501, -0.00020207974, -0.008959199, 0.9621565)
-bones/62/rotation = Quaternion(0.48921585, -0.017303001, -0.11115435, 0.86487764)
-bones/63/rotation = Quaternion(0.3352169, 0.0005914277, -3.2336964e-05, 0.94214076)
-
-[node name="CameraPivot" type="Node3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3619635, 0)
-
-[node name="PhantomCamThird" type="Node3D" parent="Player/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5086738, 0, 1.5237582)
-script = ExtResource("8_pcam")
-priority = 10
-tween_resource = SubResource("Resource_pcam_tween")
-
-[node name="PhantomCamFirst" type="Node3D" parent="Player/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26619303, -0.6674018)
-script = ExtResource("8_pcam")
-priority = 5
-tween_resource = SubResource("Resource_pcam_tween")
+[node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 
 [node name="MainCamera3D" type="Camera3D" parent="."]
 physics_interpolation_mode = 1
@@ -218,5 +106,3 @@ HintLabel3DPath = NodePath("../Hint3D")
 visible = false
 
 [node name="PauseMenu" parent="." instance=ExtResource("13_bbv3w")]
-
-[editable path="Player/visuals/mixamo_base"]
