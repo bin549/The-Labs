@@ -7,6 +7,9 @@ public partial class Interactable : Node3D {
     [Export] protected ShaderMaterial outlineMat;
     [Export] protected Label3D nameLabel;
     [Export] protected Node3D lineNode;
+    protected bool isFocus = false;
+    protected bool isInteracting = false;
+    [Export] protected GameManager gameManager;
 
     public override void _Ready() {
         if (this.nameLabel != null) {
@@ -18,11 +21,29 @@ public partial class Interactable : Node3D {
         }
     }
 
+    public override void _Process(double delta) {
+        if (Input.IsActionJustPressed("interact") && this.isFocus && !this.gameManager.IsBusy) {
+            this.EnterInteraction();
+        }
+        if (Input.IsActionJustPressed("quit") && this.gameManager.IsBusy) {
+            this.ExitInteraction();
+        }
+    }
+
+    protected virtual void EnterInteraction() {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+    }
+
+    protected virtual void ExitInteraction() {
+        Input.MouseMode = Input.MouseModeEnum.Captured;
+    }
+
     public virtual void OnFocusEnter() {
         ApplyOutline(true);
         if (this.nameLabel != null) {
             this.nameLabel.Text = $"[E] {ActionName}";
         }
+        this.isFocus = true;
     }
 
     public virtual void OnFocusExit() {
@@ -30,14 +51,10 @@ public partial class Interactable : Node3D {
         if (this.nameLabel != null) {
             this.nameLabel.Text = DisplayName;
         }
+        this.isFocus = false;
     }
 
     protected virtual void Interact(Node3D interactor) {
-    }
-
-    protected virtual void ExitInteraction() {
-        if (this.nameLabel != null) this.nameLabel.Text = DisplayName;
-        ApplyOutline(false);
     }
 
     private void ApplyOutline(bool enable) {

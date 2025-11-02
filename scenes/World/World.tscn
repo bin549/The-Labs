@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cni4dh48mykc1" path="res://scenes/Player/Player.tscn" id="5_eu7l1"]
 [ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
-[ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://globals/InteractionManager.cs" id="10_interact_mgr"]
+[ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://globals/GameManager.cs" id="10_interact_mgr"]
 [ext_resource type="PackedScene" uid="uid://bigqesy83pc7m" path="res://scenes/PauseMenu/PauseMenu.tscn" id="13_bbv3w"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_js7pq"]
@@ -49,8 +49,13 @@ size = Vector3(1000, 1, 1000)
 
 [node name="Labs" type="Node3D" parent="."]
 
-[node name="LabItem" parent="Labs" instance=ExtResource("3_kurpr")]
+[node name="LabItem" parent="Labs" node_paths=PackedStringArray("gameManager") instance=ExtResource("3_kurpr")]
 transform = Transform3D(0.7660444, 0, -0.6427875, 0, 1, 0, 0.6427875, 0, 0.7660444, -6.6, 0.5, -7.2000003)
+gameManager = NodePath("../../GameManager")
+
+[node name="LabItem2" parent="Labs" node_paths=PackedStringArray("gameManager") instance=ExtResource("3_kurpr")]
+transform = Transform3D(0.7660444, 0, -0.6427875, 0, 1, 0, 0.6427875, 0, 0.7660444, -3.3324275, 0.5, -7.2000003)
+gameManager = NodePath("../../GameManager")
 
 [node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 
@@ -64,10 +69,14 @@ process_priority = 300
 process_physics_priority = 300
 script = ExtResource("7_host")
 
-[node name="InteractionManager" type="Node" parent="."]
+[node name="GameManager" type="Node" parent="."]
 script = ExtResource("10_interact_mgr")
 
 [node name="Hint3D" type="Label3D" parent="."]
 visible = false
 
-[node name="PauseMenu" parent="." instance=ExtResource("13_bbv3w")]
+[node name="PauseMenu" parent="." node_paths=PackedStringArray("gameManager") instance=ExtResource("13_bbv3w")]
+gameManager = NodePath("../GameManager")
+
+[editable path="Player"]
+[editable path="Player/visuals/mixamo_base"]

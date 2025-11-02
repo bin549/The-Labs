@@ -4,6 +4,7 @@ public partial class PauseMenu : Control {
     [Export] private Control _panel;
     [Export] private Button ResumeBtn;
     [Export] private Button QuitBtn;
+    [Export] protected GameManager gameManager;
 
     public override void _Ready() {
         ProcessMode = ProcessModeEnum.Always;
@@ -16,6 +17,8 @@ public partial class PauseMenu : Control {
 
     public override void _Process(double delta) {
         if (Input.IsActionJustPressed("pause")) {
+            GD.Print(this.gameManager.IsBusy);
+            if (this.gameManager.IsBusy) return;
             GetTree().Paused = !GetTree().Paused;
             Visible = GetTree().Paused;
             if (GetTree().Paused)

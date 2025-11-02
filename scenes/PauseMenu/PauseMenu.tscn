@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bdmar3sn531o0" path="res://scenes/PauseMenu/PauseMenu.cs" id="1_slfc8"]
 
-[node name="PauseMenu" type="Control" node_paths=PackedStringArray("_panel", "Resume", "Quit")]
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("_panel", "ResumeBtn", "QuitBtn")]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -16,12 +17,10 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-mouse_filter = 0
-process_mode = 3
 script = ExtResource("1_slfc8")
 _panel = NodePath(".")
-Resume = NodePath("Panel/VBox/Resume")
-Quit = NodePath("Panel/VBox/Quit")
+ResumeBtn = NodePath("Panel/VBox/Resume")
+QuitBtn = NodePath("Panel/VBox/Quit")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0

@@ -9,6 +9,8 @@ public partial class PlayerCamera : Node3D {
 	private bool isFirstPerson = false;
 	private PhantomCamera3D phantomFirst;
 	private PhantomCamera3D phantomThird;
+	[Export] private RayCast3D interactionRay;
+	private Node currentInteractable;
 
 	public override void _Ready() {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -20,6 +22,10 @@ public partial class PlayerCamera : Node3D {
 		var phantomThirdNode = GetNodeOrNull<Node3D>("PhantomCamThird");
 		if (phantomFirstNode != null) phantomFirst = phantomFirstNode.AsPhantomCamera3D();
 		if (phantomThirdNode != null) phantomThird = phantomThirdNode.AsPhantomCamera3D();
+	}
+
+	public override void _PhysicsProcess(double delta) {
+		this.CheckInteraction();
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -40,6 +46,29 @@ public partial class PlayerCamera : Node3D {
 		if (Input.IsActionJustPressed("toggle_view")) {
 			this.isFirstPerson = !isFirstPerson;
 			phantomFirst.Priority = this.isFirstPerson ? 15 : 5;
+		}
+	}
+
+	private void CheckInteraction() {
+		if (interactionRay.IsColliding()) {
+			var collider = interactionRay.GetCollider() as Node;
+			if (this.currentInteractable != null && collider == this.currentInteractable) {
+				return;
+			}
+			bool hasInteractMethod = collider != null && (collider.HasMethod("Interact"));
+			if (hasInteractMethod) {
+	 			if (this.currentInteractable != collider) {
+					this.currentInteractable = collider;
+					if (collider.HasMethod("OnFocusEnter"))
+   						collider.Call("OnFocusEnter");
+				}
+ 			}
+		} else {
+			if (this.currentInteractable != null) {
+				if (currentInteractable.HasMethod("OnFocusExit"))
+					currentInteractable.Call("OnFocusExit");
+				this.currentInteractable = null;
+			}
 		}
 	}
 }
