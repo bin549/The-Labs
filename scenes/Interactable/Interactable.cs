@@ -17,36 +17,21 @@ public partial class Interactable : Node3D {
     public NodePath NameLabelPath { get; set; } = new NodePath();
     [Export]
     public NodePath LinePath { get; set; } = new NodePath();
-    [Export]
-    public NodePath FocusCameraPath { get; set; } = new NodePath();
     private Node3D _visualRoot;
     private readonly Dictionary<GeometryInstance3D, Material> _originalOverlays = new();
     private Shader _outlineShader;
     private ShaderMaterial _outlineMat;
     private Label3D _nameLabel;
     private Node3D _lineNode;
-    private Camera3D _focusCamera;
     private Node3D _phantomCamNode;
     private int? _savedPhantomPriority;
     private bool _usedPhantom;
 
     public override void _Ready() {
         _visualRoot = GetNodeOrNull<Node3D>(VisualRootPath);
-        _outlineShader = ResourceLoader.Load<Shader>("res://shaders/Outline.gdshader");
-        if (_outlineShader != null) {
-            _outlineMat = new ShaderMaterial { Shader = _outlineShader };
-            _outlineMat.SetShaderParameter("thickness", 0.0f);
-            _outlineMat.SetShaderParameter("edge_color", OutlineColor);
-            foreach (var target in EnumerateGeometryInstances(_visualRoot ?? this))
-            {
-                target.MaterialOverlay = _outlineMat;
-            }
-        }
         _nameLabel = GetNodeOrNull<Label3D>(NameLabelPath);
         _lineNode = GetNodeOrNull<Node3D>(LinePath);
-        _focusCamera = GetNodeOrNull<Camera3D>(FocusCameraPath);
         _phantomCamNode = GetNodeOrNull<Node3D>("PhantomCamera3D");
-
         if (_nameLabel != null) {
             _nameLabel.Text = DisplayName;
             _nameLabel.Visible = true;
@@ -79,7 +64,6 @@ public partial class Interactable : Node3D {
             _usedPhantom = true;
             return;
         }
-        if (_focusCamera != null) _focusCamera.Current = true;
     }
 
     public virtual void ExitInteraction() {
@@ -94,25 +78,10 @@ public partial class Interactable : Node3D {
     }
 
     public Node3D GetActiveCameraNode() {
-        return _phantomCamNode ?? (Node3D)_focusCamera;
+        return _phantomCamNode;
     }
-
 
     private void ApplyOutline(bool enable) {
         if (_outlineMat == null) return;
-        _outlineMat.SetShaderParameter("edge_color", OutlineColor);
-        _outlineMat.SetShaderParameter("thickness", enable ? OutlineThickness : 0.0f);
-    }
-
-    private static IEnumerable<GeometryInstance3D> EnumerateGeometryInstances(Node root) {
-        var stack = new Stack<Node>();
-        stack.Push(root);
-        while (stack.Count > 0) {
-            var node = stack.Pop();
-            if (node is GeometryInstance3D geom)
-                yield return geom;
-            foreach (Node child in node.GetChildren())
-                stack.Push(child);
-        }
     }
 }

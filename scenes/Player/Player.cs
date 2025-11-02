@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using PhantomCamera;
 
 public partial class Player : CharacterBody3D {
     [Export] private float WalkSpeed = 3.0f;
@@ -12,11 +13,23 @@ public partial class Player : CharacterBody3D {
     private float pitch = 0.0f;
     private AnimationPlayer animationPlayer;
     private Node3D visuals;
+	[Export]
+	public NodePath VisualsPath { get; set; } = "Player/visuals";
+    private bool isFirstPerson = false;
+    private PhantomCamera3D phantomFirst;
+    private PhantomCamera3D phantomThird;
+    private InteractionManager interactionManager;
 
     public override void _Ready() {
         Input.MouseMode = Input.MouseModeEnum.Captured;
         animationPlayer = GetNode<AnimationPlayer>("visuals/mixamo_base/AnimationPlayer");
         visuals = GetNode<Node3D>("visuals");
+        var phantomFirstNode = GetNodeOrNull<Node3D>("CameraPivot/PhantomCamFirst");
+        var phantomThirdNode = GetNodeOrNull<Node3D>("CameraPivot/PhantomCamThird");
+        if (phantomFirstNode != null) phantomFirst = phantomFirstNode.AsPhantomCamera3D();
+        if (phantomThirdNode != null) phantomThird = phantomThirdNode.AsPhantomCamera3D();
+        SetThirdPerson();
+        interactionManager = GetNodeOrNull<InteractionManager>("InteractionManager");
     }
 
     public override void _Input(InputEvent @event) {
@@ -29,6 +42,18 @@ public partial class Player : CharacterBody3D {
             pitch -= mouseEvent.Relative.Y * MOUSE_SENSITIVITY_VERTICLE;
             pitch = Mathf.Clamp(pitch, -90f, 90f);
             cameraPivot.Rotation = new Vector3(Mathf.DegToRad(pitch), 0, 0);
+        }
+    }
+
+    public override void _Process(double delta) {
+        if (Input.IsActionJustPressed("toggle_view")) {
+            ToggleView();
+        }
+        if (Input.IsActionJustPressed("ui_cancel")) {
+            if (interactionManager != null && interactionManager.IsInteracting) {
+                interactionManager.ExitInteraction();
+                return;
+            }
         }
     }
 
@@ -60,6 +85,26 @@ public partial class Player : CharacterBody3D {
     private void PlayAnimation(string animationName) {
         if (animationPlayer.CurrentAnimation != animationName) {
             animationPlayer.Play(animationName);
+        }
+    }
+
+    private void ToggleView() {
+        if (phantomFirst != null && phantomThird != null) {
+            isFirstPerson = !isFirstPerson;
+            if (isFirstPerson) {
+                phantomFirst.Priority = Math.Max(phantomThird.Priority + 1, phantomFirst.Priority + 1);
+            } else {
+                phantomThird.Priority = Math.Max(phantomFirst.Priority + 1, phantomThird.Priority + 1);
+            }
+            return;
+        }
+        isFirstPerson = !isFirstPerson;
+    }
+
+    private void SetThirdPerson() {
+        isFirstPerson = false;
+        if (phantomThird != null && phantomFirst != null) {
+            phantomThird.Priority = Math.Max(phantomFirst.Priority + 1, phantomThird.Priority + 1);
         }
     }
 }

@@ -1,45 +1,37 @@
 using Godot;
 
 public partial class PauseMenu : Control {
-    private Control _panel;
-    private Button _btnResume;
-    private Button _btnQuit;
+    [Export] private Control _panel;
+    [Export] private Button Resume;
+    [Export] private Button Quit;
 
     public override void _Ready() {
+        ProcessMode = ProcessModeEnum.Always;
         Visible = false;
-        _panel = GetNodeOrNull<Control>("Panel");
-        _btnResume = GetNodeOrNull<Button>("Panel/VBox/Resume");
-        _btnQuit = GetNodeOrNull<Button>("Panel/VBox/Quit");
-        if (_btnResume != null) _btnResume.Pressed += _OnResumePressed;
-        if (_btnQuit != null) _btnQuit.Pressed += _OnQuitPressed;
-        CenterPanel();
+        if (Resume != null)
+            Resume.Pressed += OnResumePressed;
+        if (Quit != null)
+            Quit.Pressed += OnQuitPressed;
     }
 
-    public void ShowMenu() {
-        Visible = true;
-        GetTree().Paused = true;
-        Input.MouseMode = Input.MouseModeEnum.Visible;
-        CenterPanel();
+    public override void _Process(double delta) {
+        if (Input.IsActionJustPressed("pause")) {
+            GetTree().Paused = !GetTree().Paused;
+            Visible = GetTree().Paused;
+            if (GetTree().Paused)
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            else
+                Input.MouseMode = Input.MouseModeEnum.Captured;
+        }
     }
 
-    public void HideMenu() {
-        Visible = false;
-        GetTree().Paused = false;
+    private void OnResumePressed() {
         Input.MouseMode = Input.MouseModeEnum.Captured;
+        GetTree().Paused = false;
+        Visible = false;
     }
 
-    private void _OnResumePressed() {
-        HideMenu();
-    }
-
-    private void _OnQuitPressed() {
+    private void OnQuitPressed() {
         GetTree().Quit();
-    }
-
-    private void CenterPanel() {
-        if (_panel == null) return;
-        var viewportSize = GetViewportRect().Size;
-        var panelSize = _panel.Size;
-        _panel.Position = (viewportSize - panelSize) / 2f;
     }
 }
