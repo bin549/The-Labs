@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://cshvdcc2wm8up"]
+
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="1_je24b"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="2_aaeog"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_aaeog"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_aaeog"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_cyrg0"]
+sky_material = SubResource("ProceduralSkyMaterial_aaeog")
+
+[sub_resource type="Environment" id="Environment_uup4o"]
+background_mode = 2
+sky = SubResource("Sky_cyrg0")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_cyrg0"]
+script = ExtResource("2_aaeog")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uup4o")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="PhantomCamera3D" type="Node3D" parent="."]
+script = ExtResource("1_je24b")
+priority = 5
+tween_resource = SubResource("Resource_cyrg0")
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
+
+[node name="PhantomCamera3D2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.024816036, 0.999692, 0, -0.999692, -0.024816036, 0, 3.3473577, 0)
+script = ExtResource("1_je24b")
+tween_resource = SubResource("Resource_cyrg0")
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5211251, 0)
+size = Vector3(1000, 1, 1000)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("3_aaeog")

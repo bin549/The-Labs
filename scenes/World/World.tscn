@@ -1,14 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=12 format=3 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
-[ext_resource type="Texture2D" uid="uid://b58xv1joypxo5" path="res://textures/grids/Orange/texture_09.png" id="2_2dftf"]
-[ext_resource type="Script" uid="uid://b0dr1esg6fplp" path="res://scenes/Interactable/Interactable.cs" id="4_f5c0m"]
-[ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_p1v5b"]
+[ext_resource type="PackedScene" uid="uid://jtliji0ma1xl" path="res://scenes/LabItem/LabItem.tscn" id="3_kurpr"]
 [ext_resource type="PackedScene" uid="uid://cni4dh48mykc1" path="res://scenes/Player/Player.tscn" id="5_eu7l1"]
 [ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
-[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="8_pcam"]
-[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="9_tween"]
 [ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://globals/InteractionManager.cs" id="10_interact_mgr"]
 [ext_resource type="PackedScene" uid="uid://bigqesy83pc7m" path="res://scenes/PauseMenu/PauseMenu.tscn" id="13_bbv3w"]
 
@@ -33,19 +29,7 @@ fog_density = 0.001
 albedo_texture = ExtResource("1_c6gwx")
 uv1_triplanar = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcbcq"]
-albedo_texture = ExtResource("2_2dftf")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b2ar6"]
-render_priority = 0
-shader = ExtResource("4_p1v5b")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/size = 1.0
-
-[sub_resource type="Resource" id="Resource_ee7l0"]
-script = ExtResource("9_tween")
-
-[node name="world" type="Node3D"]
+[node name="World" type="Node3D"]
 script = ExtResource("6_world")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -65,25 +49,8 @@ size = Vector3(1000, 1, 1000)
 
 [node name="Labs" type="Node3D" parent="."]
 
-[node name="LabItem" type="CSGBox3D" parent="Labs"]
-transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, -6.6, 0.5, -7.2000003)
-material_override = SubResource("StandardMaterial3D_bcbcq")
-material_overlay = SubResource("ShaderMaterial_b2ar6")
-use_collision = true
-script = ExtResource("4_f5c0m")
-DisplayName = "测试箱子"
-ActionName = "查看"
-NameLabelPath = NodePath("NameLabel")
-
-[node name="NameLabel" type="Label3D" parent="Labs/LabItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-pixel_size = 0.01
-
-[node name="PhantomCamera3D" type="Node3D" parent="Labs/LabItem"]
-transform = Transform3D(1, 0, 0, 0, 0.9622655, 0.2721123, 0, -0.2721123, 0.9622655, -1.1920929e-07, 1.5659313, 2.307831)
-script = ExtResource("8_pcam")
-priority = 1
-tween_resource = SubResource("Resource_ee7l0")
+[node name="LabItem" parent="Labs" instance=ExtResource("3_kurpr")]
+transform = Transform3D(0.7660444, 0, -0.6427875, 0, 1, 0, 0.6427875, 0, 0.7660444, -6.6, 0.5, -7.2000003)
 
 [node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 
@@ -99,8 +66,6 @@ script = ExtResource("7_host")
 
 [node name="InteractionManager" type="Node" parent="."]
 script = ExtResource("10_interact_mgr")
-CameraPath = NodePath("../MainCamera3D")
-HintLabel3DPath = NodePath("../Hint3D")
 
 [node name="Hint3D" type="Label3D" parent="."]
 visible = false

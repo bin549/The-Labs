@@ -2,16 +2,16 @@ using Godot;
 
 public partial class PauseMenu : Control {
     [Export] private Control _panel;
-    [Export] private Button Resume;
-    [Export] private Button Quit;
+    [Export] private Button ResumeBtn;
+    [Export] private Button QuitBtn;
 
     public override void _Ready() {
         ProcessMode = ProcessModeEnum.Always;
         Visible = false;
-        if (Resume != null)
-            Resume.Pressed += OnResumePressed;
-        if (Quit != null)
-            Quit.Pressed += OnQuitPressed;
+        if (ResumeBtn != null)
+            ResumeBtn.Pressed += OnResumePressed;
+        if (QuitBtn != null)
+        QuitBtn.Pressed += OnQuitPressed;
     }
 
     public override void _Process(double delta) {
