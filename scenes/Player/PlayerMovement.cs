@@ -14,14 +14,22 @@ public partial class PlayerMovement : CharacterBody3D {
     private bool isJumping = false;
 	[Export]
 	public NodePath VisualsPath { get; set; } = "Player/visuals";
+	[Export] private NodePath gameManagerPath;
+	private GameManager gameManager;
+
+	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
 
     public override void _Ready() {
         Input.MouseMode = Input.MouseModeEnum.Captured;
         animationPlayer = GetNode<AnimationPlayer>("visuals/mixamo_base/AnimationPlayer");
         visuals = GetNode<Node3D>("visuals");
+		ResolveGameManager();
     }
 
     public override void _PhysicsProcess(double delta) {
+		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
+			ResolveGameManager();
+		}
         this.ApplyMovement(delta);
     }
 
@@ -30,6 +38,7 @@ public partial class PlayerMovement : CharacterBody3D {
         bool onFloor = IsOnFloor();
         if (!onFloor)
             velocity.Y -= gravity * (float)delta;
+		bool interacting = IsInteracting;
         if (onFloor) {
             if (Input.IsActionJustPressed("jump")) {
                 velocity.Y = JUMP_VELOCITY;
@@ -41,8 +50,8 @@ public partial class PlayerMovement : CharacterBody3D {
         } else if (isJumping && velocity.Y <= 0.0f) {
             isJumping = false;
         }
-        Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
-        bool isRunning = Input.IsActionPressed("run");
+        Vector2 inputDir = interacting ? Vector2.Zero : Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
+        bool isRunning = !interacting && Input.IsActionPressed("run");
         float speed = isRunning ? RunSpeed : WalkSpeed;
         Node3D cameraPivot = GetNode<Node3D>("CameraPivot");
         Basis camBasis = cameraPivot.GlobalTransform.Basis;
@@ -69,8 +78,9 @@ public partial class PlayerMovement : CharacterBody3D {
             this.PlayAnimation(isRunning ? "run" : "walk");
         } else {
             this.PlayAnimation("idle");
-            velocity.X = Mathf.MoveToward(velocity.X, 0, speed);
-            velocity.Z = Mathf.MoveToward(velocity.Z, 0, speed);
+            float stopSpeed = interacting ? Mathf.Max(WalkSpeed, RunSpeed) : speed;
+            velocity.X = Mathf.MoveToward(velocity.X, 0, stopSpeed);
+            velocity.Z = Mathf.MoveToward(velocity.Z, 0, stopSpeed);
         }
         Velocity = velocity;
         MoveAndSlide();
@@ -81,4 +91,17 @@ public partial class PlayerMovement : CharacterBody3D {
             animationPlayer.Play(animationName);
         }
     }
+
+	private void ResolveGameManager() {
+		if (gameManagerPath != null && gameManagerPath.ToString() != string.Empty) {
+			gameManager = GetNodeOrNull<GameManager>(gameManagerPath);
+		}
+		if (gameManager == null) {
+			gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
+				GetTree().Root.FindChild("GameManager", true, false) as GameManager;
+		}
+		if (gameManager == null) {
+			GD.PushWarning($"{Name}: 未找到 GameManager，无法同步交互状态锁定移动。");
+		}
+	}
 }

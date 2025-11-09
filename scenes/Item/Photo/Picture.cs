@@ -3,14 +3,18 @@ using Godot;
 public partial class Picture : Interactable {
 	[Export]
 	public NodePath TextureRectPath { get; set; } = default;
+	[Export]
+	public Texture2D PhotoTexture { get; set; }
 
 	private TextureRect textureRect;
 	private bool canToggleOff = false;
+	private Texture2D originalTexture;
 
 	public override void _Ready() {
 		base._Ready();
 		ResolveTextureRect();
 		if (textureRect != null) {
+			originalTexture = textureRect.Texture;
 			textureRect.Visible = false;
 		}
 	}
@@ -49,6 +53,13 @@ public partial class Picture : Interactable {
 
 	private void ShowTexture(bool visible) {
 		if (textureRect == null) return;
+		if (visible) {
+			if (PhotoTexture != null) {
+				textureRect.Texture = PhotoTexture;
+			}
+		} else {
+			textureRect.Texture = originalTexture;
+		}
 		textureRect.Visible = visible;
 		textureRect.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
 	}

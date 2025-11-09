@@ -14,6 +14,7 @@ shader_parameter/size = 0.0
 
 [sub_resource type="Resource" id="Resource_ee7l0"]
 script = ExtResource("5_6e1ab")
+duration = 0.4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mmtqw"]
 

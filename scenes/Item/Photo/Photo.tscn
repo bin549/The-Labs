@@ -12,7 +12,7 @@ shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/size = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6gik"]
-size = Vector3(0.5078125, 0.953125, 0.6044922)
+size = Vector3(0.5078125, 1.0686035, 1.0585938)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqijp"]
 resource_name = "main"

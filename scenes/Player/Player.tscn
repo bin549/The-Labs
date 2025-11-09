@@ -6092,11 +6092,12 @@ _data = {
 
 [sub_resource type="Resource" id="Resource_pcam_tween"]
 script = ExtResource("4_xcisb")
-duration = 0.4
+duration = 0.2
 transition = 1
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_v6fml")
+gameManagerPath = NodePath("../GameManager")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -6701,7 +6702,7 @@ priority = 5
 tween_resource = SubResource("Resource_pcam_tween")
 
 [node name="InteractionRay" type="RayCast3D" parent="CameraPivot/PhantomCamFirst"]
-target_position = Vector3(0, 0, -3)
+target_position = Vector3(0, 0, -4)
 collision_mask = 3
 collide_with_areas = true
 
