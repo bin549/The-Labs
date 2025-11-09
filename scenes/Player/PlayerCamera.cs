@@ -10,18 +10,18 @@ public partial class PlayerCamera : Node3D {
 	private PhantomCamera3D phantomFirst;
 	private PhantomCamera3D phantomThird;
 	private RayCast3D interactionRay;
-	[Export] private NodePath interactionRayPath;
+	[Export] private NodePath interactionRayPath = "PhantomCamFirst/InteractionRay";
+	[Export] private NodePath gameManagerPath;
 	private Interactable currentInteractable;
+	private GameManager gameManager;
+
+	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
 
 	public override void _Ready() {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		this.InitPhantomCamera();
-		if (interactionRay == null && interactionRayPath != null && interactionRayPath.ToString() != string.Empty) {
-			interactionRay = GetNodeOrNull<RayCast3D>(interactionRayPath);
-		}
-		if (interactionRay != null) {
-			interactionRay.Enabled = true;
-		}
+		this.ResolveInteractionRay();
+		this.ResolveGameManager();
 	}
 
 	private void InitPhantomCamera() {
@@ -32,10 +32,21 @@ public partial class PlayerCamera : Node3D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		if (interactionRay == null || !GodotObject.IsInstanceValid(interactionRay)) {
+			this.ResolveInteractionRay();
+		}
+		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
+			this.ResolveGameManager();
+		}
+		if (IsInteracting) {
+			return;
+		}
 		this.CheckInteraction();
 	}
 
 	public override void _Input(InputEvent @event) {
+		if (IsInteracting) return;
+
 		if (@event is InputEventMouseMotion mouseEvent) {
 			RotateY(-Mathf.DegToRad(mouseEvent.Relative.X * MOUSE_SENSITIVITY_HORIZONTAL));
 			pitch -= mouseEvent.Relative.Y * MOUSE_SENSITIVITY_VERTICLE;
@@ -46,6 +57,7 @@ public partial class PlayerCamera : Node3D {
 	}
 
 	public override void _Process(double delta) {
+		if (IsInteracting) return;
 		this.ToggleView();
 	}
 
@@ -59,6 +71,7 @@ public partial class PlayerCamera : Node3D {
 	private void CheckInteraction() {
 		if (interactionRay == null) return;
 
+		interactionRay.ForceRaycastUpdate();
 		if (interactionRay.IsColliding()) {
 			var colliderNode = interactionRay.GetCollider() as Node;
 			var interactable = FindInteractable(colliderNode);
@@ -76,10 +89,35 @@ public partial class PlayerCamera : Node3D {
 			}
 		}
 
-		// 未命中或未找到交互对象，清理焦点
 		if (this.currentInteractable != null) {
 			this.currentInteractable.OnFocusExit();
 			this.currentInteractable = null;
+		}
+	}
+
+	private void ResolveInteractionRay() {
+		if (interactionRayPath != null && interactionRayPath.ToString() != string.Empty) {
+			interactionRay = GetNodeOrNull<RayCast3D>(interactionRayPath);
+		}
+		if (interactionRay == null) {
+			interactionRay = GetNodeOrNull<RayCast3D>("PhantomCamFirst/InteractionRay") ??
+				GetNodeOrNull<RayCast3D>("PhantomCamThird/InteractionRay");
+		}
+		if (interactionRay != null) {
+			interactionRay.Enabled = true;
+		}
+	}
+
+	private void ResolveGameManager() {
+		if (gameManagerPath != null && gameManagerPath.ToString() != string.Empty) {
+			gameManager = GetNodeOrNull<GameManager>(gameManagerPath);
+		}
+		if (gameManager == null) {
+			gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
+				GetTree().Root.FindChild("GameManager", true, false) as GameManager;
+		}
+		if (gameManager == null) {
+			GD.PushWarning($"{Name}: 未找到 GameManager 节点，无法检测交互状态。");
 		}
 	}
 

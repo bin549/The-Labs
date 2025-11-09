@@ -27,14 +27,18 @@ public partial class PlayerMovement : CharacterBody3D {
 
     private void ApplyMovement(double delta) {
         Vector3 velocity = Velocity;
-        if (!IsOnFloor())
-            velocity.Y -= gravity * (float)delta;
         bool onFloor = IsOnFloor();
-        if (onFloor && Input.IsActionJustPressed("jump")) {
-            velocity.Y = JUMP_VELOCITY;
-            isJumping = true;
-            this.PlayAnimation("jump");
-        } else if (onFloor && isJumping && velocity.Y <= 0.0f) {
+        if (!onFloor)
+            velocity.Y -= gravity * (float)delta;
+        if (onFloor) {
+            if (Input.IsActionJustPressed("jump")) {
+                velocity.Y = JUMP_VELOCITY;
+                isJumping = true;
+                this.PlayAnimation("jump");
+            } else if (isJumping) {
+                isJumping = false;
+            }
+        } else if (isJumping && velocity.Y <= 0.0f) {
             isJumping = false;
         }
         Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
@@ -49,14 +53,20 @@ public partial class PlayerMovement : CharacterBody3D {
         right.Y = 0;
         right = right.Normalized();
         Vector3 direction = (right * inputDir.X + forward * inputDir.Y).Normalized();
-        if (isJumping || !onFloor) {
+        if (!onFloor) {
+            if (isJumping && velocity.Y > 0.0f) {
+                this.PlayAnimation("jump");
+            } else {
+                this.PlayAnimation("fall");
+            }
+        } else if (isJumping) {
             this.PlayAnimation("jump");
         } else if (direction != Vector3.Zero) {
             Vector3 lookTarget = visuals.GlobalPosition + new Vector3(direction.X, 0, direction.Z);
             visuals.LookAt(lookTarget, Vector3.Up);
             velocity.X = direction.X * speed;
             velocity.Z = direction.Z * speed;
-            this.PlayAnimation(isRunning ? "running" : "walking");
+            this.PlayAnimation(isRunning ? "run" : "walk");
         } else {
             this.PlayAnimation("idle");
             velocity.X = Mathf.MoveToward(velocity.X, 0, speed);

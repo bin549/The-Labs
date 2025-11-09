@@ -13,6 +13,7 @@ config_version=5
 config/name="The Labs"
 run/main_scene="uid://p5vg4aeef8ba"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
+boot_splash/image="uid://cog1xeb46nw4d"
 config/icon="res://icon.svg"
 
 [autoload]
