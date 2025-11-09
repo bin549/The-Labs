@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://cni4dh48mykc1"]
+[gd_scene load_steps=27 format=4 uid="uid://cni4dh48mykc1"]
 
 [ext_resource type="Script" uid="uid://b8iekfj3s5xek" path="res://scenes/Player/PlayerMovement.cs" id="1_v6fml"]
 [ext_resource type="Shader" uid="uid://ssgesi78vg38" path="res://assets/Josie/Toon Shader/Outline_Shader.gdshader" id="2_dqp0f"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dg2lcvn01ami8" path="res://assets/Josie/Textures/Mouth_02.png" id="5_cd157"]
 [ext_resource type="Texture2D" uid="uid://by2q6ybroafj7" path="res://assets/Josie/Textures/Eye Texture.png" id="6_8djf2"]
 [ext_resource type="Texture2D" uid="uid://b6yppsi0gkw0n" path="res://assets/photos/1103044653.jpg" id="6_socpp"]
+[ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://scenes/Item/Book/Book.tscn" id="11_tl8lu"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v6fml"]
 radius = 0.3
@@ -6095,6 +6096,9 @@ script = ExtResource("4_xcisb")
 duration = 0.2
 transition = 1
 
+[sub_resource type="Resource" id="Resource_tl8lu"]
+script = ExtResource("4_xcisb")
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_v6fml")
 gameManagerPath = NodePath("../GameManager")
@@ -6738,3 +6742,15 @@ grow_vertical = 2
 texture = ExtResource("6_socpp")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="Book" parent="." instance=ExtResource("11_tl8lu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6392417, -1.9767611)
+visible = false
+
+[node name="PhantomCamera3D" type="Node3D" parent="Book"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4057631)
+visible = false
+script = ExtResource("3_ved6o")
+priority = 999
+tween_resource = SubResource("Resource_tl8lu")
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
