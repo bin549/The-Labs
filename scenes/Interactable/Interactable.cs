@@ -25,17 +25,14 @@ public partial class Interactable : Node3D {
         if (Input.IsActionJustPressed("interact") && this.isFocus && !this.gameManager.IsBusy) {
             this.EnterInteraction();
         }
-        if (Input.IsActionJustPressed("quit") && this.gameManager.IsBusy) {
-            this.ExitInteraction();
-        }
     }
 
-    protected virtual void EnterInteraction() {
+    public virtual void EnterInteraction() {
+        this.gameManager.SetCurrentInteractable(this);
         Input.MouseMode = Input.MouseModeEnum.Visible;
     }
 
-    protected virtual void ExitInteraction() {
-        Input.MouseMode = Input.MouseModeEnum.Captured;
+    public virtual void ExitInteraction() {
     }
 
     public virtual void OnFocusEnter() {

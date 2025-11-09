@@ -14,19 +14,18 @@ public partial class LabItem : Interactable {
         if (phantomCamNode != null) this.phantomCam = phantomCamNode.AsPhantomCamera3D();
     }
 
-    protected override void EnterInteraction() {
-        base.gameManager.IsBusy = true;
+    public override void EnterInteraction() {
         base.EnterInteraction();
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 999;
         }
     }
 
-    protected override void ExitInteraction() {
+    public override void ExitInteraction() {
         base.ExitInteraction();
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 1;
         }
-        base.gameManager.IsBusy = false;
+        base.gameManager.SetCurrentInteractable(null);
     }
 }
