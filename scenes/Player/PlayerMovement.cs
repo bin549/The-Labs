@@ -5,12 +5,13 @@ using PhantomCamera;
 public partial class PlayerMovement : CharacterBody3D {
     [Export] private float WalkSpeed = 3.0f;
     [Export] private float RunSpeed = 8.0f;
-    private float JUMP_VELOCITY = 4.5f;
+    private float JUMP_VELOCITY = 5.5f;
     private float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
     private Node3D cameraPivot;
     private float pitch = 0.0f;
     private AnimationPlayer animationPlayer;
     private Node3D visuals;
+    private bool isJumping = false;
 	[Export]
 	public NodePath VisualsPath { get; set; } = "Player/visuals";
 
@@ -28,8 +29,14 @@ public partial class PlayerMovement : CharacterBody3D {
         Vector3 velocity = Velocity;
         if (!IsOnFloor())
             velocity.Y -= gravity * (float)delta;
-        if (Input.IsActionJustPressed("jump") && IsOnFloor())
+        bool onFloor = IsOnFloor();
+        if (onFloor && Input.IsActionJustPressed("jump")) {
             velocity.Y = JUMP_VELOCITY;
+            isJumping = true;
+            this.PlayAnimation("jump");
+        } else if (onFloor && isJumping && velocity.Y <= 0.0f) {
+            isJumping = false;
+        }
         Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         bool isRunning = Input.IsActionPressed("run");
         float speed = isRunning ? RunSpeed : WalkSpeed;
@@ -42,7 +49,9 @@ public partial class PlayerMovement : CharacterBody3D {
         right.Y = 0;
         right = right.Normalized();
         Vector3 direction = (right * inputDir.X + forward * inputDir.Y).Normalized();
-        if (direction != Vector3.Zero) {
+        if (isJumping || !onFloor) {
+            this.PlayAnimation("jump");
+        } else if (direction != Vector3.Zero) {
             Vector3 lookTarget = visuals.GlobalPosition + new Vector3(direction.X, 0, direction.Z);
             visuals.LookAt(lookTarget, Vector3.Up);
             velocity.X = direction.X * speed;

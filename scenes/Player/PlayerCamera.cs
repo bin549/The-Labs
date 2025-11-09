@@ -9,12 +9,19 @@ public partial class PlayerCamera : Node3D {
 	private bool isFirstPerson = false;
 	private PhantomCamera3D phantomFirst;
 	private PhantomCamera3D phantomThird;
-	[Export] private RayCast3D interactionRay;
-	private Node currentInteractable;
+	private RayCast3D interactionRay;
+	[Export] private NodePath interactionRayPath;
+	private Interactable currentInteractable;
 
 	public override void _Ready() {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		this.InitPhantomCamera();
+		if (interactionRay == null && interactionRayPath != null && interactionRayPath.ToString() != string.Empty) {
+			interactionRay = GetNodeOrNull<RayCast3D>(interactionRayPath);
+		}
+		if (interactionRay != null) {
+			interactionRay.Enabled = true;
+		}
 	}
 
 	private void InitPhantomCamera() {
@@ -50,25 +57,38 @@ public partial class PlayerCamera : Node3D {
 	}
 
 	private void CheckInteraction() {
+		if (interactionRay == null) return;
+
 		if (interactionRay.IsColliding()) {
-			var collider = interactionRay.GetCollider() as Node;
-			if (this.currentInteractable != null && collider == this.currentInteractable) {
+			var colliderNode = interactionRay.GetCollider() as Node;
+			var interactable = FindInteractable(colliderNode);
+
+			if (interactable != null) {
+				if (this.currentInteractable != interactable) {
+					// 先对上一个发出退出
+					if (this.currentInteractable != null) {
+						this.currentInteractable.OnFocusExit();
+					}
+					this.currentInteractable = interactable;
+					this.currentInteractable.OnFocusEnter();
+				}
 				return;
 			}
-			bool hasInteractMethod = collider != null && (collider.HasMethod("Interact"));
-			if (hasInteractMethod) {
-	 			if (this.currentInteractable != collider) {
-					this.currentInteractable = collider;
-					if (collider.HasMethod("OnFocusEnter"))
-   						collider.Call("OnFocusEnter");
-				}
- 			}
-		} else {
-			if (this.currentInteractable != null) {
-				if (currentInteractable.HasMethod("OnFocusExit"))
-					currentInteractable.Call("OnFocusExit");
-				this.currentInteractable = null;
-			}
 		}
+
+		// 未命中或未找到交互对象，清理焦点
+		if (this.currentInteractable != null) {
+			this.currentInteractable.OnFocusExit();
+			this.currentInteractable = null;
+		}
+	}
+
+	private static Interactable FindInteractable(Node node) {
+		var cursor = node;
+		while (cursor != null) {
+			if (cursor is Interactable interactable) return interactable;
+			cursor = cursor.GetParent();
+		}
+		return null;
 	}
 }
