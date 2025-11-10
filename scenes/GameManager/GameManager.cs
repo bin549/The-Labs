@@ -15,11 +15,9 @@ public partial class GameManager : Node {
         }
     }
 
-
     public void SetCurrentInteractable(Interactable interactable) {
         this.currentInteractable = interactable;
     }
-
     public bool IsBusy => this.currentInteractable != null;
 
     public override void _Process(double delta) {
@@ -38,7 +36,6 @@ public partial class GameManager : Node {
         if (GetTree().Paused == newState && targetState.HasValue) {
             return;
         }
-
         GetTree().Paused = newState;
         if (this.pauseMenu != null) {
             this.pauseMenu.Visible = newState;

@@ -26,7 +26,6 @@ public partial class Door : Interactable {
 		if (isInteracting || rotationTween?.IsRunning() == true) {
 			return;
 		}
-
 		ResolveGameManager();
 		isInteracting = true;
 		gameManager?.SetCurrentInteractable(this);
@@ -45,7 +44,6 @@ public partial class Door : Interactable {
 			FinishInteraction();
 			return;
 		}
-
 		bool targetState = !isOpen;
 		PlaySound(targetState);
 		AnimateDoor(targetState);
@@ -54,15 +52,12 @@ public partial class Door : Interactable {
 	private void AnimateDoor(bool open) {
 		isOpen = open;
 		KillTween();
-
 		var targetRotation = open ? OpenRotationDegrees : ClosedRotationDegrees;
-
 		if (TransitionDuration <= Mathf.Epsilon) {
 			ApplyDoorRotation(targetRotation);
 			FinishInteraction();
 			return;
 		}
-
 		var tween = CreateTween();
 		tween.SetParallel(false);
 		tween.SetEase(EaseType);
@@ -88,7 +83,6 @@ public partial class Door : Interactable {
 		} else {
 			doorPivot = GetNodeOrNull<Node3D>(DoorPivotPath);
 		}
-
 		if (doorPivot == null) {
 			GD.PushWarning($"{Name}: 未找到 DoorPivotPath 指定的节点 {DoorPivotPath}。");
 		}

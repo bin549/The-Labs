@@ -7,8 +7,7 @@ public partial class Interactable : Node3D {
     [Export] protected string ActionName { get; set; } = "交互";
     [Export] protected ShaderMaterial outlineMat;
     [Export] protected float outlineSize = 1.05f;
-    [Export]
-    public Godot.Collections.Array<NodePath> OutlineTargetPaths { get; set; } = new();
+    [Export] public Godot.Collections.Array<NodePath> OutlineTargetPaths { get; set; } = new();
     [Export] protected Label3D nameLabel;
     [Export] protected Node3D lineNode;
 	[Export] public NodePath linePointAPath { get; set; } = new();
@@ -26,7 +25,6 @@ public partial class Interactable : Node3D {
     protected bool isFocus = false;
     protected bool isInteracting = false;
     [Export] protected GameManager gameManager;
-
     private readonly List<GeometryInstance3D> outlineTargets = new();
     private readonly Dictionary<GeometryInstance3D, Material> originalOverlays = new();
 	private Node3D lineRoot;
@@ -151,13 +149,11 @@ public partial class Interactable : Node3D {
 		lineRoot = new Node3D();
 		lineRoot.Name = "AutoLine";
 		parent.AddChild(lineRoot);
-
 		lineMeshInstance = new MeshInstance3D();
 		lineMeshInstance.Name = "AutoLineMesh";
 		lineBoxMesh = new BoxMesh();
 		lineBoxMesh.Size = new Vector3(lineThickness * 2.0f, lineThickness * 2.0f, 1.0f);
 		lineMeshInstance.Mesh = lineBoxMesh;
-
 		lineMaterial = new StandardMaterial3D();
 		lineMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
 		lineMaterial.AlbedoColor = lineColor;
@@ -174,12 +170,10 @@ public partial class Interactable : Node3D {
 		var a = GetNodeOrNull<Node3D>(linePointAPath);
 		var b = GetNodeOrNull<Node3D>(linePointBPath);
 		if (lineRoot == null || lineMeshInstance == null) return;
-
 		if (a == null || b == null) {
 			lineRoot.Visible = false;
 			return;
 		}
-
 		Vector3 start = a.GlobalTransform.Origin;
 		Vector3 end = b.GlobalTransform.Origin;
 		Vector3 dir = end - start;
@@ -208,7 +202,6 @@ public partial class Interactable : Node3D {
 		curveRoot = new Node3D();
 		curveRoot.Name = "AutoCurvedArrow";
 		parent.AddChild(curveRoot);
-
 		curveBodyInstance = new MultiMeshInstance3D();
 		curveBody = new MultiMesh();
 		curveSegmentMesh = new BoxMesh();

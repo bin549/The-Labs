@@ -26,12 +26,10 @@ public partial class BookPickup : Interactable {
 	public override void _Process(double delta) {
 		base._Process(delta);
 		if (!isInteractingWithBook) return;
-
 		if (Input.IsActionJustPressed("pause") || Input.IsActionJustPressed("ui_cancel")) {
 			ExitInteraction();
 			return;
 		}
-
 		if (!canExitInteraction && Input.IsActionJustReleased("interact")) {
 			canExitInteraction = true;
 		} else if (canExitInteraction && Input.IsActionJustPressed("interact")) {
@@ -43,11 +41,9 @@ public partial class BookPickup : Interactable {
 		if (isInteractingWithBook) return;
 		ResolvePlayerAndCamera();
 		ResolvePickupVisual();
-
 		base.EnterInteraction();
 		isInteractingWithBook = true;
 		canExitInteraction = false;
-
 		ShowPickupVisual(false);
 		ShowPlayerBook(true);
 		BoostCameraPriority(true);
@@ -56,15 +52,12 @@ public partial class BookPickup : Interactable {
 
 	public override void ExitInteraction() {
 		if (!isInteractingWithBook) return;
-
 		ShowPlayerBook(false);
 		BoostCameraPriority(false);
 		isInteractingWithBook = false;
 		canExitInteraction = false;
-
 		Input.ActionRelease("pause");
 		Input.ActionRelease("ui_cancel");
-
 		base.ExitInteraction();
 		if (gameManager != null) {
 			gameManager.SetCurrentInteractable(null);
@@ -81,7 +74,6 @@ public partial class BookPickup : Interactable {
 				GD.PushWarning($"{Name}: 未找到 Player 节点，拾取书籍功能将不可用。");
 			}
 		}
-
 		if (playerNode != null && (playerBook == null || !GodotObject.IsInstanceValid(playerBook))) {
 			if (NodePathIsValid(PlayerBookPath)) {
 				playerBook = ResolveNodePath(PlayerBookPath, playerNode);
@@ -91,7 +83,6 @@ public partial class BookPickup : Interactable {
 				GD.PushWarning($"{Name}: 未找到玩家持有的书籍节点。");
 			}
 		}
-
 		if (playerBook != null && (phantomCamera == null || !GodotObject.IsInstanceValid(phantomCamera.Node3D))) {
 			Node3D phantomNode = null;
 			if (NodePathIsValid(PhantomCameraPath)) {
@@ -109,11 +100,9 @@ public partial class BookPickup : Interactable {
 
 	private void ResolvePickupVisual() {
 		if (pickupVisualRoot != null && GodotObject.IsInstanceValid(pickupVisualRoot)) return;
-
 		if (NodePathIsValid(PickupVisualRootPath)) {
 			pickupVisualRoot = ResolveNodePath(PickupVisualRootPath, this);
 		}
-
 		pickupVisualRoot ??= this;
 	}
 
@@ -131,11 +120,9 @@ public partial class BookPickup : Interactable {
 
 	private void BoostCameraPriority(bool enable) {
 		if (phantomCamera == null) return;
-
 		if (!originalCameraPriority.HasValue) {
 			originalCameraPriority = phantomCamera.Priority;
 		}
-
 		if (enable) {
 			phantomCamera.Priority = InspectCameraPriority;
 		} else {

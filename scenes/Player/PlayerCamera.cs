@@ -14,7 +14,6 @@ public partial class PlayerCamera : Node3D {
 	[Export] private NodePath gameManagerPath;
 	private Interactable currentInteractable;
 	private GameManager gameManager;
-
 	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
 
 	public override void _Ready() {
@@ -46,7 +45,6 @@ public partial class PlayerCamera : Node3D {
 
 	public override void _Input(InputEvent @event) {
 		if (IsInteracting) return;
-
 		if (@event is InputEventMouseMotion mouseEvent) {
 			RotateY(-Mathf.DegToRad(mouseEvent.Relative.X * MOUSE_SENSITIVITY_HORIZONTAL));
 			pitch -= mouseEvent.Relative.Y * MOUSE_SENSITIVITY_VERTICLE;
@@ -70,15 +68,12 @@ public partial class PlayerCamera : Node3D {
 
 	private void CheckInteraction() {
 		if (interactionRay == null) return;
-
 		interactionRay.ForceRaycastUpdate();
 		if (interactionRay.IsColliding()) {
 			var colliderNode = interactionRay.GetCollider() as Node;
 			var interactable = FindInteractable(colliderNode);
-
 			if (interactable != null) {
 				if (this.currentInteractable != interactable) {
-					// 先对上一个发出退出
 					if (this.currentInteractable != null) {
 						this.currentInteractable.OnFocusExit();
 					}
@@ -88,7 +83,6 @@ public partial class PlayerCamera : Node3D {
 				return;
 			}
 		}
-
 		if (this.currentInteractable != null) {
 			this.currentInteractable.OnFocusExit();
 			this.currentInteractable = null;

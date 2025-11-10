@@ -1,4 +1,5 @@
 using Godot;
+
 public partial class Gramophone : Interactable {
 	[Export] public NodePath AudioPlayerPath { get; set; } = new("AudioStreamPlayer3D");
 	[Export] public string PlayActionText { get; set; } = "播放音乐";
@@ -24,13 +25,11 @@ public partial class Gramophone : Interactable {
 
 	public override void EnterInteraction() {
 		if (audioPlayer == null) return;
-
 		if (IsAudioPlaying()) {
 			audioPlayer.Stop();
 		} else {
 			audioPlayer.Play();
 		}
-
 		RefreshState();
 		UpdateActionLabel();
 	}
@@ -42,7 +41,6 @@ public partial class Gramophone : Interactable {
 
 	private void ResolveAudioPlayer() {
 		var previousPlayer = audioPlayer;
-
 		AudioStreamPlayer3D resolvedPlayer = null;
 		if (AudioPlayerPath.GetNameCount() == 0) {
 			resolvedPlayer = GetNodeOrNull<AudioStreamPlayer3D>("AudioStreamPlayer3D");
@@ -52,24 +50,19 @@ public partial class Gramophone : Interactable {
 				resolvedPlayer = GetTree().Root.GetNodeOrNull<AudioStreamPlayer3D>(AudioPlayerPath);
 			}
 		}
-
 		if (previousPlayer != null && previousPlayer != resolvedPlayer) {
 			DisconnectAudioSignals(previousPlayer);
 		}
-
 		audioPlayer = resolvedPlayer;
-
 		if (audioPlayer == null) {
 			GD.PushWarning($"{Name}: 未找到 AudioStreamPlayer3D 节点 {AudioPlayerPath}。");
 			return;
 		}
-
 		ConnectAudioSignals();
 	}
 
 	private void ConnectAudioSignals() {
 		if (audioPlayer == null || audioSignalsConnected) return;
-
 		audioPlayer.Finished += OnAudioFinished;
 		audioSignalsConnected = true;
 	}
@@ -77,22 +70,18 @@ public partial class Gramophone : Interactable {
 	private void DisconnectAudioSignals(AudioStreamPlayer3D targetPlayer = null) {
 		var player = targetPlayer ?? audioPlayer;
 		if (player == null || !audioSignalsConnected) return;
-
 		player.Finished -= OnAudioFinished;
 		audioSignalsConnected = false;
 	}
 
 	private void UpdateLoopSetting() {
 		if (audioPlayer == null || audioPlayer.Stream == null) return;
-
 		var duplicatedStream = audioPlayer.Stream.Duplicate() as AudioStream;
 		if (duplicatedStream == null) {
 			GD.PushWarning($"{Name}: 无法复制音频流资源，循环设置可能无效。");
 			return;
 		}
-
 		bool loopApplied = false;
-
 		if (duplicatedStream is AudioStreamWav wavStream) {
 			wavStream.LoopMode = Loop ? AudioStreamWav.LoopModeEnum.Forward : AudioStreamWav.LoopModeEnum.Disabled;
 			loopApplied = true;
@@ -103,11 +92,9 @@ public partial class Gramophone : Interactable {
 			mp3Stream.Loop = Loop;
 			loopApplied = true;
 		}
-
 		if (!loopApplied) {
 			GD.PushWarning($"{Name}: 当前音频流类型 {duplicatedStream.GetClass()} 不支持自动循环设置。");
 		}
-
 		audioPlayer.Stream = duplicatedStream;
 	}
 
@@ -133,4 +120,3 @@ public partial class Gramophone : Interactable {
 		}
 	}
 }
-

@@ -22,7 +22,6 @@ public partial class Picture : Interactable {
 	public override void _Process(double delta) {
 		base._Process(delta);
 		if (!isInteracting) return;
-
 		if (!canToggleOff && Input.IsActionJustReleased("interact")) {
 			canToggleOff = true;
 		} else if (canToggleOff && Input.IsActionJustPressed("interact")) {
@@ -66,16 +65,13 @@ public partial class Picture : Interactable {
 
 	private void ResolveTextureRect() {
 		if (TextureRectPath == default || TextureRectPath.ToString() == string.Empty) return;
-
 		var candidate = GetNodeOrNull<TextureRect>(TextureRectPath);
 		if (candidate == null) {
 			candidate = GetTree().Root.GetNodeOrNull<TextureRect>(TextureRectPath);
 		}
-
 		if (candidate == null) {
 			GD.PushWarning($"{Name}: 未找到 TextureRect 节点 {TextureRectPath}，无法显示照片。");
 		}
-
 		textureRect = candidate;
 	}
 }
