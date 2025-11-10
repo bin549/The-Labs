@@ -51,6 +51,8 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void ResolveVideoPlayer() {
+		var previousPlayer = videoPlayer;
+
 		if (VideoPlayerPath.IsEmpty) {
 			videoPlayer = null;
 		} else {
@@ -60,18 +62,21 @@ public partial class MoviePlayer : Interactable {
 			}
 		}
 
+		if (previousPlayer != null && previousPlayer != videoPlayer) {
+			DisconnectVideoSignals(previousPlayer);
+		}
+
 		if (videoPlayer == null) {
 			GD.PushWarning($"{Name}: 未找到 VideoStreamPlayer 节点 {VideoPlayerPath}。");
 			return;
 		}
 
+		ConnectVideoSignals();
 		videoPlayer.Autoplay = false;
-		videoPlayer.Finished -= OnVideoFinished;
 		videoPlayer.Stop();
 		if (ResetOnStop) {
 			videoPlayer.StreamPosition = 0;
 		}
-		videoPlayer.Finished += OnVideoFinished;
 		originalStream = videoPlayer.Stream;
 	}
 
@@ -114,6 +119,21 @@ public partial class MoviePlayer : Interactable {
 		if (isFocus && nameLabel != null) {
 			nameLabel.Text = $"[E] {ActionName}";
 		}
+	}
+
+	private bool videoSignalsConnected;
+
+	private void ConnectVideoSignals() {
+		if (videoPlayer == null || videoSignalsConnected) return;
+		videoPlayer.Finished += OnVideoFinished;
+		videoSignalsConnected = true;
+	}
+
+	private void DisconnectVideoSignals(VideoStreamPlayer target = null) {
+		var player = target ?? videoPlayer;
+		if (player == null || !videoSignalsConnected) return;
+		player.Finished -= OnVideoFinished;
+		videoSignalsConnected = false;
 	}
 
 	private void InitializePlaylist() {
