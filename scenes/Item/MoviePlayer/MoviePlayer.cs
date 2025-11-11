@@ -7,7 +7,6 @@ public partial class MoviePlayer : Interactable {
 	[Export] public string StopActionText { get; set; } = "关闭影片";
 	[Export] public Godot.Collections.Array<VideoStream> VideoStreams { get; set; } = new();
 	[Export] public int DefaultStreamIndex { get; set; } = 0;
-
 	private VideoStreamPlayer videoPlayer;
 	private bool isPlaying;
 	private int currentStreamIndex = -1;
@@ -15,10 +14,10 @@ public partial class MoviePlayer : Interactable {
 
 	public override void _Ready() {
 		base._Ready();
-		ResolveVideoPlayer();
-		InitializePlaylist();
-		RefreshPlaybackState();
-		UpdateActionLabel();
+		this.ResolveVideoPlayer();
+		this.InitializePlaylist();
+		this.RefreshPlaybackState();
+		this.UpdateActionLabel();
 	}
 
 	public override void _ExitTree() {
@@ -35,7 +34,7 @@ public partial class MoviePlayer : Interactable {
 
 	public override void _Process(double delta) {
 		base._Process(delta);
-		if (!isInteracting || !isPlaying || videoPlayer == null) return;
+		if (!isInteracting || !this.isPlaying || videoPlayer == null) return;
 		if (Input.IsActionJustPressed("ui_left")) {
 			SwitchVideo(-1);
 		} else if (Input.IsActionJustPressed("ui_right")) {
@@ -81,19 +80,19 @@ public partial class MoviePlayer : Interactable {
 			if (ResetOnStop) {
 				videoPlayer.StreamPosition = 0;
 			}
-			isPlaying = false;
+			this.isPlaying = false;
 			isInteracting = false;
 		} else {
 			PrepareStreamForPlayback();
 			videoPlayer.Play();
-			isPlaying = true;
+			this.isPlaying = true;
 			isInteracting = true;
 		}
 		UpdateActionLabel();
 	}
 
 	private void OnVideoFinished() {
-		isPlaying = false;
+		this.isPlaying = false;
 		isInteracting = false;
 		if (ResetOnStop && videoPlayer != null) {
 			videoPlayer.StreamPosition = 0;
@@ -102,12 +101,12 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void RefreshPlaybackState() {
-		isPlaying = videoPlayer != null && videoPlayer.IsPlaying();
-		isInteracting = isPlaying;
+		this.isPlaying = videoPlayer != null && videoPlayer.IsPlaying();
+		isInteracting = this.isPlaying;
 	}
 
 	private void UpdateActionLabel() {
-		ActionName = isPlaying ? StopActionText : PlayActionText;
+		ActionName = this.isPlaying ? StopActionText : PlayActionText;
 		if (isFocus && nameLabel != null) {
 			nameLabel.Text = $"[E] {ActionName}";
 		}
@@ -116,16 +115,16 @@ public partial class MoviePlayer : Interactable {
 	private bool videoSignalsConnected;
 
 	private void ConnectVideoSignals() {
-		if (videoPlayer == null || videoSignalsConnected) return;
+		if (videoPlayer == null || this.videoSignalsConnected) return;
 		videoPlayer.Finished += OnVideoFinished;
-		videoSignalsConnected = true;
+		this.videoSignalsConnected = true;
 	}
 
 	private void DisconnectVideoSignals(VideoStreamPlayer target = null) {
 		var player = target ?? videoPlayer;
-		if (player == null || !videoSignalsConnected) return;
+		if (player == null || !this.videoSignalsConnected) return;
 		player.Finished -= OnVideoFinished;
-		videoSignalsConnected = false;
+		this.videoSignalsConnected = false;
 	}
 
 	private void InitializePlaylist() {
@@ -135,7 +134,7 @@ public partial class MoviePlayer : Interactable {
 			if (AssignStream(targetIndex)) {
 				videoPlayer.Stop();
 			}
-			isPlaying = false;
+			this.isPlaying = false;
 			isInteracting = false;
 		} else {
 			currentStreamIndex = -1;
@@ -163,12 +162,12 @@ public partial class MoviePlayer : Interactable {
 		var nextIndex = WrapIndex(baseIndex + direction, VideoStreams.Count);
 		bool wasPlaying = videoPlayer.IsPlaying();
 		AssignStream(nextIndex);
-		if (wasPlaying || isPlaying) {
+		if (wasPlaying || this.isPlaying) {
 			videoPlayer.Play();
-			isPlaying = true;
+			this.isPlaying = true;
 			isInteracting = true;
 		} else {
-			isPlaying = false;
+			this.isPlaying = false;
 			isInteracting = false;
 		}
 		UpdateActionLabel();

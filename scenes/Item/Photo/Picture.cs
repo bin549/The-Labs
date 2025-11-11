@@ -1,11 +1,8 @@
 using Godot;
 
 public partial class Picture : Interactable {
-	[Export]
-	public NodePath TextureRectPath { get; set; } = default;
-	[Export]
-	public Texture2D PhotoTexture { get; set; }
-
+	[Export] public NodePath TextureRectPath { get; set; } = default;
+	[Export] public Texture2D PhotoTexture { get; set; }
 	private TextureRect textureRect;
 	private bool canToggleOff = false;
 	private Texture2D originalTexture;

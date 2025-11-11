@@ -19,8 +19,8 @@ public partial class BookPickup : Interactable {
 
 	public override void _Ready() {
 		base._Ready();
-		ResolvePlayerAndCamera();
-		ResolvePickupVisual();
+		this.ResolvePlayerAndCamera();
+		this.ResolvePickupVisual();
 	}
 
 	public override void _Process(double delta) {
@@ -39,8 +39,8 @@ public partial class BookPickup : Interactable {
 
 	public override void EnterInteraction() {
 		if (isInteractingWithBook) return;
-		ResolvePlayerAndCamera();
-		ResolvePickupVisual();
+		this.ResolvePlayerAndCamera();
+		this.ResolvePickupVisual();
 		base.EnterInteraction();
 		isInteractingWithBook = true;
 		canExitInteraction = false;

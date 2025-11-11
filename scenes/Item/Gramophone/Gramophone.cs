@@ -5,22 +5,21 @@ public partial class Gramophone : Interactable {
 	[Export] public string PlayActionText { get; set; } = "播放音乐";
 	[Export] public string StopActionText { get; set; } = "暂停音乐";
 	[Export] public bool Loop { get; set; } = true;
-
 	private AudioStreamPlayer3D audioPlayer;
 	private bool audioSignalsConnected;
 	private bool isPlaying;
 
 	public override void _Ready() {
 		base._Ready();
-		ResolveAudioPlayer();
-		UpdateLoopSetting();
-		RefreshState();
-		UpdateActionLabel();
+		this.ResolveAudioPlayer();
+		this.UpdateLoopSetting();
+		this.RefreshState();
+		this.UpdateActionLabel();
 	}
 
 	public override void _ExitTree() {
 		base._ExitTree();
-		DisconnectAudioSignals();
+		this.DisconnectAudioSignals();
 	}
 
 	public override void EnterInteraction() {
@@ -30,12 +29,12 @@ public partial class Gramophone : Interactable {
 		} else {
 			audioPlayer.Play();
 		}
-		RefreshState();
-		UpdateActionLabel();
+		this.RefreshState();
+		this.UpdateActionLabel();
 	}
 
 	public override void OnFocusEnter() {
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		base.OnFocusEnter();
 	}
 
@@ -51,7 +50,7 @@ public partial class Gramophone : Interactable {
 			}
 		}
 		if (previousPlayer != null && previousPlayer != resolvedPlayer) {
-			DisconnectAudioSignals(previousPlayer);
+			this.DisconnectAudioSignals(previousPlayer);
 		}
 		audioPlayer = resolvedPlayer;
 		if (audioPlayer == null) {

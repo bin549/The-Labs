@@ -10,16 +10,15 @@ public partial class Door : Interactable {
 	[Export] public bool StartsOpen { get; set; } = false;
 	[Export] public AudioStreamPlayer3D OpenSound { get; set; }
 	[Export] public AudioStreamPlayer3D CloseSound { get; set; }
-
 	private Node3D doorPivot;
 	private Tween rotationTween;
 	private bool isOpen;
 
 	public override void _Ready() {
 		base._Ready();
-		ResolveDoorPivot();
-		isOpen = StartsOpen;
-		ApplyDoorRotation(isOpen ? OpenRotationDegrees : ClosedRotationDegrees);
+		this.ResolveDoorPivot();
+		this.isOpen = StartsOpen;
+		this.ApplyDoorRotation(this.isOpen ? OpenRotationDegrees : ClosedRotationDegrees);
 	}
 
 	public override void EnterInteraction() {
@@ -44,17 +43,17 @@ public partial class Door : Interactable {
 			FinishInteraction();
 			return;
 		}
-		bool targetState = !isOpen;
+		bool targetState = !this.isOpen;
 		PlaySound(targetState);
 		AnimateDoor(targetState);
 	}
 
 	private void AnimateDoor(bool open) {
-		isOpen = open;
+		this.isOpen = open;
 		KillTween();
 		var targetRotation = open ? OpenRotationDegrees : ClosedRotationDegrees;
 		if (TransitionDuration <= Mathf.Epsilon) {
-			ApplyDoorRotation(targetRotation);
+			this.ApplyDoorRotation(targetRotation);
 			FinishInteraction();
 			return;
 		}

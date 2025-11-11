@@ -5,18 +5,17 @@ public partial class Page : Control {
     private string[] verbs = { "seeks", "fights", "journeys", "discovers", "challenges", "protects", "defends", "questions" };
     private string[] adjectives = { "brave", "mysterious", "ancient", "glowing", "forgotten", "fearsome", "legendary", "hidden" };
     private string[] adverbs = { "boldly", "mysteriously", "bravely", "fiercely", "quickly", "cautiously", "silently", "relentlessly" };
-
     private Label numberLabel;
     private RichTextLabel textLabel;
 
     public override void _Ready() {
-        numberLabel = GetNode<Label>("Background/Number");
-        textLabel = GetNode<RichTextLabel>("Background/Text");
+        this.numberLabel = GetNode<Label>("Background/Number");
+        this.textLabel = GetNode<RichTextLabel>("Background/Text");
     }
 
     public void SetNumber(int value) {
-        numberLabel.Text = $"- {value} -";
-        textLabel.Text = GeneratePlaceholderText(value);
+        this.numberLabel.Text = $"- {value} -";
+        this.textLabel.Text = GeneratePlaceholderText(value);
     }
 
     private string GeneratePlaceholderText(int seed) {

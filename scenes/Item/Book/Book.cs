@@ -24,7 +24,7 @@ public partial class Book : Node3D {
 
     public override void _Ready() {
         staticPage = GetNode<Node3D>("Book/Static");
-        turningPage = GetNode<Node3D>("Book/Turning");
+        this.turningPage = GetNode<Node3D>("Book/Turning");
         turningAnimation = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
         pf1 = GetNode<MeshInstance3D>("Book/Turning/PageLeft");
         pf2 = GetNode<MeshInstance3D>("Book/Turning/Page/Skeleton3D/Front");
@@ -41,9 +41,9 @@ public partial class Book : Node3D {
         sfx = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
         animationPlayer = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
         UpdatePageNumber();
-        turningPage.Hide();
-        SetTexture(ps1, v3);
-        SetTexture(ps2, v4);
+        this.turningPage.Hide();
+        this.SetTexture(ps1, v3);
+        this.SetTexture(ps2, v4);
         animationPlayer.AnimationFinished += OnAnimationFinished;
     }
 
@@ -51,19 +51,19 @@ public partial class Book : Node3D {
         if (turningAnimation.IsPlaying())
             return;
         if (Input.IsActionJustPressed("ui_left"))
-            TurnLeft();
+            this.TurnLeft();
         if (Input.IsActionJustPressed("ui_right"))
-            TurnRight();
+            this.TurnRight();
     }
 
     private void TurnRight() {
-        SetTexture(pf1, v3);
-        SetTexture(pf2, v4);
-        SetTexture(pf3, v5);
-        SetTexture(pf4, v6);
+        this.SetTexture(pf1, v3);
+        this.SetTexture(pf2, v4);
+        this.SetTexture(pf3, v5);
+        this.SetTexture(pf4, v6);
         HideAndShow(pf4);
         staticPage.Hide();
-        turningPage.Show();
+        this.turningPage.Show();
         turningAnimation.Play("Turn1");
         sfx.Play();
     }
@@ -71,12 +71,12 @@ public partial class Book : Node3D {
     private void TurnLeft() {
         if (currentPageNumber <= 1)
             return;
-        SetTexture(pf1, v1);
-        SetTexture(pf2, v2);
-        SetTexture(pf3, v3);
-        SetTexture(pf4, v4);
+        this.SetTexture(pf1, v1);
+        this.SetTexture(pf2, v2);
+        this.SetTexture(pf3, v3);
+        this.SetTexture(pf4, v4);
         HideAndShow(pf1);
-        turningPage.Show();
+        this.turningPage.Show();
         staticPage.Hide();
         turningAnimation.Play("Turn2");
         sfx.Play();
@@ -114,6 +114,6 @@ public partial class Book : Node3D {
         if (animName == "Turn2")
             UpdatePageNumber(-2);
         staticPage.Show();
-        turningPage.Hide();
+        this.turningPage.Hide();
     }
 }

@@ -40,10 +40,10 @@ public partial class Interactable : Node3D {
 	private StandardMaterial3D curveMaterial;
 
     public override void _Ready() {
-        CacheOutlineTargets();
-		InitLineSegment();
-		InitCurvedArrow();
-        ResolveGameManager();
+        this.CacheOutlineTargets();
+		this.InitLineSegment();
+		this.InitCurvedArrow();
+        this.ResolveGameManager();
         if (this.nameLabel != null) {
             this.nameLabel.Text = DisplayName;
             this.nameLabel.Visible = true;
@@ -59,7 +59,7 @@ public partial class Interactable : Node3D {
 			if (lineRoot != null) lineRoot.Visible = false;
 		} else {
 			if (curveRoot != null) curveRoot.Visible = false;
-			UpdateLineSegment();
+			thiis.UpdateLineSegment();
 		}
         if (Input.IsActionJustPressed("interact") && this.isFocus && (this.gameManager == null || !this.gameManager.IsBusy)) {
             this.EnterInteraction();
@@ -98,27 +98,27 @@ public partial class Interactable : Node3D {
     }
 
     private void ApplyOutline(bool enable) {
-        if (outlineMat == null) return;
-        SetOutlineActive(enable);
+        if (this.outlineMat == null) return;
+        this.SetOutlineActive(enable);
     }
 
     protected void SetOutlineActive(bool enable) {
-        if (outlineMat == null || outlineTargets.Count == 0) return;
-        foreach (var instance in outlineTargets) {
+        if (this.outlineMat == null || this.outlineTargets.Count == 0) return;
+        foreach (var instance in this.outlineTargets) {
             if (!GodotObject.IsInstanceValid(instance)) continue;
-            if (!originalOverlays.ContainsKey(instance)) {
-                originalOverlays[instance] = instance.MaterialOverlay;
+            if (!this.originalOverlays.ContainsKey(instance)) {
+                this.originalOverlays[instance] = instance.MaterialOverlay;
             }
-            instance.MaterialOverlay = enable ? outlineMat : originalOverlays[instance];
+            instance.MaterialOverlay = enable ? this.outlineMat : this.originalOverlays[instance];
         }
-        if (outlineMat != null) {
-            outlineMat.SetShaderParameter("size", enable ? outlineSize : 0.0f);
+        if (this.outlineMat != null) {
+            this.outlineMat.SetShaderParameter("size", enable ? outlineSize : 0.0f);
         }
     }
 
     private void CacheOutlineTargets() {
-        outlineTargets.Clear();
-        originalOverlays.Clear();
+        this.outlineTargets.Clear();
+        this.originalOverlays.Clear();
         if (OutlineTargetPaths == null || OutlineTargetPaths.Count == 0) {
             GD.PushWarning($"{Name}: 未设置 OutlineTargetPaths，无法应用描边。");
             return;
@@ -127,8 +127,8 @@ public partial class Interactable : Node3D {
             if (path.ToString() == string.Empty) continue;
             var instance = GetNodeOrNull<GeometryInstance3D>(path);
             if (instance != null) {
-                outlineTargets.Add(instance);
-                originalOverlays[instance] = instance.MaterialOverlay;
+                this.outlineTargets.Add(instance);
+                this.originalOverlays[instance] = instance.MaterialOverlay;
             } else {
                 GD.PushWarning($"{Name}: 未找到描边目标节点 {path}");
             }

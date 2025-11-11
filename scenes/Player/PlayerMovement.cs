@@ -12,11 +12,9 @@ public partial class PlayerMovement : CharacterBody3D {
     private AnimationPlayer animationPlayer;
     private Node3D visuals;
     private bool isJumping = false;
-	[Export]
-	public NodePath VisualsPath { get; set; } = "Player/visuals";
+	[Export] public NodePath VisualsPath { get; set; } = "Player/visuals";
 	[Export] private NodePath gameManagerPath;
 	private GameManager gameManager;
-
 	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
 
     public override void _Ready() {
@@ -42,13 +40,13 @@ public partial class PlayerMovement : CharacterBody3D {
         if (onFloor) {
             if (Input.IsActionJustPressed("jump")) {
                 velocity.Y = JUMP_VELOCITY;
-                isJumping = true;
+                this.isJumping = true;
                 this.PlayAnimation("jump");
-            } else if (isJumping) {
-                isJumping = false;
+            } else if (this.isJumping) {
+                this.isJumping = false;
             }
-        } else if (isJumping && velocity.Y <= 0.0f) {
-            isJumping = false;
+        } else if (this.isJumping && velocity.Y <= 0.0f) {
+            this.isJumping = false;
         }
         Vector2 inputDir = interacting ? Vector2.Zero : Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         bool isRunning = !interacting && Input.IsActionPressed("run");
@@ -63,12 +61,12 @@ public partial class PlayerMovement : CharacterBody3D {
         right = right.Normalized();
         Vector3 direction = (right * inputDir.X + forward * inputDir.Y).Normalized();
         if (!onFloor) {
-            if (isJumping && velocity.Y > 0.0f) {
+            if (this.isJumping && velocity.Y > 0.0f) {
                 this.PlayAnimation("jump");
             } else {
                 this.PlayAnimation("fall");
             }
-        } else if (isJumping) {
+        } else if (this.isJumping) {
             this.PlayAnimation("jump");
         } else if (direction != Vector3.Zero) {
             Vector3 lookTarget = visuals.GlobalPosition + new Vector3(direction.X, 0, direction.Z);
