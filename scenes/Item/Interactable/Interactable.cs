@@ -59,7 +59,7 @@ public partial class Interactable : Node3D {
 			if (lineRoot != null) lineRoot.Visible = false;
 		} else {
 			if (curveRoot != null) curveRoot.Visible = false;
-			thiis.UpdateLineSegment();
+			this.UpdateLineSegment();
 		}
         if (Input.IsActionJustPressed("interact") && this.isFocus && (this.gameManager == null || !this.gameManager.IsBusy)) {
             this.EnterInteraction();
