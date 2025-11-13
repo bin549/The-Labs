@@ -31,7 +31,7 @@ public partial class MoviePlayer : Interactable {
 		this.RefreshPlaybackState();
 		this.UpdateActionLabel();
 		if (!this.isPlaying) {
-			ClearVideoFrame();
+			this.ClearVideoFrame();
 		}
 		UpdateScreenVisibility();
 	}
@@ -87,7 +87,7 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	public override void OnFocusEnter() {
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		base.OnFocusEnter();
 	}
 
@@ -124,7 +124,7 @@ public partial class MoviePlayer : Interactable {
 			return;
 		}
 		if (videoPlayer.IsPlaying()) {
-			StopPlayback();
+			this.StopPlayback();
 			return;
 		}
 		PrepareStreamForPlayback();
@@ -132,7 +132,7 @@ public partial class MoviePlayer : Interactable {
 		this.isPlaying = true;
 		this.isPaused = false;
 		isInteracting = true;
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
 	}
 
@@ -145,9 +145,9 @@ public partial class MoviePlayer : Interactable {
 		this.isPlaying = false;
 		this.isPaused = false;
 		isInteracting = false;
-		ClearVideoFrame();
-		HidePlaylistUI();
-		UpdateActionLabel();
+		this.ClearVideoFrame();
+		this.HidePlaylistUI();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
 	}
 
@@ -158,7 +158,7 @@ public partial class MoviePlayer : Interactable {
 		this.isPlaying = false;
 		this.isPaused = true;
 		isInteracting = true;
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
 	}
 
@@ -171,12 +171,12 @@ public partial class MoviePlayer : Interactable {
 		this.isPlaying = true;
 		this.isPaused = false;
 		isInteracting = true;
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
 	}
 
 	private void OnVideoFinished() {
-		StopPlayback();
+		this.StopPlayback();
 	}
 
 	private void RefreshPlaybackState() {
@@ -229,8 +229,8 @@ public partial class MoviePlayer : Interactable {
 		} else {
 			currentStreamIndex = -1;
 		}
-		UpdatePlaylistSelection();
-		HidePlaylistUI();
+		this.UpdatePlaylistSelection();
+		this.HidePlaylistUI();
 	}
 
 	private void PrepareStreamForPlayback() {
@@ -277,8 +277,8 @@ public partial class MoviePlayer : Interactable {
 			this.isPaused = false;
 			isInteracting = false;
 		}
-		UpdatePlaylistSelection();
-		UpdateActionLabel();
+		this.UpdatePlaylistSelection();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
 	}
 
@@ -302,7 +302,7 @@ public partial class MoviePlayer : Interactable {
 			videoPlayer.StreamPosition = 0;
 		}
 		currentStreamIndex = wrappedIndex;
-		UpdatePlaylistSelection();
+		this.UpdatePlaylistSelection();
 		return wasPlaying;
 	}
 
@@ -318,7 +318,7 @@ public partial class MoviePlayer : Interactable {
 			videoPlayer.Stream = null;
 		}
 		videoPlayer.Visible = false;
-		HidePlaylistUI();
+		this.HidePlaylistUI();
 	}
 
 	private void UpdateScreenVisibility() {
@@ -348,7 +348,7 @@ public partial class MoviePlayer : Interactable {
 			CreateRuntimePlaylistContainer();
 		}
 		BuildPlaylistButtons();
-		HidePlaylistUI();
+		this.HidePlaylistUI();
 	}
 
 	private void BuildPlaylistButtons() {
@@ -391,7 +391,7 @@ public partial class MoviePlayer : Interactable {
 			playlistButtonContainer.AddChild(button);
 			playlistButtons.Add(button);
 		}
-		UpdatePlaylistSelection();
+		this.UpdatePlaylistSelection();
 	}
 
 	private string GetStreamDisplayName(int index) {
@@ -422,10 +422,10 @@ public partial class MoviePlayer : Interactable {
 		videoPlayer.Play();
 		this.isPlaying = true;
 		isInteracting = true;
-		UpdateActionLabel();
+		this.UpdateActionLabel();
 		UpdateScreenVisibility();
-		UpdatePlaylistSelection();
-		HidePlaylistUI();
+		this.UpdatePlaylistSelection();
+		this.HidePlaylistUI();
 	}
 
 	private void UpdateHoverDescription(int index) {
@@ -456,9 +456,9 @@ public partial class MoviePlayer : Interactable {
 		if (playlistPanel == null) return;
 		if (isPlaylistVisible == visible) return;
 		if (visible) {
-			ShowPlaylistUI();
+			this.ShowPlaylistUI();
 		} else {
-			HidePlaylistUI();
+			this.HidePlaylistUI();
 		}
 	}
 
@@ -468,7 +468,7 @@ public partial class MoviePlayer : Interactable {
 		playlistPanel.Visible = true;
 		isPlaylistVisible = true;
 		SetGameInteractionLock(true);
-		UpdatePlaylistSelection();
+		this.UpdatePlaylistSelection();
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 		GetViewport().SetInputAsHandled();
 	}
