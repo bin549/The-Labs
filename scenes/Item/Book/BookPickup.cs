@@ -25,40 +25,40 @@ public partial class BookPickup : Interactable {
 
 	public override void _Process(double delta) {
 		base._Process(delta);
-		if (!isInteractingWithBook) return;
+		if (!this.isInteractingWithBook) return;
 		if (Input.IsActionJustPressed("pause") || Input.IsActionJustPressed("ui_cancel")) {
-			ExitInteraction();
+			this.ExitInteraction();
 			return;
 		}
-		if (!canExitInteraction && Input.IsActionJustReleased("interact")) {
-			canExitInteraction = true;
-		} else if (canExitInteraction && Input.IsActionJustPressed("interact")) {
-			ExitInteraction();
+		if (!this.canExitInteraction && Input.IsActionJustReleased("interact")) {
+			this.canExitInteraction = true;
+		} else if (this.canExitInteraction && Input.IsActionJustPressed("interact")) {
+			this.ExitInteraction();
 		}
 	}
 
 	public override void EnterInteraction() {
-		if (isInteractingWithBook) return;
+		if (this.isInteractingWithBook) return;
 		this.ResolvePlayerAndCamera();
 		this.ResolvePickupVisual();
 		base.EnterInteraction();
-		isInteractingWithBook = true;
-		canExitInteraction = false;
-		ShowPickupVisual(false);
-		ShowPlayerBook(true);
+		this.isInteractingWithBook = true;
+		this.canExitInteraction = false;
+		this.ShowPickupVisual(false);
+		this.ShowPlayerBook(true);
 		BoostCameraPriority(true);
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
 	public override void ExitInteraction() {
-		if (!isInteractingWithBook) return;
-		ShowPlayerBook(false);
+		if (!this.isInteractingWithBook) return;
+		this.ShowPlayerBook(false);
 		BoostCameraPriority(false);
-		isInteractingWithBook = false;
-		canExitInteraction = false;
+		this.isInteractingWithBook = false;
+		this.canExitInteraction = false;
 		Input.ActionRelease("pause");
 		Input.ActionRelease("ui_cancel");
-		base.ExitInteraction();
+		base.this.ExitInteraction();
 		if (gameManager != null) {
 			gameManager.SetCurrentInteractable(null);
 		}

@@ -23,9 +23,9 @@ public partial class Book : Node3D {
     private AnimationPlayer animationPlayer;
 
     public override void _Ready() {
-        staticPage = GetNode<Node3D>("Book/Static");
+        this.staticPage = GetNode<Node3D>("Book/Static");
         this.turningPage = GetNode<Node3D>("Book/Turning");
-        turningAnimation = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
+        this.turningAnimation = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
         pf1 = GetNode<MeshInstance3D>("Book/Turning/PageLeft");
         pf2 = GetNode<MeshInstance3D>("Book/Turning/Page/Skeleton3D/Front");
         pf3 = GetNode<MeshInstance3D>("Book/Turning/Page/Skeleton3D/Back");
@@ -38,17 +38,17 @@ public partial class Book : Node3D {
         v4 = GetNode<Viewport>("Viewport4");
         v5 = GetNode<Viewport>("Viewport5");
         v6 = GetNode<Viewport>("Viewport6");
-        sfx = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
-        animationPlayer = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
-        UpdatePageNumber();
+        this.sfx = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        this.animationPlayer = GetNode<AnimationPlayer>("Book/Turning/AnimationPlayer");
+        this.UpdatePageNumber();
         this.turningPage.Hide();
         this.SetTexture(ps1, v3);
         this.SetTexture(ps2, v4);
-        animationPlayer.AnimationFinished += OnAnimationFinished;
+        this.animationPlayer.AnimationFinished += OnAnimationFinished;
     }
 
     public override void _Input(InputEvent @event) {
-        if (turningAnimation.IsPlaying())
+        if (this.turningAnimation.IsPlaying())
             return;
         if (Input.IsActionJustPressed("ui_left"))
             this.TurnLeft();
@@ -61,11 +61,11 @@ public partial class Book : Node3D {
         this.SetTexture(pf2, v4);
         this.SetTexture(pf3, v5);
         this.SetTexture(pf4, v6);
-        HideAndShow(pf4);
-        staticPage.Hide();
+        this.HideAndShow(pf4);
+        this.staticPage.Hide();
         this.turningPage.Show();
-        turningAnimation.Play("Turn1");
-        sfx.Play();
+        this.turningAnimation.Play("Turn1");
+        this.sfx.Play();
     }
 
     private void TurnLeft() {
@@ -75,16 +75,16 @@ public partial class Book : Node3D {
         this.SetTexture(pf2, v2);
         this.SetTexture(pf3, v3);
         this.SetTexture(pf4, v4);
-        HideAndShow(pf1);
+        this.HideAndShow(pf1);
         this.turningPage.Show();
-        staticPage.Hide();
-        turningAnimation.Play("Turn2");
-        sfx.Play();
+        this.staticPage.Hide();
+        this.turningAnimation.Play("Turn2");
+        this.sfx.Play();
     }
 
     private async void HideAndShow(MeshInstance3D page) {
         page.Hide();
-        await Task.Delay(100); 
+        await Task.Delay(100);
         page.Show();
     }
 
@@ -110,10 +110,10 @@ public partial class Book : Node3D {
 
     private void OnAnimationFinished(StringName animName) {
         if (animName == "Turn1")
-            UpdatePageNumber(2);
+            this.UpdatePageNumber(2);
         if (animName == "Turn2")
-            UpdatePageNumber(-2);
-        staticPage.Show();
+            this.UpdatePageNumber(-2);
+        this.staticPage.Show();
         this.turningPage.Hide();
     }
 }

@@ -9,10 +9,10 @@ public partial class PauseMenu : Control {
     public override void _Ready() {
         Visible = false;
         ProcessMode = ProcessModeEnum.Always;
-        if (ResumeBtn != null)
-            ResumeBtn.Pressed += OnResumePressed;
-        if (QuitBtn != null)
-            QuitBtn.Pressed += OnQuitPressed;
+        if (this.ResumeBtn != null)
+            this.ResumeBtn.Pressed += OnResumePressed;
+        if (this.QuitBtn != null)
+            this.QuitBtn.Pressed += OnQuitPressed;
     }
 
     private void OnResumePressed() {

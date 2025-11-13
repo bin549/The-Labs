@@ -12,77 +12,77 @@ public partial class Door : Interactable {
 	[Export] public AudioStreamPlayer3D CloseSound { get; set; }
 	private Node3D doorPivot;
 	private Tween rotationTween;
-	private bool isOpen;
+	private bool disOpen;
 
 	public override void _Ready() {
 		base._Ready();
 		this.ResolveDoorPivot();
-		this.isOpen = StartsOpen;
-		this.ApplyDoorRotation(this.isOpen ? OpenRotationDegrees : ClosedRotationDegrees);
+		this.disOpen = this.StartsOpen;
+		this.ApplyDoorRotation(this.disOpen ? OpenRotationDegrees : ClosedRotationDegrees);
 	}
 
 	public override void EnterInteraction() {
-		if (isInteracting || rotationTween?.IsRunning() == true) {
+		if (base.isInteracting || this.rotationTween?.IsRunning() == true) {
 			return;
 		}
-		ResolveGameManager();
-		isInteracting = true;
-		gameManager?.SetCurrentInteractable(this);
-		ToggleDoor();
+		base.ResolveGameManager();
+		base.isInteracting = true;
+		base.gameManager?.SetCurrentInteractable(this);
+		this.ToggleDoor();
 	}
 
 	public override void ExitInteraction() {
-		if (!isInteracting) return;
-		KillTween();
-		FinishInteraction();
+		if (!base.isInteracting) return;
+		this.KillTween();
+		this.FinishInteraction();
 	}
 
 	private void ToggleDoor() {
-		if (doorPivot == null) {
+		if (this.doorPivot == null) {
 			GD.PushWarning($"{Name}: 未找到门旋转节点，无法开关门。");
-			FinishInteraction();
+			this.FinishInteraction();
 			return;
 		}
-		bool targetState = !this.isOpen;
-		PlaySound(targetState);
-		AnimateDoor(targetState);
+		bool targetState = !this.disOpen;
+		this.PlaySound(targetState);
+		this.AnimateDoor(targetState);
 	}
 
 	private void AnimateDoor(bool open) {
-		this.isOpen = open;
-		KillTween();
+		this.disOpen = open;
+		this.KillTween();
 		var targetRotation = open ? OpenRotationDegrees : ClosedRotationDegrees;
 		if (TransitionDuration <= Mathf.Epsilon) {
 			this.ApplyDoorRotation(targetRotation);
-			FinishInteraction();
+			this.FinishInteraction();
 			return;
 		}
 		var tween = CreateTween();
 		tween.SetParallel(false);
 		tween.SetEase(EaseType);
 		tween.SetTrans(TransitionType);
-		tween.TweenProperty(doorPivot, "rotation_degrees", targetRotation, TransitionDuration);
+		tween.TweenProperty(this.doorPivot, "rotation_degrees", targetRotation, TransitionDuration);
 		tween.Finished += OnTweenFinished;
-		rotationTween = tween;
+		this.rotationTween = tween;
 	}
 
 	private void OnTweenFinished() {
-		KillTween();
-		FinishInteraction();
+		this.KillTween();
+		this.FinishInteraction();
 	}
 
 	private void ApplyDoorRotation(Vector3 rotationDegrees) {
-		if (doorPivot == null) return;
-		doorPivot.RotationDegrees = rotationDegrees;
+		if (this.doorPivot == null) return;
+		this.doorPivot.RotationDegrees = rotationDegrees;
 	}
 
 	private void ResolveDoorPivot() {
 		if (DoorPivotPath.GetNameCount() == 0) {
-			doorPivot = GetNodeOrNull<Node3D>("walldoor_0012/Node3D");
+			this.doorPivot = GetNodeOrNull<Node3D>("walldoor_0012/Node3D");
 		} else {
-			doorPivot = GetNodeOrNull<Node3D>(DoorPivotPath);
+			this.doorPivot = GetNodeOrNull<Node3D>(DoorPivotPath);
 		}
-		if (doorPivot == null) {
+		if (this.doorPivot == null) {
 			GD.PushWarning($"{Name}: 未找到 DoorPivotPath 指定的节点 {DoorPivotPath}。");
 		}
 	}
@@ -95,15 +95,15 @@ public partial class Door : Interactable {
 	}
 
 	private void KillTween() {
-		if (rotationTween == null) return;
-		rotationTween.Finished -= OnTweenFinished;
-		rotationTween.Kill();
-		rotationTween = null;
+		if (this.rotationTween == null) return;
+		this.rotationTween.Finished -= OnTweenFinished;
+		this.rotationTween.Kill();
+		this.rotationTween = null;
 	}
 
 	private void FinishInteraction() {
-		isInteracting = false;
-		gameManager?.SetCurrentInteractable(null);
+		base.isInteracting = false;
+		base.gameManager?.SetCurrentInteractable(null);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 }

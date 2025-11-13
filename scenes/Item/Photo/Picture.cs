@@ -9,37 +9,37 @@ public partial class Picture : Interactable {
 
 	public override void _Ready() {
 		base._Ready();
-		ResolveTextureRect();
-		if (textureRect != null) {
-			originalTexture = textureRect.Texture;
-			textureRect.Visible = false;
+		this.ResolveTextureRect();
+		if (this.textureRect != null) {
+			this.originalTexture = this.textureRect.Texture;
+			this.textureRect.Visible = false;
 		}
 	}
 
 	public override void _Process(double delta) {
 		base._Process(delta);
-		if (!isInteracting) return;
-		if (!canToggleOff && Input.IsActionJustReleased("interact")) {
-			canToggleOff = true;
-		} else if (canToggleOff && Input.IsActionJustPressed("interact")) {
-			ExitInteraction();
+		if (!base.isInteracting) return;
+		if (!this.canToggleOff && Input.IsActionJustReleased("interact")) {
+			this.canToggleOff = true;
+		} else if (this.canToggleOff && Input.IsActionJustPressed("interact")) {
+			this.ExitInteraction();
 		}
 	}
 
 	public override void EnterInteraction() {
-		if (isInteracting) return;
-		ResolveGameManager();
+		if (base.isInteracting) return;
+		base.ResolveGameManager();
 		base.EnterInteraction();
-		isInteracting = true;
-		canToggleOff = false;
-		ShowTexture(true);
+		base.isInteracting = true;
+		this.canToggleOff = false;
+		this.ShowTexture(true);
 	}
 
 	public override void ExitInteraction() {
-		if (!isInteracting) return;
-		ShowTexture(false);
-		isInteracting = false;
-		canToggleOff = false;
+		if (!base.isInteracting) return;
+		this.ShowTexture(false);
+		base.isInteracting = false;
+		this.canToggleOff = false;
 		base.ExitInteraction();
 		if (gameManager != null) {
 			gameManager.SetCurrentInteractable(null);
@@ -48,16 +48,16 @@ public partial class Picture : Interactable {
 	}
 
 	private void ShowTexture(bool visible) {
-		if (textureRect == null) return;
+		if (this.textureRect == null) return;
 		if (visible) {
 			if (PhotoTexture != null) {
-				textureRect.Texture = PhotoTexture;
+				this.textureRect.Texture = PhotoTexture;
 			}
 		} else {
-			textureRect.Texture = originalTexture;
+			this.textureRect.Texture = this.originalTexture;
 		}
-		textureRect.Visible = visible;
-		textureRect.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
+		this.textureRect.Visible = visible;
+		this.textureRect.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
 	}
 
 	private void ResolveTextureRect() {
@@ -69,6 +69,6 @@ public partial class Picture : Interactable {
 		if (candidate == null) {
 			GD.PushWarning($"{Name}: 未找到 TextureRect 节点 {TextureRectPath}，无法显示照片。");
 		}
-		textureRect = candidate;
+		this.textureRect = candidate;
 	}
 }

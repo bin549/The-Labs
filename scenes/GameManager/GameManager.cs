@@ -6,13 +6,13 @@ public partial class GameManager : Node {
 
     public override void _Ready() {
         this.ProcessMode = Node.ProcessModeEnum.Always;
-        if (this.pauseMenu != null) {
-            this.pauseMenu.Visible = false;
-            this.pauseMenu.ProcessMode = Node.ProcessModeEnum.Always;
-            this.pauseMenu.gameManager = this;
-        } else {
+        if (this.pauseMenu == null) {
             GD.PushWarning($"{nameof(GameManager)}: pauseMenu 未绑定，暂停菜单将无法显示。");
+            return;
         }
+        this.pauseMenu.Visible = false;
+        this.pauseMenu.ProcessMode = Node.ProcessModeEnum.Always;
+        this.pauseMenu.gameManager = this;
     }
 
     public void SetCurrentInteractable(Interactable interactable) {
@@ -40,9 +40,6 @@ public partial class GameManager : Node {
         if (this.pauseMenu != null) {
             this.pauseMenu.Visible = newState;
         }
-        if (newState)
-            Input.MouseMode = Input.MouseModeEnum.Visible;
-        else
-            Input.MouseMode = Input.MouseModeEnum.Captured;
+        Input.MouseMode = newState ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
     }
 }

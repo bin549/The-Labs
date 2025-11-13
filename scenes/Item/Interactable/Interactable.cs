@@ -79,7 +79,7 @@ public partial class Interactable : Node3D {
     }
 
     public virtual void OnFocusEnter() {
-        ApplyOutline(true);
+        this.ApplyOutline(true);
         if (this.nameLabel != null) {
             this.nameLabel.Text = $"[E] {ActionName}";
         }
@@ -87,7 +87,7 @@ public partial class Interactable : Node3D {
     }
 
     public virtual void OnFocusExit() {
-        ApplyOutline(false);
+        this.ApplyOutline(false);
         if (this.nameLabel != null) {
             this.nameLabel.Text = DisplayName;
         }

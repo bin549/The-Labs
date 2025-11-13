@@ -23,11 +23,11 @@ public partial class Gramophone : Interactable {
 	}
 
 	public override void EnterInteraction() {
-		if (audioPlayer == null) return;
+		if (this.audioPlayer == null) return;
 		if (IsAudioPlaying()) {
-			audioPlayer.Stop();
+			this.audioPlayer.Stop();
 		} else {
-			audioPlayer.Play();
+			this.audioPlayer.Play();
 		}
 		this.RefreshState();
 		this.UpdateActionLabel();
@@ -39,7 +39,7 @@ public partial class Gramophone : Interactable {
 	}
 
 	private void ResolveAudioPlayer() {
-		var previousPlayer = audioPlayer;
+		var previousPlayer = this.audioPlayer;
 		AudioStreamPlayer3D resolvedPlayer = null;
 		if (AudioPlayerPath.GetNameCount() == 0) {
 			resolvedPlayer = GetNodeOrNull<AudioStreamPlayer3D>("AudioStreamPlayer3D");
@@ -52,70 +52,70 @@ public partial class Gramophone : Interactable {
 		if (previousPlayer != null && previousPlayer != resolvedPlayer) {
 			this.DisconnectAudioSignals(previousPlayer);
 		}
-		audioPlayer = resolvedPlayer;
-		if (audioPlayer == null) {
+		this.audioPlayer = resolvedPlayer;
+		if (this.audioPlayer == null) {
 			GD.PushWarning($"{Name}: 未找到 AudioStreamPlayer3D 节点 {AudioPlayerPath}。");
 			return;
 		}
-		ConnectAudioSignals();
+		this.ConnectAudioSignals();
 	}
 
 	private void ConnectAudioSignals() {
-		if (audioPlayer == null || audioSignalsConnected) return;
-		audioPlayer.Finished += OnAudioFinished;
-		audioSignalsConnected = true;
+		if (this.audioPlayer == null || this.audioSignalsConnected) return;
+		this.audioPlayer.Finished += OnAudioFinished;
+		this.audioSignalsConnected = true;
 	}
 
 	private void DisconnectAudioSignals(AudioStreamPlayer3D targetPlayer = null) {
-		var player = targetPlayer ?? audioPlayer;
-		if (player == null || !audioSignalsConnected) return;
+		var player = targetPlayer ?? this.audioPlayer;
+		if (player == null || !this.audioSignalsConnected) return;
 		player.Finished -= OnAudioFinished;
-		audioSignalsConnected = false;
+		this.audioSignalsConnected = false;
 	}
 
 	private void UpdateLoopSetting() {
-		if (audioPlayer == null || audioPlayer.Stream == null) return;
-		var duplicatedStream = audioPlayer.Stream.Duplicate() as AudioStream;
+		if (this.audioPlayer == null || this.audioPlayer.Stream == null) return;
+		var duplicatedStream = this.audioPlayer.Stream.Duplicate() as AudioStream;
 		if (duplicatedStream == null) {
 			GD.PushWarning($"{Name}: 无法复制音频流资源，循环设置可能无效。");
 			return;
 		}
 		bool loopApplied = false;
 		if (duplicatedStream is AudioStreamWav wavStream) {
-			wavStream.LoopMode = Loop ? AudioStreamWav.LoopModeEnum.Forward : AudioStreamWav.LoopModeEnum.Disabled;
+			wavStream.LoopMode = this.Loop ? AudioStreamWav.LoopModeEnum.Forward : AudioStreamWav.LoopModeEnum.Disabled;
 			loopApplied = true;
 		} else if (duplicatedStream is AudioStreamOggVorbis oggStream) {
-			oggStream.Loop = Loop;
+			oggStream.this.Loop = this.Loop;
 			loopApplied = true;
 		} else if (duplicatedStream is AudioStreamMP3 mp3Stream) {
-			mp3Stream.Loop = Loop;
+			mp3Stream.this.Loop = this.Loop;
 			loopApplied = true;
 		}
 		if (!loopApplied) {
 			GD.PushWarning($"{Name}: 当前音频流类型 {duplicatedStream.GetClass()} 不支持自动循环设置。");
 		}
-		audioPlayer.Stream = duplicatedStream;
+		this.audioPlayer.Stream = duplicatedStream;
 	}
 
 	private void OnAudioFinished() {
-		if (!Loop) {
-			isPlaying = false;
-			UpdateActionLabel();
+		if (!this.Loop) {
+			this.isPlaying = false;
+			this.UpdateActionLabel();
 		}
 	}
 
 	private bool IsAudioPlaying() {
-		return audioPlayer != null && audioPlayer.Playing;
+		return this.audioPlayer != null && this.audioPlayer.Playing;
 	}
 
 	private void RefreshState() {
-		isPlaying = IsAudioPlaying();
+		this.isPlaying = IsAudioPlaying();
 	}
 
 	private void UpdateActionLabel() {
-		ActionName = isPlaying ? StopActionText : PlayActionText;
-		if (isFocus && nameLabel != null) {
-			nameLabel.Text = $"[E] {ActionName}";
+		ActionName = this.isPlaying ? StopActionText : PlayActionText;
+		if (isFocus && base.nameLabel != null) {
+			base.nameLabel.Text = $"[E] {ActionName}";
 		}
 	}
 }

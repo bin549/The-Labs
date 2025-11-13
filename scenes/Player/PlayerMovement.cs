@@ -19,14 +19,14 @@ public partial class PlayerMovement : CharacterBody3D {
 
     public override void _Ready() {
         Input.MouseMode = Input.MouseModeEnum.Captured;
-        animationPlayer = GetNode<AnimationPlayer>("visuals/mixamo_base/AnimationPlayer");
-        visuals = GetNode<Node3D>("visuals");
-		ResolveGameManager();
+        this.animationPlayer = GetNode<AnimationPlayer>("visuals/mixamo_base/AnimationPlayer");
+        this.visuals = GetNode<Node3D>("visuals");
+		this.ResolveGameManager();
     }
 
     public override void _PhysicsProcess(double delta) {
 		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
-			ResolveGameManager();
+			this.ResolveGameManager();
 		}
         this.ApplyMovement(delta);
     }
@@ -69,8 +69,8 @@ public partial class PlayerMovement : CharacterBody3D {
         } else if (this.isJumping) {
             this.PlayAnimation("jump");
         } else if (direction != Vector3.Zero) {
-            Vector3 lookTarget = visuals.GlobalPosition + new Vector3(direction.X, 0, direction.Z);
-            visuals.LookAt(lookTarget, Vector3.Up);
+            Vector3 lookTarget = this.visuals.GlobalPosition + new Vector3(direction.X, 0, direction.Z);
+            this.visuals.LookAt(lookTarget, Vector3.Up);
             velocity.X = direction.X * speed;
             velocity.Z = direction.Z * speed;
             this.PlayAnimation(isRunning ? "run" : "walk");
@@ -85,8 +85,8 @@ public partial class PlayerMovement : CharacterBody3D {
     }
 
     private void PlayAnimation(string animationName) {
-        if (animationPlayer.CurrentAnimation != animationName) {
-            animationPlayer.Play(animationName);
+        if (this.animationPlayer.CurrentAnimation != animationName) {
+            this.animationPlayer.Play(animationName);
         }
     }
 

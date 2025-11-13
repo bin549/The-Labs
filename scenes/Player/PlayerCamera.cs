@@ -14,7 +14,7 @@ public partial class PlayerCamera : Node3D {
 	[Export] private NodePath gameManagerPath;
 	private Interactable currentInteractable;
 	private GameManager gameManager;
-	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
+	private bool IsInteracting => this.gameManager != null && this.gameManager.IsBusy;
 
 	public override void _Ready() {
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -26,15 +26,15 @@ public partial class PlayerCamera : Node3D {
 	private void InitPhantomCamera() {
 		var phantomFirstNode = GetNodeOrNull<Node3D>("PhantomCamFirst");
 		var phantomThirdNode = GetNodeOrNull<Node3D>("PhantomCamThird");
-		if (phantomFirstNode != null) phantomFirst = phantomFirstNode.AsPhantomCamera3D();
-		if (phantomThirdNode != null) phantomThird = phantomThirdNode.AsPhantomCamera3D();
+		if (phantomFirstNode != null) this.phantomFirst = phantomFirstNode.AsPhantomCamera3D();
+		if (phantomThirdNode != null) this.phantomThird = phantomThirdNode.AsPhantomCamera3D();
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		if (interactionRay == null || !GodotObject.IsInstanceValid(interactionRay)) {
+		if (this.interactionRay == null || !GodotObject.IsInstanceValid(this.interactionRay)) {
 			this.ResolveInteractionRay();
 		}
-		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
+		if (this.gameManager == null || !GodotObject.IsInstanceValid(this.gameManager)) {
 			this.ResolveGameManager();
 		}
 		if (IsInteracting) {
@@ -62,15 +62,15 @@ public partial class PlayerCamera : Node3D {
 	private void ToggleView() {
 		if (Input.IsActionJustPressed("toggle_view")) {
 			this.isFirstPerson = !isFirstPerson;
-			phantomFirst.Priority = this.isFirstPerson ? 15 : 5;
+			this.phantomFirst.Priority = this.isFirstPerson ? 15 : 5;
 		}
 	}
 
 	private void CheckInteraction() {
-		if (interactionRay == null) return;
-		interactionRay.ForceRaycastUpdate();
-		if (interactionRay.IsColliding()) {
-			var colliderNode = interactionRay.GetCollider() as Node;
+		if (this.interactionRay == null) return;
+		this.interactionRay.ForceRaycastUpdate();
+		if (this.interactionRay.IsColliding()) {
+		var colliderNode = this.interactionRay.GetCollider() as Node;
 			var interactable = FindInteractable(colliderNode);
 			if (interactable != null) {
 				if (this.currentInteractable != interactable) {
@@ -90,27 +90,27 @@ public partial class PlayerCamera : Node3D {
 	}
 
 	private void ResolveInteractionRay() {
-		if (interactionRayPath != null && interactionRayPath.ToString() != string.Empty) {
-			interactionRay = GetNodeOrNull<RayCast3D>(interactionRayPath);
+		if (this.interactionRayPath != null && this.interactionRayPath.ToString() != string.Empty) {
+		    this.interactionRay = GetNodeOrNull<RayCast3D>(this.interactionRayPath);
 		}
-		if (interactionRay == null) {
-			interactionRay = GetNodeOrNull<RayCast3D>("PhantomCamFirst/InteractionRay") ??
+		if (this.interactionRay == null) {
+			this.interactionRay = GetNodeOrNull<RayCast3D>("PhantomCamFirst/InteractionRay") ??
 				GetNodeOrNull<RayCast3D>("PhantomCamThird/InteractionRay");
 		}
-		if (interactionRay != null) {
-			interactionRay.Enabled = true;
+		if (this.interactionRay != null) {
+			this.interactionRay.Enabled = true;
 		}
 	}
 
 	private void ResolveGameManager() {
-		if (gameManagerPath != null && gameManagerPath.ToString() != string.Empty) {
-			gameManager = GetNodeOrNull<GameManager>(gameManagerPath);
+		if (this.gameManagerPath != null && this.gameManagerPath.ToString() != string.Empty) {
+		this.gameManager = GetNodeOrNull<GameManager>(this.gameManagerPath);
 		}
-		if (gameManager == null) {
-			gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
+		if (this.gameManager == null) {
+			this.gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
 				GetTree().Root.FindChild("GameManager", true, false) as GameManager;
 		}
-		if (gameManager == null) {
+		if (this.gameManager == null) {
 			GD.PushWarning($"{Name}: 未找到 GameManager 节点，无法检测交互状态。");
 		}
 	}

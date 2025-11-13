@@ -33,13 +33,13 @@ public partial class MoviePlayer : Interactable {
 		if (!this.isPlaying) {
 			this.ClearVideoFrame();
 		}
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	public override void _ExitTree() {
 		base._ExitTree();
-		if (videoPlayer != null) {
-			videoPlayer.Finished -= OnVideoFinished;
+		if (this.videoPlayer != null) {
+			this.videoPlayer.Finished -= OnVideoFinished;
 		}
 	}
 
@@ -49,14 +49,14 @@ public partial class MoviePlayer : Interactable {
 
 	public override void _Process(double delta) {
 		base._Process(delta);
-		if (!isInteracting || videoPlayer == null) return;
+		if (!base.isInteracting || this.videoPlayer == null) return;
 		if (Input.IsKeyPressed(Key.Escape)) {
-			HidePlaylistUI();
+			this.HidePlaylistUI();
 		}
 		bool togglePressed = Input.IsKeyPressed(Key.U);
 		if (togglePressed && !this.isToggleKeyHeld) {
 			if (this.isPlaying || this.isPaused) {
-				TogglePlaylistUI(!this.isPlaylistVisible);
+				this.TogglePlaylistUI(!this.isPlaylistVisible);
 			}
 		} else if (!togglePressed && this.isToggleKeyHeld) {
 			this.isToggleKeyHeld = false;
@@ -77,7 +77,7 @@ public partial class MoviePlayer : Interactable {
 			}
 		} else if (this.isPaused) {
 			if (Input.IsActionJustPressed("ui_up")) {
-				ResumePlayback();
+				this.ResumePlayback();
 			} else if (Input.IsActionJustPressed("ui_left")) {
 				this.SwitchVideo(-1);
 			} else if (Input.IsActionJustPressed("ui_right")) {
@@ -92,87 +92,87 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void ResolveVideoPlayer() {
-		var previousPlayer = videoPlayer;
+		var previousPlayer = this.videoPlayer;
 		if (VideoPlayerPath.IsEmpty) {
-			videoPlayer = null;
+			this.videoPlayer = null;
 		} else {
-			videoPlayer = GetNodeOrNull<VideoStreamPlayer>(VideoPlayerPath);
-			if (videoPlayer == null) {
-				videoPlayer = GetTree().Root.GetNodeOrNull<VideoStreamPlayer>(VideoPlayerPath);
+			this.videoPlayer = GetNodeOrNull<VideoStreamPlayer>(VideoPlayerPath);
+			if (this.videoPlayer == null) {
+			this.videoPlayer = GetTree().Root.GetNodeOrNull<VideoStreamPlayer>(VideoPlayerPath);
 			}
 		}
-		if (previousPlayer != null && previousPlayer != videoPlayer) {
+		if (previousPlayer != null && previousPlayer != this.videoPlayer) {
 			DisconnectVideoSignals(previousPlayer);
 		}
-		if (videoPlayer == null) {
+		if (this.videoPlayer == null) {
 			GD.PushWarning($"{Name}: 未找到 VideoStreamPlayer 节点 {VideoPlayerPath}。");
 			return;
 		}
-		ConnectVideoSignals();
-		videoPlayer.Autoplay = false;
-		videoPlayer.Stop();
+		this.ConnectVideoSignals();
+		this.videoPlayer.Autoplay = false;
+		this.videoPlayer.Stop();
 		if (ResetOnStop) {
-			videoPlayer.StreamPosition = 0;
+			this.videoPlayer.StreamPosition = 0;
 		}
-		originalStream = videoPlayer.Stream;
+		originalStream = this.videoPlayer.Stream;
 	}
 
 	private void TogglePlayback() {
-		if (videoPlayer == null) return;
+		if (this.videoPlayer == null) return;
 		if (this.isPaused) {
-			ResumePlayback();
+			this.ResumePlayback();
 			return;
 		}
-		if (videoPlayer.IsPlaying()) {
+		if (this.videoPlayer.IsPlaying()) {
 			this.StopPlayback();
 			return;
 		}
 		PrepareStreamForPlayback();
-		videoPlayer.Play();
+		this.videoPlayer.Play();
 		this.isPlaying = true;
 		this.isPaused = false;
-		isInteracting = true;
+		base.isInteracting = true;
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private void StopPlayback() {
-		if (videoPlayer == null) return;
-		bool wasPlaying = videoPlayer.IsPlaying() || this.isPlaying;
+		if (this.videoPlayer == null) return;
+		bool wasPlaying = this.videoPlayer.IsPlaying() || this.isPlaying;
 		if (!wasPlaying && !this.isPaused) return;
-		videoPlayer.Stop();
-		videoPlayer.Paused = false;
+		this.videoPlayer.Stop();
+		this.videoPlayer.Paused = false;
 		this.isPlaying = false;
 		this.isPaused = false;
-		isInteracting = false;
+		base.isInteracting = false;
 		this.ClearVideoFrame();
 		this.HidePlaylistUI();
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private void PausePlayback() {
-		if (videoPlayer == null || this.isPaused) return;
-		if (!(videoPlayer.IsPlaying() || this.isPlaying)) return;
-		videoPlayer.Paused = true;
+		if (this.videoPlayer == null || this.isPaused) return;
+		if (!(this.videoPlayer.IsPlaying() || this.isPlaying)) return;
+		this.videoPlayer.Paused = true;
 		this.isPlaying = false;
 		this.isPaused = true;
-		isInteracting = true;
+		base.isInteracting = true;
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private void ResumePlayback() {
-		if (videoPlayer == null || !this.isPaused) return;
-		videoPlayer.Paused = false;
-		if (!videoPlayer.IsPlaying()) {
-			videoPlayer.Play();
+		if (this.videoPlayer == null || !this.isPaused) return;
+		this.videoPlayer.Paused = false;
+		if (!this.videoPlayer.IsPlaying()) {
+		this.videoPlayer.Play();
 		}
 		this.isPlaying = true;
 		this.isPaused = false;
-		isInteracting = true;
+		base.isInteracting = true;
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private void OnVideoFinished() {
@@ -180,52 +180,52 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void RefreshPlaybackState() {
-		if (videoPlayer == null) {
+		if (this.videoPlayer == null) {
 			this.isPlaying = false;
 			this.isPaused = false;
-			isInteracting = false;
+			base.isInteracting = false;
 		} else {
-			bool playing = videoPlayer.IsPlaying();
-			bool paused = playing && videoPlayer.Paused;
+			bool playing = this.videoPlayer.IsPlaying();
+			bool paused = playing && this.videoPlayer.Paused;
 			this.isPlaying = playing && !paused;
 			this.isPaused = paused;
-			isInteracting = this.isPlaying || this.isPaused;
+			base.isInteracting = this.isPlaying || this.isPaused;
 		}
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private void UpdateActionLabel() {
-		ActionName = this.isPlaying ? StopActionText : PlayActionText;
+		base.ActionName = this.isPlaying ? StopActionText : PlayActionText;
 		if (isFocus && nameLabel != null) {
-			nameLabel.Text = $"[E] {ActionName}";
+			nameLabel.Text = $"[E] {base.ActionName}";
 		}
 	}
 
 	private bool videoSignalsConnected;
 
 	private void ConnectVideoSignals() {
-		if (videoPlayer == null || this.videoSignalsConnected) return;
-		videoPlayer.Finished += OnVideoFinished;
+		if (this.videoPlayer == null || this.videoSignalsConnected) return;
+		this.videoPlayer.Finished += OnVideoFinished;
 		this.videoSignalsConnected = true;
 	}
 
 	private void DisconnectVideoSignals(VideoStreamPlayer target = null) {
-		var player = target ?? videoPlayer;
+		var player = target ?? this.videoPlayer;
 		if (player == null || !this.videoSignalsConnected) return;
 		player.Finished -= OnVideoFinished;
 		this.videoSignalsConnected = false;
 	}
 
 	private void InitializePlaylist() {
-		if (videoPlayer == null) return;
-		if (VideoStreams != null && VideoStreams.Count > 0) {
-			var targetIndex = WrapIndex(DefaultStreamIndex, VideoStreams.Count);
-			if (AssignStream(targetIndex)) {
-				videoPlayer.Stop();
+		if (this.videoPlayer == null) return;
+		if (this.VideoStreams != null && this.VideoStreams.Count > 0) {
+			var targetIndex = WrapIndex(DefaultStreamIndex, this.VideoStreams.Count);
+			if (this.AssignStream(targetIndex)) {
+				this.videoPlayer.Stop();
 			}
 			this.isPlaying = false;
 			this.isPaused = false;
-			isInteracting = false;
+			base.isInteracting = false;
 		} else {
 			currentStreamIndex = -1;
 		}
@@ -234,72 +234,72 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void PrepareStreamForPlayback() {
-		if (videoPlayer == null) return;
-		if (HideScreenOnStop) {
-			videoPlayer.Visible = true;
+		if (this.videoPlayer == null) return;
+		if (this.HideScreenOnStop) {
+			this.videoPlayer.Visible = true;
 		}
-		videoPlayer.Paused = false;
+		this.videoPlayer.Paused = false;
 		this.isPaused = false;
-		if (VideoStreams != null && VideoStreams.Count > 0) {
-			var targetIndex = currentStreamIndex >= 0 ? currentStreamIndex : WrapIndex(DefaultStreamIndex, VideoStreams.Count);
-			AssignStream(targetIndex, true);
-		} else if (videoPlayer.Stream == null && originalStream != null) {
-			videoPlayer.Stream = originalStream;
+		if (this.VideoStreams != null && this.VideoStreams.Count > 0) {
+			var targetIndex = currentStreamIndex >= 0 ? currentStreamIndex : WrapIndex(DefaultStreamIndex, this.VideoStreams.Count);
+			this.AssignStream(targetIndex, true);
+		} else if (this.videoPlayer.Stream == null && originalStream != null) {
+			this.videoPlayer.Stream = originalStream;
 			if (ResetOnStop) {
-				videoPlayer.StreamPosition = 0;
+				this.videoPlayer.StreamPosition = 0;
 			}
 		} else if (ResetOnStop) {
-			videoPlayer.StreamPosition = 0;
+			this.videoPlayer.StreamPosition = 0;
 		}
 	}
 
 	private void SwitchVideo(int direction) {
-		if (videoPlayer == null || VideoStreams == null || VideoStreams.Count <= 1) return;
-		var baseIndex = currentStreamIndex >= 0 ? currentStreamIndex : WrapIndex(DefaultStreamIndex, VideoStreams.Count);
-		var nextIndex = WrapIndex(baseIndex + direction, VideoStreams.Count);
-		bool wasPlaying = videoPlayer.IsPlaying();
-		bool wasPaused = this.isPaused || (wasPlaying && videoPlayer.Paused);
-		AssignStream(nextIndex);
+		if (this.videoPlayer == null || this.VideoStreams == null || this.VideoStreams.Count <= 1) return;
+		var baseIndex = currentStreamIndex >= 0 ? currentStreamIndex : WrapIndex(DefaultStreamIndex, this.VideoStreams.Count);
+		var nextIndex = WrapIndex(baseIndex + direction, this.VideoStreams.Count);
+		bool wasPlaying = this.videoPlayer.IsPlaying();
+		bool wasPaused = this.isPaused || (wasPlaying && this.videoPlayer.Paused);
+		this.AssignStream(nextIndex);
 		if (wasPaused) {
-			videoPlayer.Play();
-			videoPlayer.Paused = true;
+			this.videoPlayer.Play();
+			this.videoPlayer.Paused = true;
 			this.isPlaying = false;
 			this.isPaused = true;
-			isInteracting = true;
+			base.isInteracting = true;
 		} else if (wasPlaying || this.isPlaying) {
-			videoPlayer.Play();
-			videoPlayer.Paused = false;
+			this.videoPlayer.Play();
+			this.videoPlayer.Paused = false;
 			this.isPlaying = true;
 			this.isPaused = false;
-			isInteracting = true;
+			base.isInteracting = true;
 		} else {
 			this.isPlaying = false;
 			this.isPaused = false;
-			isInteracting = false;
+			base.isInteracting = false;
 		}
 		this.UpdatePlaylistSelection();
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 	}
 
 	private bool AssignStream(int index, bool resetPosition = true) {
-		if (videoPlayer == null || VideoStreams == null || VideoStreams.Count == 0) return false;
-		int wrappedIndex = WrapIndex(index, VideoStreams.Count);
-		var stream = VideoStreams[wrappedIndex];
+		if (this.videoPlayer == null || this.VideoStreams == null || this.VideoStreams.Count == 0) return false;
+		int wrappedIndex = WrapIndex(index, this.VideoStreams.Count);
+		var stream = this.VideoStreams[wrappedIndex];
 		if (stream == null) {
 			GD.PushWarning($"{Name}: 播放列表中的 VideoStream（索引 {wrappedIndex}）为空。");
 			return false;
 		}
-		bool wasPlaying = videoPlayer.IsPlaying();
-		bool needUpdate = currentStreamIndex != wrappedIndex || videoPlayer.Stream != stream;
+		bool wasPlaying = this.videoPlayer.IsPlaying();
+		bool needUpdate = currentStreamIndex != wrappedIndex || this.videoPlayer.Stream != stream;
 		if (needUpdate && wasPlaying) {
-			videoPlayer.Stop();
+			this.videoPlayer.Stop();
 		}
 		if (needUpdate) {
-			videoPlayer.Stream = stream;
+			this.videoPlayer.Stream = stream;
 		}
 		if (resetPosition || ResetOnStop) {
-			videoPlayer.StreamPosition = 0;
+			this.videoPlayer.StreamPosition = 0;
 		}
 		currentStreamIndex = wrappedIndex;
 		this.UpdatePlaylistSelection();
@@ -307,62 +307,62 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void ClearVideoFrame() {
-		if (videoPlayer == null) return;
+		if (this.videoPlayer == null) return;
 		if (ResetOnStop) {
-			videoPlayer.StreamPosition = 0;
+			this.videoPlayer.StreamPosition = 0;
 		}
-		videoPlayer.Paused = false;
+		this.videoPlayer.Paused = false;
 		this.isPaused = false;
-		if (!HideScreenOnStop) return;
-		if ((VideoStreams != null && VideoStreams.Count > 0) || originalStream != null) {
-			videoPlayer.Stream = null;
+		if (!this.HideScreenOnStop) return;
+		if ((this.VideoStreams != null && this.VideoStreams.Count > 0) || originalStream != null) {
+			this.videoPlayer.Stream = null;
 		}
-		videoPlayer.Visible = false;
+		this.videoPlayer.Visible = false;
 		this.HidePlaylistUI();
 	}
 
 	private void UpdateScreenVisibility() {
-		if (videoPlayer == null) return;
-		if (HideScreenOnStop) {
-			videoPlayer.Visible = this.isPlaying || this.isPaused;
+		if (this.videoPlayer == null) return;
+		if (this.HideScreenOnStop) {
+			this.videoPlayer.Visible = this.isPlaying || this.isPaused;
 		} else {
-			videoPlayer.Visible = true;
+			this.videoPlayer.Visible = true;
 		}
 	}
 
 	private void ResolvePlaylistUI() {
-		playlistPanel = PlaylistPanelPath.IsEmpty ? null : GetNodeOrNull<Control>(PlaylistPanelPath);
-		if (playlistPanel == null) {
+		this.playlistPanel = PlaylistPanelPath.IsEmpty ? null : GetNodeOrNull<Control>(PlaylistPanelPath);
+		if (this.playlistPanel == null) {
 			GD.PushWarning($"{Name}: 未找到影片選單面板 {PlaylistPanelPath}，將於運行時建立預設面板。");
 			CreateRuntimePlaylistUI();
 		}
-		if (playlistPanel == null) return;
+		if (this.playlistPanel == null) return;
 		playlistButtonContainer = PlaylistButtonContainerPath.IsEmpty ? null : GetNodeOrNull<Container>(PlaylistButtonContainerPath);
-		if (playlistButtonContainer == null && playlistPanel != null) {
-			playlistButtonContainer = playlistPanel as Container;
+		if (playlistButtonContainer == null && this.playlistPanel != null) {
+			playlistButtonContainer = this.playlistPanel as Container;
 			if (playlistButtonContainer == null) {
-				playlistButtonContainer = playlistPanel.GetNodeOrNull<Container>("VBoxContainer");
+				playlistButtonContainer = this.playlistPanel.GetNodeOrNull<Container>("VBoxContainer");
 			}
 		}
 		if (playlistButtonContainer == null) {
 			CreateRuntimePlaylistContainer();
 		}
-		BuildPlaylistButtons();
+		this.BuildPlaylistButtons();
 		this.HidePlaylistUI();
 	}
 
 	private void BuildPlaylistButtons() {
-		foreach (var button in playlistButtons) {
+		foreach (var button in this.playlistButtons) {
 			if (button != null && IsInstanceValid(button)) {
 				button.QueueFree();
 			}
 		}
-		playlistButtons.Clear();
+		this.playlistButtons.Clear();
 		if (playlistButtonContainer == null) return;
 		foreach (Node child in playlistButtonContainer.GetChildren()) {
 			child.QueueFree();
 		}
-		if (VideoStreams == null || VideoStreams.Count == 0) {
+		if (this.VideoStreams == null || this.VideoStreams.Count == 0) {
 			var emptyLabel = new Label {
 				Text = "暂无可播放影片",
 				HorizontalAlignment = HorizontalAlignment.Center,
@@ -378,7 +378,7 @@ public partial class MoviePlayer : Interactable {
 		};
 		playlistButtonContainer.AddChild(title);
 		playlistButtonContainer.AddChild(new HSeparator());
-		for (int i = 0; i < VideoStreams.Count; i++) {
+		for (int i = 0; i < this.VideoStreams.Count; i++) {
 			var button = new Button {
 				Text = GetStreamDisplayName(i),
 				SizeFlagsHorizontal = Control.SizeFlags.Fill,
@@ -389,13 +389,13 @@ public partial class MoviePlayer : Interactable {
 			button.MouseEntered += () => UpdateHoverDescription(index);
 			button.FocusMode = Control.FocusModeEnum.All;
 			playlistButtonContainer.AddChild(button);
-			playlistButtons.Add(button);
+			this.playlistButtons.Add(button);
 		}
 		this.UpdatePlaylistSelection();
 	}
 
 	private string GetStreamDisplayName(int index) {
-		var stream = VideoStreams[index];
+		var stream = this.VideoStreams[index];
 		if (stream == null) return $"影片 {index + 1}";
 		if (!string.IsNullOrEmpty(stream.ResourceName)) {
 			return stream.ResourceName;
@@ -411,49 +411,49 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void PlayStreamAt(int index) {
-		if (videoPlayer == null || VideoStreams == null || VideoStreams.Count == 0) return;
-		if (index < 0 || index >= VideoStreams.Count) return;
-		if (HideScreenOnStop) {
-			videoPlayer.Visible = true;
+		if (this.videoPlayer == null || this.VideoStreams == null || this.VideoStreams.Count == 0) return;
+		if (index < 0 || index >= this.VideoStreams.Count) return;
+		if (this.HideScreenOnStop) {
+			this.videoPlayer.Visible = true;
 		}
-		videoPlayer.Paused = false;
+		this.videoPlayer.Paused = false;
 		this.isPaused = false;
-		AssignStream(index, true);
-		videoPlayer.Play();
+		this.AssignStream(index, true);
+		this.videoPlayer.Play();
 		this.isPlaying = true;
-		isInteracting = true;
+		base.isInteracting = true;
 		this.UpdateActionLabel();
-		UpdateScreenVisibility();
+		this.UpdateScreenVisibility();
 		this.UpdatePlaylistSelection();
 		this.HidePlaylistUI();
 	}
 
 	private void UpdateHoverDescription(int index) {
-		if (VideoStreams == null || index < 0 || index >= VideoStreams.Count) return;
-		var stream = VideoStreams[index];
+		if (this.VideoStreams == null || index < 0 || index >= this.VideoStreams.Count) return;
+		var stream = this.VideoStreams[index];
 		if (stream == null) return;
 		var tooltip = GetStreamDisplayName(index);
 		if (!string.IsNullOrEmpty(stream.ResourcePath)) {
 			tooltip += $"\n{stream.ResourcePath}";
 		}
-		if (playlistPanel != null) {
-			playlistPanel.TooltipText = tooltip;
+		if (this.playlistPanel != null) {
+			this.playlistPanel.TooltipText = tooltip;
 		}
 	}
 
 	private void SetGameInteractionLock(bool enabled) {
-		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) return;
+		if (base.gameManager == null || !GodotObject.IsInstanceValid(base.gameManager)) return;
 		if (enabled) {
-			if (gameManager.currentInteractable != this) {
-				gameManager.SetCurrentInteractable(this);
+			if (base.gameManager.currentInteractable != this) {
+			base.gameManager.SetCurrentInteractable(this);
 			}
-		} else if (gameManager.currentInteractable == this) {
-			gameManager.SetCurrentInteractable(null);
+		} else if (base.gameManager.currentInteractable == this) {
+			base.gameManager.SetCurrentInteractable(null);
 		}
 	}
 
 	private void TogglePlaylistUI(bool visible) {
-		if (playlistPanel == null) return;
+		if (this.playlistPanel == null) return;
 		if (isPlaylistVisible == visible) return;
 		if (visible) {
 			this.ShowPlaylistUI();
@@ -463,9 +463,9 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void ShowPlaylistUI() {
-		if (playlistPanel == null) return;
-		BuildPlaylistButtons();
-		playlistPanel.Visible = true;
+		if (this.playlistPanel == null) return;
+		this.BuildPlaylistButtons();
+		this.playlistPanel.Visible = true;
 		isPlaylistVisible = true;
 		SetGameInteractionLock(true);
 		this.UpdatePlaylistSelection();
@@ -474,17 +474,17 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void HidePlaylistUI() {
-		if (playlistPanel == null) return;
-		playlistPanel.Visible = false;
+		if (this.playlistPanel == null) return;
+		this.playlistPanel.Visible = false;
 		isPlaylistVisible = false;
 		SetGameInteractionLock(false);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	private void UpdatePlaylistSelection() {
-		if (playlistButtons.Count == 0) return;
-		for (int i = 0; i < playlistButtons.Count; i++) {
-			var button = playlistButtons[i];
+		if (this.playlistButtons.Count == 0) return;
+		for (int i = 0; i < this.playlistButtons.Count; i++) {
+		var button = this.playlistButtons[i];
 			if (button == null || !IsInstanceValid(button)) continue;
 			button.ButtonPressed = (i == currentStreamIndex && currentStreamIndex >= 0);
 		}
@@ -517,17 +517,17 @@ public partial class MoviePlayer : Interactable {
 			panel.CustomMinimumSize = new Vector2(480, 320);
 			canvasLayer.AddChild(panel);
 		}
-		playlistPanel = panel;
+		this.playlistPanel = panel;
 		CreateRuntimePlaylistContainer();
-		PlaylistPanelPath = playlistPanel.GetPath();
+		PlaylistPanelPath = this.playlistPanel.GetPath();
 		if (playlistButtonContainer != null) {
 			PlaylistButtonContainerPath = playlistButtonContainer.GetPath();
 		}
 	}
 
 	private void CreateRuntimePlaylistContainer() {
-		if (playlistPanel == null) return;
-		playlistButtonContainer = playlistPanel.GetNodeOrNull<Container>("VBoxContainer");
+		if (this.playlistPanel == null) return;
+		playlistButtonContainer = this.playlistPanel.GetNodeOrNull<Container>("VBoxContainer");
 		if (playlistButtonContainer != null) return;
 		var vbox = new VBoxContainer {
 			Name = "VBoxContainer"
@@ -538,7 +538,7 @@ public partial class MoviePlayer : Interactable {
 		vbox.OffsetRight = -16;
 		vbox.OffsetBottom = -16;
 		vbox.AddThemeConstantOverride("separation", 12);
-		playlistPanel.AddChild(vbox);
+		this.playlistPanel.AddChild(vbox);
 		playlistButtonContainer = vbox;
 	}
 
@@ -547,8 +547,8 @@ public partial class MoviePlayer : Interactable {
 	}
 
 	private void EndInteractionSession() {
-		if (gameManager != null) {
-			gameManager.SetCurrentInteractable(null);
+		if (base.gameManager != null) {
+		base.gameManager.SetCurrentInteractable(null);
 		}
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
