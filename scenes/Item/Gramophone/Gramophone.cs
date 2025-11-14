@@ -85,10 +85,10 @@ public partial class Gramophone : Interactable {
 			wavStream.LoopMode = this.Loop ? AudioStreamWav.LoopModeEnum.Forward : AudioStreamWav.LoopModeEnum.Disabled;
 			loopApplied = true;
 		} else if (duplicatedStream is AudioStreamOggVorbis oggStream) {
-			oggStream.this.Loop = this.Loop;
+			oggStream.Loop = this.Loop;
 			loopApplied = true;
 		} else if (duplicatedStream is AudioStreamMP3 mp3Stream) {
-			mp3Stream.this.Loop = this.Loop;
+			mp3Stream.Loop = this.Loop;
 			loopApplied = true;
 		}
 		if (!loopApplied) {

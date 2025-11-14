@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=89 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -14,15 +14,11 @@
 [ext_resource type="Script" uid="uid://da6gjphc5qoy1" path="res://scenes/Item/MoviePlayer/MoviePlayer.cs" id="6_el0ym"]
 [ext_resource type="Texture2D" uid="uid://b6yppsi0gkw0n" path="res://assets/photos/1103044653.jpg" id="6_socpp"]
 [ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
-[ext_resource type="VideoStream" uid="uid://bg2k1or860pdx" path="res://assets/videos/1.ogv" id="7_g7bw1"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
 [ext_resource type="Material" uid="uid://bb7gbi6vn7vjc" path="res://assets/Josie/Toon Shader/josie_toon_shader.tres" id="8_8onjr"]
-[ext_resource type="VideoStream" uid="uid://ddhto8fcjtrld" path="res://assets/videos/2.ogv" id="8_88vt2"]
 [ext_resource type="Texture2D" uid="uid://c3kgh8ieknqwd" path="res://assets/low poly trees for itch_grandient texture.png" id="8_hembk"]
 [ext_resource type="PackedScene" uid="uid://b6ub5c82b4pab" path="res://assets/GLB/Tubes and Flasks/Flasks/bottle_glassware_beaker_small.glb" id="8_p47ta"]
-[ext_resource type="VideoStream" uid="uid://b78kauvc3r307" path="res://assets/videos/3.ogv" id="9_o5rrj"]
 [ext_resource type="PackedScene" uid="uid://bvsfc3r4jjgu6" path="res://scenes/Item/Door/Door.tscn" id="9_xyyef"]
-[ext_resource type="VideoStream" uid="uid://btvc0uutnvf88" path="res://assets/videos/4.ogv" id="10_f6cs8"]
 [ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://scenes/GameManager/GameManager.cs" id="10_interact_mgr"]
 [ext_resource type="Texture2D" uid="uid://b6yulutv0ld4a" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/TV_ImphenziaPalette01-256-Gradient.png" id="11_mg0u2"]
 [ext_resource type="PackedScene" uid="uid://bigqesy83pc7m" path="res://scenes/PauseMenu/PauseMenu.tscn" id="13_bbv3w"]
@@ -329,6 +325,12 @@ albedo_texture = SubResource("ViewportTexture_x2fmw")
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ef1mk"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_el0ym"]
 render_priority = 0
 shader = ExtResource("4_ef1mk")
 shader_parameter/color = Color(1, 1, 1, 1)
@@ -936,6 +938,7 @@ PlayerBookPath = NodePath("../../Player/Book")
 PhantomCameraPath = NodePath("../../Player/Book/PhantomCamera3D")
 PickupVisualRootPath = NodePath("Cube_010")
 outlineMat = SubResource("ShaderMaterial_tggud")
+OutlineTargetPaths = Array[NodePath]([NodePath("Cube_010")])
 nameLabel = NodePath("NameLabel")
 lineNode = NodePath("lineNode")
 linePointAPath = NodePath("lineNode/lineNode")
@@ -989,8 +992,8 @@ autoplay = true
 [node name="MoviePlayer" type="Node3D" parent="Objects" node_paths=PackedStringArray("nameLabel", "lineNode")]
 transform = Transform3D(-0.20989172, 0, 0.9777246, 0, 1, 0, -0.9777246, 0, -0.20989172, 16.179647, 4.463881, -2.0468807)
 script = ExtResource("6_el0ym")
-VideoStreams = Array[VideoStream]([ExtResource("7_g7bw1"), ExtResource("8_88vt2"), ExtResource("9_o5rrj"), ExtResource("10_f6cs8")])
 outlineMat = SubResource("ShaderMaterial_x2fmw")
+OutlineTargetPaths = Array[NodePath]([NodePath("MeshInstance3D")])
 nameLabel = NodePath("MeshInstance3D/NameLabel")
 lineNode = NodePath("MeshInstance3D/lineNode")
 linePointAPath = NodePath("MeshInstance3D/lineNode/lineNode")
@@ -1009,7 +1012,7 @@ mesh = SubResource("PlaneMesh_nxajo")
 surface_material_override/0 = SubResource("StandardMaterial3D_tggud")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/MoviePlayer"]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -2.130475, -3.8704274, -15.527952)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.1304748, -3.8704274, -15.527954)
 mesh = SubResource("BoxMesh_el0ym")
 
 [node name="NameLabel" type="Label3D" parent="Objects/MoviePlayer/MeshInstance3D"]
@@ -1082,6 +1085,8 @@ transform = Transform3D(0.45809838, 0, 0, 0, 0.06331954, -0.9848078, 0, 0.359102
 transform = Transform3D(1, 0, 0, 0, 0.19531286, 0.980741, 0, -0.980741, 0.19531286, 5.3, 2.2, -1.5000002)
 TextureRectPath = NodePath("../../../../Player/CanvasLayer/Control/TextureRect")
 PhotoTexture = ExtResource("5_bbv3w")
+outlineMat = SubResource("ShaderMaterial_el0ym")
+OutlineTargetPaths = Array[NodePath]([NodePath("Cube_011")])
 gameManager = NodePath("../../../../GameManager")
 
 [node name="Mesh" parent="Objects/PhotoWall/Photos/Photo2" index="1"]

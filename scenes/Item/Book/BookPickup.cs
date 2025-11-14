@@ -58,7 +58,7 @@ public partial class BookPickup : Interactable {
 		this.canExitInteraction = false;
 		Input.ActionRelease("pause");
 		Input.ActionRelease("ui_cancel");
-		base.this.ExitInteraction();
+		base.ExitInteraction();
 		if (gameManager != null) {
 			gameManager.SetCurrentInteractable(null);
 		}
