@@ -1,0 +1,19 @@
+# 将以下内容添加到 project.godot 文件的 [input] 部分
+
+[input]
+
+# 实验菜单切换键（P键）
+toggle_experiment_menu={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":80,"key_label":0,"unicode":112,"echo":false,"script":null)
+]
+}
+
+# 或者在Godot编辑器中手动添加：
+# 1. 打开：项目 -> 项目设置 -> 输入映射
+# 2. 在"添加新动作"中输入：toggle_experiment_menu
+# 3. 点击"添加"
+# 4. 点击右侧的"+"号添加按键
+# 5. 按下P键
+# 6. 点击"确定"
+

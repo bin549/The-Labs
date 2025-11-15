@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b0wsdibnv7u4n" path="res://scenes/Item/Gramophone/Gramophone.cs" id="1_02cxt"]
 [ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="2_yhnrh"]
 [ext_resource type="Texture2D" uid="uid://42g871hhbjpw" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/radio_ImphenziaPalette01-256-Gradient.png" id="3_texsp"]
-[ext_resource type="AudioStream" uid="uid://djuoopc50si8w" path="res://assets/sounds/1-09 风の憧憬.mp3" id="4_iw47m"]
+[ext_resource type="AudioStream" uid="uid://djuoopc50si8w" path="res://assets/sounds/music/1-09 风の憧憬.mp3" id="4_iw47m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tggud"]
 render_priority = 0

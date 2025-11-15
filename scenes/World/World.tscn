@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=114 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -8,20 +8,28 @@
 [ext_resource type="Script" uid="uid://dxoq13efuokh6" path="res://scenes/Item/Book/BookPickup.cs" id="3_nxajo"]
 [ext_resource type="PackedScene" uid="uid://cht2ry1qh5q0t" path="res://scenes/Item/Gramophone/Gramophone.tscn" id="3_tggud"]
 [ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_ef1mk"]
-[ext_resource type="Texture2D" uid="uid://c3iswmsrhcvxc" path="res://assets/photos/1118291238.jpg" id="5_bbv3w"]
 [ext_resource type="PackedScene" uid="uid://cni4dh48mykc1" path="res://scenes/Player/Player.tscn" id="5_eu7l1"]
 [ext_resource type="PackedScene" uid="uid://7gowqoi86x4e" path="res://assets/GLB/Tubes and Flasks/Flasks/bottle_glassware_florence_flask_large.glb" id="5_ictkp"]
 [ext_resource type="Script" uid="uid://da6gjphc5qoy1" path="res://scenes/Item/MoviePlayer/MoviePlayer.cs" id="6_el0ym"]
-[ext_resource type="Texture2D" uid="uid://b6yppsi0gkw0n" path="res://assets/photos/1103044653.jpg" id="6_socpp"]
 [ext_resource type="Script" uid="uid://b4twt6qoakcgt" path="res://scenes/World/World.cs" id="6_world"]
+[ext_resource type="AudioStream" uid="uid://b6eybet5vhda5" path="res://assets/sounds/music/ElevenLabs_2024-11-28T11_52_06_WLH_ivc_s50_sb100_se0_b_m2.mp3" id="6_x2fmw"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="7_host"]
 [ext_resource type="Material" uid="uid://bb7gbi6vn7vjc" path="res://assets/Josie/Toon Shader/josie_toon_shader.tres" id="8_8onjr"]
 [ext_resource type="Texture2D" uid="uid://c3kgh8ieknqwd" path="res://assets/low poly trees for itch_grandient texture.png" id="8_hembk"]
 [ext_resource type="PackedScene" uid="uid://b6ub5c82b4pab" path="res://assets/GLB/Tubes and Flasks/Flasks/bottle_glassware_beaker_small.glb" id="8_p47ta"]
 [ext_resource type="PackedScene" uid="uid://bvsfc3r4jjgu6" path="res://scenes/Item/Door/Door.tscn" id="9_xyyef"]
 [ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://scenes/GameManager/GameManager.cs" id="10_interact_mgr"]
+[ext_resource type="Texture2D" uid="uid://1fchufgmnu5d" path="res://assets/images/bafkreigavk5b64vkhjknydgg6tohwhp3p4s45ocorwyew4hipcff2pkgai.jpg" id="10_x2fmw"]
 [ext_resource type="Texture2D" uid="uid://b6yulutv0ld4a" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/TV_ImphenziaPalette01-256-Gradient.png" id="11_mg0u2"]
+[ext_resource type="Script" uid="uid://byy5eqxajw0gy" path="res://scenes/Item/Mirror/Mirror.cs" id="12_tggud"]
 [ext_resource type="PackedScene" uid="uid://bigqesy83pc7m" path="res://scenes/PauseMenu/PauseMenu.tscn" id="13_bbv3w"]
+[ext_resource type="Script" uid="uid://dfpts3xel8bf8" path="res://scenes/Item/Interactable/DialogueEntry.cs" id="13_nxajo"]
+[ext_resource type="AudioStream" uid="uid://cvrajc8sulanl" path="res://assets/sounds/dialog/万界智能_Arabella（英语-女）, 28_11_2024, 17_44_2024-11-28.mp3" id="14_xet21"]
+[ext_resource type="Script" uid="uid://te5tvbm5k7pl" path="res://scenes/Item/LabItem/OhmsLawExperiment.cs" id="19_88vt2"]
+[ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Item/LabItem/FrictionExperiment.cs" id="21_el0ym"]
+[ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Item/LabItem/AluminumReactionExperiment.cs" id="22_g7bw1"]
+[ext_resource type="Script" uid="uid://dvl0x4l10i824" path="res://scenes/ExperimentManager/ExperimentManager.cs" id="23_expman"]
+[ext_resource type="Script" uid="uid://cfjcjjhpo4ww0" path="res://scenes/ExperimentManager/ExperimentInfo.cs" id="24_expinfo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_js7pq"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -255,7 +263,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_5abf2")
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_ety44"]
-file = "res://assets/videos/2.ogv"
+file = "res://assets/videos/TWOZ7255.ogv"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x2fmw"]
 render_priority = 0
@@ -330,6 +338,18 @@ shader = ExtResource("4_ef1mk")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/size = 0.0
 
+[sub_resource type="Resource" id="Resource_g7bw1"]
+script = ExtResource("13_nxajo")
+Audio = ExtResource("14_xet21")
+Text = "dsafadsfd"
+PlayBeforeInteraction = false
+metadata/_custom_type_script = "uid://dfpts3xel8bf8"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nxajo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xet21"]
+albedo_texture = ExtResource("10_x2fmw")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_el0ym"]
 render_priority = 0
 shader = ExtResource("4_ef1mk")
@@ -370,11 +390,46 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_0m7ld")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n71f5"]
-albedo_texture = ExtResource("5_bbv3w")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ef1mk"]
+albedo_texture = ExtResource("10_x2fmw")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ao33c"]
-material = SubResource("StandardMaterial3D_n71f5")
+material = SubResource("StandardMaterial3D_ef1mk")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nxajo"]
+viewport_path = NodePath("Objects/Mirror/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_el0ym"]
+resource_local_to_scene = true
+albedo_color = Color(2.184344, 2.184344, 2.184344, 1)
+albedo_texture = SubResource("ViewportTexture_nxajo")
+metallic_specular = 1.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tggud"]
+viewport_path = NodePath("Objects/Mirror/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nxajo"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_tggud")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x2fmw"]
+material = SubResource("StandardMaterial3D_nxajo")
+size = Vector2(1.5, 3)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xet21"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
+[sub_resource type="Resource" id="Resource_xet21"]
+script = ExtResource("13_nxajo")
+Audio = ExtResource("14_xet21")
+Text = "sdfdsf	"
+metadata/_custom_type_script = "uid://dfpts3xel8bf8"
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tggud"]
+data = PackedVector3Array(0.75, 0, 1.5, -0.75, 0, 1.5, 0.75, 0, -1.5, -0.75, 0, 1.5, -0.75, 0, -1.5, 0.75, 0, -1.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dftf"]
 albedo_texture = ExtResource("1_c6gwx")
@@ -751,6 +806,12 @@ shadow_mesh = SubResource("ArrayMesh_fx256")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_xyyef"]
 data = PackedVector3Array(0.9051, 4.4417, -0.9874, 0.6965, 4.1998997, -0.29819998, 0.4628, 5.1328998, -0.8427, -0.4358, 3.5809, -0.6788, 0.6965, 4.1998997, -0.29819998, 0.5731, 3.7368, -1.1274999, -0.1765, 5.1686, -1.337, 0.6745, 4.7043, -1.6647999, 0.4628, 5.1328998, -0.8427, 0.6745, 4.7043, -1.6647999, -0.4728, 5.0144997, -1.9698999, -0.1028, 4.3177, -2.043, -0.3423, 3.6339998, -1.4334999, -0.1028, 4.3177, -2.043, -1.2154, 4.3887997, -1.2899, -0.4728, 5.0144997, -1.9698999, -1.2154, 4.3887997, -1.2899, -0.1028, 4.3177, -2.043, -0.4728, 5.0144997, -1.9698999, -0.9238, 5.1405997, -1.2558, -1.2154, 4.3887997, -1.2899, 0.4628, 5.1328998, -0.8427, 0.6745, 4.7043, -1.6647999, 0.9051, 4.4417, -0.9874, 0.5731, 3.7368, -1.1274999, 0.9051, 4.4417, -0.9874, 0.6745, 4.7043, -1.6647999, 0.6965, 4.1998997, -0.29819998, -0.4358, 3.5809, -0.6788, -0.4103, 3.8156, -0.0263, -0.1765, 5.1686, -1.337, -0.9238, 5.1405997, -1.2558, -0.4728, 5.0144997, -1.9698999, -0.4358, 3.5809, -0.6788, 0.5731, 3.7368, -1.1274999, -0.3423, 3.6339998, -1.4334999, 0.5731, 3.7368, -1.1274999, -0.1028, 4.3177, -2.043, -0.3423, 3.6339998, -1.4334999, 0.5731, 3.7368, -1.1274999, 0.6745, 4.7043, -1.6647999, -0.1028, 4.3177, -2.043, 0.6745, 4.7043, -1.6647999, -0.1765, 5.1686, -1.337, -0.4728, 5.0144997, -1.9698999, -0.5006, 5.1872997, -0.56409997, -0.9238, 5.1405997, -1.2558, -0.1765, 5.1686, -1.337, -0.1765, 5.1686, -1.337, 0.4628, 5.1328998, -0.8427, -0.5006, 5.1872997, -0.56409997, -0.4103, 3.8156, -0.0263, -1.2154, 4.3887997, -1.2899, -0.4312, 4.5315, 0.059, -0.4103, 3.8156, -0.0263, -0.4358, 3.5809, -0.6788, -1.2154, 4.3887997, -1.2899, -1.2154, 4.3887997, -1.2899, -0.4358, 3.5809, -0.6788, -0.3423, 3.6339998, -1.4334999, -1.2154, 4.3887997, -1.2899, -0.5006, 5.1872997, -0.56409997, -0.4312, 4.5315, 0.059, -1.2154, 4.3887997, -1.2899, -0.9238, 5.1405997, -1.2558, -0.5006, 5.1872997, -0.56409997, -0.4312, 4.5315, 0.059, 0.4628, 5.1328998, -0.8427, 0.6965, 4.1998997, -0.29819998, -0.4312, 4.5315, 0.059, -0.5006, 5.1872997, -0.56409997, 0.4628, 5.1328998, -0.8427, -0.4312, 4.5315, 0.059, 0.6965, 4.1998997, -0.29819998, -0.4103, 3.8156, -0.0263, 0.9051, 4.4417, -0.9874, 0.5731, 3.7368, -1.1274999, 0.6965, 4.1998997, -0.29819998, 0.47599998, 5.933, 1.7143999, 0.3795, 4.6849, 1.5488, 0.2662, 5.9316998, 1.7741, 0.47599998, 5.933, 1.7143999, 0.6997, 4.6868, 1.4577999, 0.3795, 4.6849, 1.5488, 0.49409997, 3.4099998, 0.81149995, 0.6997, 4.6868, 1.4577999, 0.6088, 4.7152, 1.1410999, 0.49409997, 3.4099998, 0.81149995, 0.66969997, 3.3722, 1.4288, 0.6997, 4.6868, 1.4577999, -0.023, 1.6843, 0.8128, -0.1257, 3.4064, 0.98789996, 0.0499, 3.3687, 1.6050999, -0.023, 1.6843, 0.8128, -0.51309997, 1.7249999, 0.2023, -0.1257, 3.4064, 0.98789996, 0.1007, 1.7469, -0.2874, 0.66969997, 3.3722, 1.4288, 0.49409997, 3.4099998, 0.81149995, 0.1007, 1.7469, -0.2874, 0.5908, 1.7061, 0.3231, 0.66969997, 3.3722, 1.4288, 0.19139999, 5.9480996, 1.5063, 0.6088, 4.7152, 1.1410999, 0.39859998, 5.9493, 1.4474, 0.19139999, 5.9480996, 1.5063, 0.2898, 4.7132998, 1.2318, 0.6088, 4.7152, 1.1410999, -0.51309997, 1.7249999, 0.2023, 0.35999998, 0.0515, -0.95339996, 0.1007, 1.7469, -0.2874, -0.51309997, 1.7249999, 0.2023, -0.80799997, 0.0448, -0.6211, 0.35999998, 0.0515, -0.95339996, 0.5908, 1.7061, 0.3231, -0.47709998, -0.0264, 0.542, -0.023, 1.6843, 0.8128, 0.5908, 1.7061, 0.3231, 0.69089997, -0.0196, 0.20969999, -0.47709998, -0.0264, 0.542, 0.69089997, -0.0196, 0.20969999, -0.80799997, 0.0448, -0.6211, -0.47709998, -0.0264, 0.542, 0.69089997, -0.0196, 0.20969999, 0.35999998, 0.0515, -0.95339996, -0.80799997, 0.0448, -0.6211, 0.0499, 3.3687, 1.6050999, 0.2898, 4.7132998, 1.2318, 0.3795, 4.6849, 1.5488, 0.0499, 3.3687, 1.6050999, -0.1257, 3.4064, 0.98789996, 0.2898, 4.7132998, 1.2318, 0.37579998, 6.4448, 1.6056, 0.2866, 6.4553, 1.6768999, 0.2748, 6.4442, 1.6343, 0.37579998, 6.4448, 1.6056, 0.3885, 6.4567, 1.6515, 0.2866, 6.4553, 1.6768999, 0.19139999, 5.9480996, 1.5063, 0.37579998, 6.4448, 1.6056, 0.2748, 6.4442, 1.6343, 0.19139999, 5.9480996, 1.5063, 0.39859998, 5.9493, 1.4474, 0.37579998, 6.4448, 1.6056, 0.2619, 5.94, 1.6328, 0.2748, 6.4442, 1.6343, 0.2866, 6.4553, 1.6768999, 0.2619, 5.94, 1.6328, 0.19139999, 5.9480996, 1.5063, 0.2748, 6.4442, 1.6343, 0.4067, 5.9405, 1.5972999, 0.2866, 6.4553, 1.6768999, 0.3885, 6.4567, 1.6515, 0.4067, 5.9405, 1.5972999, 0.2619, 5.94, 1.6328, 0.2866, 6.4553, 1.6768999, 0.39859998, 5.9493, 1.4474, 0.3885, 6.4567, 1.6515, 0.37579998, 6.4448, 1.6056, 0.39859998, 5.9493, 1.4474, 0.4067, 5.9405, 1.5972999, 0.3885, 6.4567, 1.6515, 0.55509996, 6.0924997, 1.8851, 0.1857, 6.3409996, 2.31, 0.33949998, 6.0951, 1.9425, 0.55509996, 6.0924997, 1.8851, 0.32819998, 6.3392997, 2.2719998, 0.1857, 6.3409996, 2.31, 0.2619, 5.94, 1.6328, 0.55509996, 6.0924997, 1.8851, 0.33949998, 6.0951, 1.9425, 0.2619, 5.94, 1.6328, 0.4067, 5.9405, 1.5972999, 0.55509996, 6.0924997, 1.8851, 0.2662, 5.9316998, 1.7741, 0.33949998, 6.0951, 1.9425, 0.3556, 6.0393, 1.9951999, 0.2662, 5.9316998, 1.7741, 0.2619, 5.94, 1.6328, 0.33949998, 6.0951, 1.9425, 0.47599998, 5.933, 1.7143999, 0.3556, 6.0393, 1.9951999, 0.57, 6.0406, 1.9341999, 0.47599998, 5.933, 1.7143999, 0.2662, 5.9316998, 1.7741, 0.3556, 6.0393, 1.9951999, 0.4067, 5.9405, 1.5972999, 0.57, 6.0406, 1.9341999, 0.55509996, 6.0924997, 1.8851, 0.4067, 5.9405, 1.5972999, 0.47599998, 5.933, 1.7143999, 0.57, 6.0406, 1.9341999, 0.32819998, 6.3392997, 2.2719998, 0.1963, 6.3041, 2.3448, 0.1857, 6.3409996, 2.31, 0.32819998, 6.3392997, 2.2719998, 0.3381, 6.3048997, 2.3044999, 0.1963, 6.3041, 2.3448, 0.57, 6.0406, 1.9341999, 0.32819998, 6.3392997, 2.2719998, 0.55509996, 6.0924997, 1.8851, 0.57, 6.0406, 1.9341999, 0.3381, 6.3048997, 2.3044999, 0.32819998, 6.3392997, 2.2719998, 0.33949998, 6.0951, 1.9425, 0.1963, 6.3041, 2.3448, 0.3556, 6.0393, 1.9951999, 0.33949998, 6.0951, 1.9425, 0.1857, 6.3409996, 2.31, 0.1963, 6.3041, 2.3448, 0.3556, 6.0393, 1.9951999, 0.3381, 6.3048997, 2.3044999, 0.57, 6.0406, 1.9341999, 0.3556, 6.0393, 1.9951999, 0.1963, 6.3041, 2.3448, 0.3381, 6.3048997, 2.3044999, 0.6997, 4.6868, 1.4577999, 0.0499, 3.3687, 1.6050999, 0.3795, 4.6849, 1.5488, 0.6997, 4.6868, 1.4577999, 0.66969997, 3.3722, 1.4288, 0.0499, 3.3687, 1.6050999, 0.47599998, 5.933, 1.7143999, 0.6088, 4.7152, 1.1410999, 0.6997, 4.6868, 1.4577999, 0.6088, 4.7152, 1.1410999, 0.47599998, 5.933, 1.7143999, 0.4067, 5.9405, 1.5972999, 0.6088, 4.7152, 1.1410999, 0.4067, 5.9405, 1.5972999, 0.39859998, 5.9493, 1.4474, 0.19139999, 5.9480996, 1.5063, 0.3795, 4.6849, 1.5488, 0.2898, 4.7132998, 1.2318, 0.3795, 4.6849, 1.5488, 0.19139999, 5.9480996, 1.5063, 0.2619, 5.94, 1.6328, 0.3795, 4.6849, 1.5488, 0.2619, 5.94, 1.6328, 0.2662, 5.9316998, 1.7741, 0.2898, 4.7132998, 1.2318, 0.49409997, 3.4099998, 0.81149995, 0.6088, 4.7152, 1.1410999, 0.2898, 4.7132998, 1.2318, -0.1257, 3.4064, 0.98789996, 0.49409997, 3.4099998, 0.81149995, -0.2364, 4.5141997, -0.8341, -0.2685, 4.9301, -0.89059997, -0.0019999999, 4.5155, -0.9008, -0.2364, 4.5141997, -0.8341, -0.42749998, 4.9291997, -0.84529996, -0.2685, 4.9301, -0.89059997, 0.1915, 3.3307998, -0.69409996, 0.34019998, 3.0296, 0.6886, 0.2932, 3.4199998, -0.3284, 0.1915, 3.3307998, -0.69409996, 0.3017, 2.747, 0.5322, 0.34019998, 3.0296, 0.6886, 0.3017, 2.747, 0.5322, -0.0446, 3.0274, 0.7981, 0.34019998, 3.0296, 0.6886, 0.3017, 2.747, 0.5322, -0.0831, 2.7447999, 0.64169997, -0.0446, 3.0274, 0.7981, -0.1873, 3.3286, -0.58629996, -0.4242, 4.1091, -0.58, -0.085599996, 3.4178, -0.2206, -0.1873, 3.3286, -0.58629996, -0.49339998, 4.0312, -0.82989997, -0.4242, 4.1091, -0.58, 0.1915, 3.3307998, -0.69409996, -0.0831, 2.7447999, 0.64169997, 0.3017, 2.747, 0.5322, 0.1915, 3.3307998, -0.69409996, -0.1873, 3.3286, -0.58629996, -0.0831, 2.7447999, 0.64169997, 0.2932, 3.4199998, -0.3284, -0.4242, 4.1091, -0.58, -0.1008, 4.1109, -0.6721, 0.2932, 3.4199998, -0.3284, -0.085599996, 3.4178, -0.2206, -0.4242, 4.1091, -0.58, -0.45979998, 4.9771, -0.9557, -0.2685, 4.9301, -0.89059997, -0.42749998, 4.9291997, -0.84529996, -0.45979998, 4.9771, -0.9557, -0.3008, 4.9781, -1.0009999, -0.2685, 4.9301, -0.89059997, -0.050899997, 4.52, -1.0732, -0.45979998, 4.9771, -0.9557, -0.2853, 4.5187, -1.0065, -0.050899997, 4.52, -1.0732, -0.3008, 4.9781, -1.0009999, -0.45979998, 4.9771, -0.9557, -0.0019999999, 4.5155, -0.9008, -0.3008, 4.9781, -1.0009999, -0.050899997, 4.52, -1.0732, -0.0019999999, 4.5155, -0.9008, -0.2685, 4.9301, -0.89059997, -0.3008, 4.9781, -1.0009999, -0.2853, 4.5187, -1.0065, -0.42749998, 4.9291997, -0.84529996, -0.2364, 4.5141997, -0.8341, -0.2853, 4.5187, -1.0065, -0.45979998, 4.9771, -0.9557, -0.42749998, 4.9291997, -0.84529996, -0.49339998, 4.0312, -0.82989997, -0.2364, 4.5141997, -0.8341, -0.4242, 4.1091, -0.58, -0.49339998, 4.0312, -0.82989997, -0.2853, 4.5187, -1.0065, -0.2364, 4.5141997, -0.8341, -0.1008, 4.1109, -0.6721, -0.050899997, 4.52, -1.0732, -0.17, 4.033, -0.922, -0.1008, 4.1109, -0.6721, -0.0019999999, 4.5155, -0.9008, -0.050899997, 4.52, -1.0732, -0.17, 4.033, -0.922, -0.2853, 4.5187, -1.0065, -0.49339998, 4.0312, -0.82989997, -0.17, 4.033, -0.922, -0.050899997, 4.52, -1.0732, -0.2853, 4.5187, -1.0065, -0.4242, 4.1091, -0.58, -0.0019999999, 4.5155, -0.9008, -0.1008, 4.1109, -0.6721, -0.4242, 4.1091, -0.58, -0.2364, 4.5141997, -0.8341, -0.0019999999, 4.5155, -0.9008, 0.34019998, 3.0296, 0.6886, -0.085599996, 3.4178, -0.2206, 0.2932, 3.4199998, -0.3284, 0.34019998, 3.0296, 0.6886, -0.0446, 3.0274, 0.7981, -0.085599996, 3.4178, -0.2206, -0.17, 4.033, -0.922, -0.1873, 3.3286, -0.58629996, 0.1915, 3.3307998, -0.69409996, -0.17, 4.033, -0.922, -0.49339998, 4.0312, -0.82989997, -0.1873, 3.3286, -0.58629996, -0.0831, 2.7447999, 0.64169997, -0.085599996, 3.4178, -0.2206, -0.0446, 3.0274, 0.7981, -0.0831, 2.7447999, 0.64169997, -0.1873, 3.3286, -0.58629996, -0.085599996, 3.4178, -0.2206, -0.17, 4.033, -0.922, 0.2932, 3.4199998, -0.3284, -0.1008, 4.1109, -0.6721, -0.17, 4.033, -0.922, 0.1915, 3.3307998, -0.69409996, 0.2932, 3.4199998, -0.3284, 0.7773, 3.4229999, 2.9901, 0.77099997, 3.8119998, 3.2644, 0.547, 3.4215999, 3.0556, 0.7773, 3.4229999, 2.9901, 0.9091, 3.8128, 3.2250998, 0.77099997, 3.8119998, 3.2644, 0.4931, 2.4392, 1.846, 0.0224, 2.3969998, 0.98859996, 0.47939998, 2.6531, 1.8131, 0.4931, 2.4392, 1.846, -0.0053999997, 2.109, 0.8695, 0.0224, 2.3969998, 0.98859996, -0.0053999997, 2.109, 0.8695, 0.40719998, 2.3992999, 0.87909997, 0.0224, 2.3969998, 0.98859996, -0.0053999997, 2.109, 0.8695, 0.3795, 2.1113, 0.76, 0.40719998, 2.3992999, 0.87909997, 0.8646, 2.4414, 1.7402999, 0.8623, 3.0472, 2.7210999, 0.8509, 2.6553, 1.7074, 0.8646, 2.4414, 1.7402999, 0.90169996, 2.9278998, 2.8514, 0.8623, 3.0472, 2.7210999, 0.4931, 2.4392, 1.846, 0.3795, 2.1113, 0.76, -0.0053999997, 2.109, 0.8695, 0.4931, 2.4392, 1.846, 0.8646, 2.4414, 1.7402999, 0.3795, 2.1113, 0.76, 0.47939998, 2.6531, 1.8131, 0.8623, 3.0472, 2.7210999, 0.57589996, 3.0456, 2.8025, 0.47939998, 2.6531, 1.8131, 0.8509, 2.6553, 1.7074, 0.8623, 3.0472, 2.7210999, 0.9432, 3.8234, 3.3462, 0.77099997, 3.8119998, 3.2644, 0.9091, 3.8128, 3.2250998, 0.9432, 3.8234, 3.3462, 0.80509996, 3.8226, 3.3855, 0.77099997, 3.8119998, 3.2644, 0.5907, 3.3802, 3.207, 0.9432, 3.8234, 3.3462, 0.8211, 3.3815, 3.1415, 0.5907, 3.3802, 3.207, 0.80509996, 3.8226, 3.3855, 0.9432, 3.8234, 3.3462, 0.547, 3.4215999, 3.0556, 0.80509996, 3.8226, 3.3855, 0.5907, 3.3802, 3.207, 0.547, 3.4215999, 3.0556, 0.77099997, 3.8119998, 3.2644, 0.80509996, 3.8226, 3.3855, 0.8211, 3.3815, 3.1415, 0.9091, 3.8128, 3.2250998, 0.7773, 3.4229999, 2.9901, 0.8211, 3.3815, 3.1415, 0.9432, 3.8234, 3.3462, 0.9091, 3.8128, 3.2250998, 0.0224, 2.3969998, 0.98859996, 0.8509, 2.6553, 1.7074, 0.47939998, 2.6531, 1.8131, 0.0224, 2.3969998, 0.98859996, 0.40719998, 2.3992999, 0.87909997, 0.8509, 2.6553, 1.7074, 0.6153, 2.9262998, 2.9327998, 0.8646, 2.4414, 1.7402999, 0.4931, 2.4392, 1.846, 0.6153, 2.9262998, 2.9327998, 0.90169996, 2.9278998, 2.8514, 0.8646, 2.4414, 1.7402999, 0.3795, 2.1113, 0.76, 0.8509, 2.6553, 1.7074, 0.40719998, 2.3992999, 0.87909997, 0.3795, 2.1113, 0.76, 0.8646, 2.4414, 1.7402999, 0.8509, 2.6553, 1.7074, 0.6153, 2.9262998, 2.9327998, 0.47939998, 2.6531, 1.8131, 0.57589996, 3.0456, 2.8025, 0.6153, 2.9262998, 2.9327998, 0.4931, 2.4392, 1.846, 0.47939998, 2.6531, 1.8131, 0.90169996, 2.9278998, 2.8514, 0.7773, 3.4229999, 2.9901, 0.8623, 3.0472, 2.7210999, 0.90169996, 2.9278998, 2.8514, 0.8211, 3.3815, 3.1415, 0.7773, 3.4229999, 2.9901, 0.57589996, 3.0456, 2.8025, 0.5907, 3.3802, 3.207, 0.6153, 2.9262998, 2.9327998, 0.57589996, 3.0456, 2.8025, 0.547, 3.4215999, 3.0556, 0.5907, 3.3802, 3.207, 0.6153, 2.9262998, 2.9327998, 0.8211, 3.3815, 3.1415, 0.90169996, 2.9278998, 2.8514, 0.6153, 2.9262998, 2.9327998, 0.5907, 3.3802, 3.207, 0.8211, 3.3815, 3.1415, 0.8623, 3.0472, 2.7210999, 0.547, 3.4215999, 3.0556, 0.57589996, 3.0456, 2.8025, 0.8623, 3.0472, 2.7210999, 0.7773, 3.4229999, 2.9901, 0.547, 3.4215999, 3.0556, 0.91069996, 3.7299, 4.8627996, 0.15789999, 3.1624, 4.5267, 0.2188, 4.5973997, 5.0415998, 0.6107, 3.168, 2.5469, 0.15789999, 3.1624, 4.5267, 1.3241999, 3.0430999, 3.8077, 0.42209998, 4.8851, 4.4161997, 1.4714999, 4.2107997, 4.6843, 0.2188, 4.5973997, 5.0415998, 1.4714999, 4.2107997, 4.6843, 1.2429999, 4.8599, 3.6051, 1.8302, 4.0211, 3.3639998, 1.3993, 3.1836, 2.6097999, 1.8302, 4.0211, 3.3639998, 0.51699996, 4.178, 2.3543, 1.2429999, 4.8599, 3.6051, 0.51699996, 4.178, 2.3543, 1.8302, 4.0211, 3.3639998, 1.2429999, 4.8599, 3.6051, 0.1989, 4.9072, 3.3527, 0.51699996, 4.178, 2.3543, 0.2188, 4.5973997, 5.0415998, 1.4714999, 4.2107997, 4.6843, 0.91069996, 3.7299, 4.8627996, 1.3241999, 3.0430999, 3.8077, 0.91069996, 3.7299, 4.8627996, 1.4714999, 4.2107997, 4.6843, 0.15789999, 3.1624, 4.5267, 0.6107, 3.168, 2.5469, -0.34199998, 3.2784998, 3.0684, 0.42209998, 4.8851, 4.4161997, 0.1989, 4.9072, 3.3527, 1.2429999, 4.8599, 3.6051, 0.6107, 3.168, 2.5469, 1.3241999, 3.0430999, 3.8077, 1.3993, 3.1836, 2.6097999, 1.3241999, 3.0430999, 3.8077, 1.8302, 4.0211, 3.3639998, 1.3993, 3.1836, 2.6097999, 1.3241999, 3.0430999, 3.8077, 1.4714999, 4.2107997, 4.6843, 1.8302, 4.0211, 3.3639998, 1.4714999, 4.2107997, 4.6843, 0.42209998, 4.8851, 4.4161997, 1.2429999, 4.8599, 3.6051, -0.48389998, 4.7676997, 4.065, 0.1989, 4.9072, 3.3527, 0.42209998, 4.8851, 4.4161997, 0.42209998, 4.8851, 4.4161997, 0.2188, 4.5973997, 5.0415998, -0.48389998, 4.7676997, 4.065, -0.34199998, 3.2784998, 3.0684, 0.51699996, 4.178, 2.3543, -0.8328, 3.8937, 3.6875, -0.34199998, 3.2784998, 3.0684, 0.6107, 3.168, 2.5469, 0.51699996, 4.178, 2.3543, 0.51699996, 4.178, 2.3543, 0.6107, 3.168, 2.5469, 1.3993, 3.1836, 2.6097999, 0.51699996, 4.178, 2.3543, -0.48389998, 4.7676997, 4.065, -0.8328, 3.8937, 3.6875, 0.51699996, 4.178, 2.3543, 0.1989, 4.9072, 3.3527, -0.48389998, 4.7676997, 4.065, -0.8328, 3.8937, 3.6875, 0.2188, 4.5973997, 5.0415998, 0.15789999, 3.1624, 4.5267, -0.8328, 3.8937, 3.6875, -0.48389998, 4.7676997, 4.065, 0.2188, 4.5973997, 5.0415998, -0.8328, 3.8937, 3.6875, 0.15789999, 3.1624, 4.5267, -0.34199998, 3.2784998, 3.0684, 0.91069996, 3.7299, 4.8627996, 1.3241999, 3.0430999, 3.8077, 0.15789999, 3.1624, 4.5267, 2.2282, 4.6787, 2.3325, 1.1733999, 4.1621, 3.0642, 1.6223999, 6.0055, 2.8227, -0.6611, 3.4355, 0.9123, 1.1733999, 4.1621, 3.0642, 1.5449, 3.4875998, 1.1896, 1.1453999, 6.4965, 1.6212, 2.5542, 5.3227, 1.2714, 1.6223999, 6.0055, 2.8227, 2.5542, 5.3227, 1.2714, 1.0485, 6.22, 0.102299996, 1.4669, 4.8455, -0.3451, 0.2692, 3.5437999, -0.16839999, 1.4669, 4.8455, -0.3451, -1.0242, 5.0765, 0.017099999, 1.0485, 6.22, 0.102299996, -1.0242, 5.0765, 0.017099999, 1.4669, 4.8455, -0.3451, 1.0485, 6.22, 0.102299996, -0.3108, 6.3153, 0.9744, -1.0242, 5.0765, 0.017099999, 1.6223999, 6.0055, 2.8227, 2.5542, 5.3227, 1.2714, 2.2282, 4.6787, 2.3325, 1.5449, 3.4875998, 1.1896, 2.2282, 4.6787, 2.3325, 2.5542, 5.3227, 1.2714, 1.1733999, 4.1621, 3.0642, -0.6611, 3.4355, 0.9123, -1.0432, 3.6452, 2.2349, 1.1453999, 6.4965, 1.6212, -0.3108, 6.3153, 0.9744, 1.0485, 6.22, 0.102299996, -0.6611, 3.4355, 0.9123, 1.5449, 3.4875998, 1.1896, 0.2692, 3.5437999, -0.16839999, 1.5449, 3.4875998, 1.1896, 1.4669, 4.8455, -0.3451, 0.2692, 3.5437999, -0.16839999, 1.5449, 3.4875998, 1.1896, 2.5542, 5.3227, 1.2714, 1.4669, 4.8455, -0.3451, 2.5542, 5.3227, 1.2714, 1.1453999, 6.4965, 1.6212, 1.0485, 6.22, 0.102299996, -0.20099999, 6.257, 2.5204, -0.3108, 6.3153, 0.9744, 1.1453999, 6.4965, 1.6212, 1.1453999, 6.4965, 1.6212, 1.6223999, 6.0055, 2.8227, -0.20099999, 6.257, 2.5204, -1.0432, 3.6452, 2.2349, -1.0242, 5.0765, 0.017099999, -0.88989997, 4.9395, 3.0029, -1.0432, 3.6452, 2.2349, -0.6611, 3.4355, 0.9123, -1.0242, 5.0765, 0.017099999, -1.0242, 5.0765, 0.017099999, -0.6611, 3.4355, 0.9123, 0.2692, 3.5437999, -0.16839999, -1.0242, 5.0765, 0.017099999, -0.20099999, 6.257, 2.5204, -0.88989997, 4.9395, 3.0029, -1.0242, 5.0765, 0.017099999, -0.3108, 6.3153, 0.9744, -0.20099999, 6.257, 2.5204, -0.88989997, 4.9395, 3.0029, 1.6223999, 6.0055, 2.8227, 1.1733999, 4.1621, 3.0642, -0.88989997, 4.9395, 3.0029, -0.20099999, 6.257, 2.5204, 1.6223999, 6.0055, 2.8227, -0.88989997, 4.9395, 3.0029, 1.1733999, 4.1621, 3.0642, -1.0432, 3.6452, 2.2349, 2.2282, 4.6787, 2.3325, 1.5449, 3.4875998, 1.1896, 1.1733999, 4.1621, 3.0642, 0.66969997, 3.3722, 1.4288, -0.023, 1.6843, 0.8128, 0.0499, 3.3687, 1.6050999, 0.66969997, 3.3722, 1.4288, 0.5908, 1.7061, 0.3231, -0.023, 1.6843, 0.8128, -0.1257, 3.4064, 0.98789996, 0.1007, 1.7469, -0.2874, 0.49409997, 3.4099998, 0.81149995, -0.1257, 3.4064, 0.98789996, -0.51309997, 1.7249999, 0.2023, 0.1007, 1.7469, -0.2874, 0.35999998, 0.0515, -0.95339996, 0.5908, 1.7061, 0.3231, 0.1007, 1.7469, -0.2874, 0.35999998, 0.0515, -0.95339996, 0.69089997, -0.0196, 0.20969999, 0.5908, 1.7061, 0.3231, -0.47709998, -0.0264, 0.542, -0.51309997, 1.7249999, 0.2023, -0.023, 1.6843, 0.8128, -0.47709998, -0.0264, 0.542, -0.80799997, 0.0448, -0.6211, -0.51309997, 1.7249999, 0.2023)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f6cs8"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xyyef"]
 size = Vector3(2.6000001, 2.2, 1)
 
@@ -898,6 +959,41 @@ _data = {
 &"pour": SubResource("Animation_ictkp")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88vt2"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5rrj"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
+[sub_resource type="Resource" id="Resource_friction"]
+script = ExtResource("24_expinfo")
+ExperimentName = "摩擦力实验"
+Description = "探究滑动摩擦力的影响因素"
+Position = Vector3(7.576, 0.5, -4.557)
+ExperimentNodePath = NodePath("../Labs/LabItem")
+
+[sub_resource type="Resource" id="Resource_aluminum"]
+script = ExtResource("24_expinfo")
+ExperimentName = "铝与氢氧化钠反应"
+Description = "观察金属铝与碱溶液的反应"
+Category = 2
+Position = Vector3(-9.285, 0.5, -4)
+ExperimentNodePath = NodePath("../Labs/LabItem2")
+
+[sub_resource type="Resource" id="Resource_ohms"]
+script = ExtResource("24_expinfo")
+ExperimentName = "欧姆定律实验"
+Description = "探究电流与电压、电阻的关系"
+Category = 1
+Position = Vector3(5, 0.5, -4)
+ExperimentNodePath = NodePath("../Labs/LabItem3")
+
 [node name="World" type="Node3D"]
 script = ExtResource("6_world")
 
@@ -976,6 +1072,12 @@ skeleton = NodePath("")
 
 [node name="Gramophone" parent="Objects" instance=ExtResource("3_tggud")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.710939, 0.81988513, -8.1361065)
+PlayActionText = "播放"
+StopActionText = "暂停"
+DisplayName = "录音机"
+
+[node name="AudioStreamPlayer3D" parent="Objects/Gramophone" index="2"]
+stream = ExtResource("6_x2fmw")
 
 [node name="SubViewport" type="SubViewport" parent="Objects"]
 size = Vector2i(1280, 720)
@@ -1067,10 +1169,11 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.7000003, 1.9, -1.8000002)
 [node name="Photos" type="Node3D" parent="Objects/PhotoWall"]
 
 [node name="Photo" parent="Objects/PhotoWall/Photos" instance=ExtResource("3_ety44")]
-transform = Transform3D(1, 0, 0, 0, 0.19531284, 0.98074096, 0, -0.98074096, 0.19531284, 4, 2.2, -1.5000002)
+transform = Transform3D(1, 0, 0, 0, 0.19531284, 0.98074096, 0, -0.98074096, 0.19531284, 4, 2.2, -1.5000005)
 TextureRectPath = NodePath("../../../../Player/CanvasLayer/Control/TextureRect")
-PhotoTexture = ExtResource("6_socpp")
+PhotoTexture = ExtResource("10_x2fmw")
 outlineMat = SubResource("ShaderMaterial_ef1mk")
+Dialogues = Array[ExtResource("13_nxajo")]([SubResource("Resource_g7bw1")])
 
 [node name="CollisionShape3D" parent="Objects/PhotoWall/Photos/Photo/StaticBody3D" index="0"]
 transform = Transform3D(1.0000015, 0, -2.9802322e-08, -3.907985e-13, 1, 7.904788e-14, 2.9802322e-08, 0, 1.0000015, 0.012696266, 0.2501831, 0.27636838)
@@ -1080,11 +1183,13 @@ transform = Transform3D(-4.371139e-08, -1, 0, 0.17364828, -7.5904065e-09, -0.984
 
 [node name="MeshInstance3D" parent="Objects/PhotoWall/Photos/Photo" index="2"]
 transform = Transform3D(0.45809838, 0, 0, 0, 0.06331954, -0.9848078, 0, 0.3591029, 0.17364827, 0.06522846, 0.090527415, -0.016059518)
+material_override = SubResource("ShaderMaterial_nxajo")
+material_overlay = SubResource("StandardMaterial3D_xet21")
 
 [node name="Photo2" parent="Objects/PhotoWall/Photos" node_paths=PackedStringArray("gameManager") instance=ExtResource("3_ety44")]
 transform = Transform3D(1, 0, 0, 0, 0.19531286, 0.980741, 0, -0.980741, 0.19531286, 5.3, 2.2, -1.5000002)
 TextureRectPath = NodePath("../../../../Player/CanvasLayer/Control/TextureRect")
-PhotoTexture = ExtResource("5_bbv3w")
+PhotoTexture = ExtResource("10_x2fmw")
 outlineMat = SubResource("ShaderMaterial_el0ym")
 OutlineTargetPaths = Array[NodePath]([NodePath("Cube_011")])
 gameManager = NodePath("../../../../GameManager")
@@ -1103,6 +1208,43 @@ skeleton = NodePath("")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Objects/PhotoWall/Photos/Photo2/Cube_011"]
 transform = Transform3D(0.5097267, 0, 0, 0, 0.23907577, 0, 0, 0, 1, 0, 0.2037654, 0.0089619765)
 mesh = SubResource("QuadMesh_ao33c")
+
+[node name="Mirror" type="MeshInstance3D" parent="Objects" node_paths=PackedStringArray("nameLabel", "lineNode")]
+transform = Transform3D(0.7676464, 0.6408737, -2.8013478e-08, 0, -4.371139e-08, -1, -0.6408737, 0.7676464, -3.355489e-08, -6.0514917, 1.5147305, -2.985454)
+material_override = SubResource("StandardMaterial3D_el0ym")
+mesh = SubResource("PlaneMesh_x2fmw")
+script = ExtResource("12_tggud")
+LockPlayerControl = false
+outlineMat = SubResource("ShaderMaterial_xet21")
+nameLabel = NodePath("NameLabel")
+lineNode = NodePath("lineNode")
+linePointAPath = NodePath("lineNode/lineNode")
+linePointBPath = NodePath("lineNode/lineNode3")
+lineColor = Color(1, 1, 1, 1)
+Dialogues = Array[ExtResource("13_nxajo")]([SubResource("Resource_xet21")])
+
+[node name="NameLabel" type="Label3D" parent="Objects/Mirror"]
+transform = Transform3D(0.9718653, 0.0696251, -0.22501257, 0.22860974, -0.048828244, 0.97229284, 0.05670909, -0.9963772, -0.0633713, -1.5574296, -0.3194338, 0.31107894)
+text = "照片"
+
+[node name="SubViewport" type="SubViewport" parent="Objects/Mirror"]
+
+[node name="Camera3D" type="Camera3D" parent="Objects/Mirror/SubViewport"]
+transform = Transform3D(-0.5284235, 0, -0.8489809, 0, 1, 0, 0.8489809, 0, -0.5284235, -5.9735403, 1.4654104, -3.0447211)
+
+[node name="lineNode" type="Node3D" parent="Objects/Mirror"]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.3241816, 0.94599473, 0, -0.9459946, 0.32418153, 0, 0, 0)
+
+[node name="lineNode" type="Node3D" parent="Objects/Mirror/lineNode"]
+transform = Transform3D(1.0000006, 0, -7.450581e-09, -5.9604645e-08, 0.99999994, 1.7881393e-07, 7.450581e-09, -3.8184226e-08, 0.9999999, -1.2016182, -0.23887673, -0.10164302)
+
+[node name="lineNode3" type="Node3D" parent="Objects/Mirror/lineNode"]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, 0.99999994, 2.9802322e-08, 0, -2.9802322e-08, 0.99999994, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Objects/Mirror"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/Mirror/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_tggud")
 
 [node name="map" type="Node3D" parent="."]
 
@@ -1257,16 +1399,29 @@ shape = SubResource("ConcavePolygonShape3D_xyyef")
 [node name="Door" parent="map" instance=ExtResource("9_xyyef")]
 transform = Transform3D(-2, 0, -3.019916e-07, 0, 2, 0, 3.019916e-07, 0, -2, -3.4000003, 2, -8.7)
 ActionName = "开门/关门"
+LockPlayerControl = false
 
 [node name="Labs" type="Node3D" parent="."]
 
-[node name="LabItem" parent="Labs" node_paths=PackedStringArray("gameManager") instance=ExtResource("3_kurpr")]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.13608909, 0.5, -4.557046)
+[node name="LabItem" parent="Labs" instance=ExtResource("3_kurpr")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 4.9940014, 0.5, -31.003468)
+script = ExtResource("19_88vt2")
+ExperimentUIPanelPath = null
+CircuitBoardPath = null
+AmmeterPath = null
+VoltmeterPath = null
+DisplayName = "欧姆定律"
+outlineMat = SubResource("ShaderMaterial_f6cs8")
 OutlineTargetPaths = Array[NodePath]([])
-gameManager = NodePath("../../GameManager")
+
+[node name="NameLabel" parent="Labs/LabItem" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6149805, 0)
 
 [node name="PhantomCamera3D" parent="Labs/LabItem" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
+
+[node name="linePointAPath" parent="Labs/LabItem/lineNode" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5324762, 1.4901161e-08)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Labs/LabItem"]
 
@@ -1285,13 +1440,239 @@ libraries = {
 &"": SubResource("AnimationLibrary_evp4r")
 }
 
+[node name="LabItem2" parent="Labs" instance=ExtResource("3_kurpr")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -6.486, 0.5, -15.385812)
+script = ExtResource("21_el0ym")
+ExperimentUIPanelPath = null
+ForceMeterPath = null
+SurfacePlatformPath = null
+BlockPaths = Array[NodePath]([])
+DisplayName = "摩檫力实验"
+outlineMat = SubResource("ShaderMaterial_88vt2")
+OutlineTargetPaths = Array[NodePath]([])
+
+[node name="NameLabel" parent="Labs/LabItem2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4011903, 0)
+
+[node name="PhantomCamera3D" parent="Labs/LabItem2" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
+
+[node name="linePointAPath" parent="Labs/LabItem2/lineNode" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.1530786, 1.4901161e-08)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Labs/LabItem2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/LabItem2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_xyyef")
+
+[node name="Low Poly - Lab Assets" parent="Labs/LabItem2" instance=ExtResource("8_p47ta")]
+transform = Transform3D(0.050000012, 0, 1.8626454e-09, 0, 0.05, 0, -1.8626454e-09, 0, 0.050000012, 0.5489109, 0.65, -0.12395477)
+
+[node name="Low Poly - Lab Assets2" parent="Labs/LabItem2" instance=ExtResource("5_ictkp")]
+transform = Transform3D(0.039999995, 0, 0, 0, 0.03999999, 0, 0, 0, 0.04, -1.1360892, 0.70999986, -0.08295408)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Labs/LabItem2/Low Poly - Lab Assets2"]
+libraries = {
+&"": SubResource("AnimationLibrary_evp4r")
+}
+
+[node name="LabItem3" parent="Labs" instance=ExtResource("3_kurpr")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -17.898464, 0.5, -22.534695)
+script = ExtResource("22_g7bw1")
+ExperimentUIPanelPath = null
+AluminumPiecePath = null
+NaOHSolutionPath = null
+TestTubePath = null
+BubbleEffectPath = null
+DisplayName = "铝和氢氧化钠反应实验"
+outlineMat = SubResource("ShaderMaterial_o5rrj")
+OutlineTargetPaths = Array[NodePath]([])
+
+[node name="NameLabel" parent="Labs/LabItem3" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5611017, 0)
+
+[node name="PhantomCamera3D" parent="Labs/LabItem3" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
+
+[node name="linePointAPath" parent="Labs/LabItem3/lineNode" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5218554, 1.4901161e-08)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Labs/LabItem3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/LabItem3/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_xyyef")
+
+[node name="Low Poly - Lab Assets" parent="Labs/LabItem3" instance=ExtResource("8_p47ta")]
+transform = Transform3D(0.050000012, 0, 1.8626454e-09, 0, 0.05, 0, -1.8626454e-09, 0, 0.050000012, 0.5489109, 0.65, -0.12395477)
+
+[node name="Low Poly - Lab Assets2" parent="Labs/LabItem3" instance=ExtResource("5_ictkp")]
+transform = Transform3D(0.039999995, 0, 0, 0, 0.03999999, 0, 0, 0, 0.04, -1.1360892, 0.70999986, -0.08295408)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Labs/LabItem3/Low Poly - Lab Assets2"]
+libraries = {
+&"": SubResource("AnimationLibrary_evp4r")
+}
+
 [node name="Player" parent="." instance=ExtResource("5_eu7l1")]
 gameManagerPath = null
+
+[node name="Skeleton3D" parent="Player/visuals/mixamo_base/Josie" index="0"]
+bones/1/position = Vector3(-0.000747755, -0.0222803, 0.980706)
+bones/1/rotation = Quaternion(0.77555585, -0.04533769, -0.005137466, 0.6296278)
+bones/2/position = Vector3(-2.48125e-09, 2.35528e-05, 6.46554e-07)
+bones/2/rotation = Quaternion(0.08451224, -5.7969526e-08, 7.788574e-07, 0.9964225)
+bones/3/position = Vector3(0.0943208, -0.0756571, 0.00151612)
+bones/3/rotation = Quaternion(0.048559528, 0.48959523, 0.8705754, -0.006088402)
+bones/4/position = Vector3(9.55216e-06, 0.451531, -8.60681e-06)
+bones/4/rotation = Quaternion(-0.73563206, 0.0641151, -0.04312471, 0.67296)
+bones/5/rotation = Quaternion(0.5161513, -0.07993257, 0.059480343, 0.85068256)
+bones/6/position = Vector3(-4.44115e-07, 0.2191, -0.000103965)
+bones/6/rotation = Quaternion(0.15613003, 0.025928007, -0.019370703, 0.9872062)
+bones/7/position = Vector3(-8.23614e-06, 0.219109, -9.82913e-05)
+bones/8/position = Vector3(1.29786e-06, 2.02694e-05, -3.01503e-07)
+bones/8/rotation = Quaternion(1.21152e-06, -0.000110612, -1.41237e-07, 1)
+bones/9/position = Vector3(-1.1062e-05, 0.275726, -4.16922e-05)
+bones/9/rotation = Quaternion(-3.6767885e-06, 0.010623397, 3.7696887e-07, 0.9999436)
+bones/10/position = Vector3(1.29344e-06, 2.02506e-05, -3.145e-07)
+bones/10/rotation = Quaternion(0.00023216203, -0.00025151594, 0.0058353296, 0.99998295)
+bones/11/position = Vector3(-6.88959e-06, -3.26543e-05, 1.55479e-08)
+bones/11/rotation = Quaternion(-8.53375e-06, 4.02285e-05, -6.33417e-05, 1)
+bones/12/position = Vector3(-1.89072e-05, 0.225781, -7.81195e-06)
+bones/12/rotation = Quaternion(-6.35419e-06, -4.3876902e-05, 5.46427e-05, 1)
+bones/13/position = Vector3(-0.0943252, -0.0756666, 0.0015169)
+bones/13/rotation = Quaternion(-0.035044182, 0.3638248, 0.9307916, -0.0055200467)
+bones/14/position = Vector3(5.18426e-06, -3.1364e-05, -2.54911e-07)
+bones/14/rotation = Quaternion(-1.51357e-05, -4.5984e-05, 8.41298e-06, 1)
+bones/15/position = Vector3(-1.14502e-06, 0.225749, -2.38679e-06)
+bones/15/rotation = Quaternion(-3.23374e-07, 4.90334e-05, -2.64895e-07, 1)
+bones/16/rotation = Quaternion(-0.5183309, -0.0034115196, 0.024592193, 0.8548198)
+bones/17/position = Vector3(1.27091e-05, 0.551539, -8.62631e-05)
+bones/17/rotation = Quaternion(0.7898203, -0.0068935114, -0.04087132, 0.6119362)
+bones/18/position = Vector3(5.9556296e-06, 0.2191, -4.82884e-06)
+bones/19/position = Vector3(9.983341e-07, 0.219108, 3.69759e-06)
+bones/19/rotation = Quaternion(0.17659806, -0.025493214, 0.019667808, 0.98375636)
+bones/20/rotation = Quaternion(0.00034312796, 0.00025816096, -0.0058354596, 0.99998295)
+bones/21/rotation = Quaternion(-6.96759e-05, 9.93169e-05, -1.18249e-05, 1)
+bones/22/rotation = Quaternion(6.723751e-05, -0.010576801, 1.0872701e-05, 0.9999441)
+bones/23/position = Vector3(-2.93816e-07, 0.14905, 0.0290683)
+bones/23/rotation = Quaternion(0.167308, 0.029132204, -0.0042649214, 0.985465)
+bones/24/position = Vector3(-3.60505e-07, 0.0764284, -8.20469e-06)
+bones/24/rotation = Quaternion(-0.009827964, 0.02166781, 0.004134971, 0.9997084)
+bones/25/position = Vector3(8.95871e-08, 0.189817, 1.12633e-05)
+bones/25/rotation = Quaternion(-0.08794519, 0.021050798, 0.00810971, 0.99586993)
+bones/26/position = Vector3(-6.20501e-08, 0.385256, -4.07926e-05)
+bones/26/rotation = Quaternion(0.15192702, -0.0008047664, 0.011951404, 0.98831916)
+bones/27/position = Vector3(-3.13281e-07, 0.0641353, -2.43712e-05)
+bones/27/rotation = Quaternion(-0.08884041, 0.006100351, -0.033311103, 0.9954701)
+bones/28/position = Vector3(-4.8176e-08, 0.0641695, -1.4040301e-05)
+bones/29/position = Vector3(0.0765765, 0.314178, -0.01548)
+bones/29/rotation = Quaternion(0.12103603, 0.0013686562, -0.8082472, 0.5762681)
+bones/30/position = Vector3(-8.12791e-05, 0.129101, -9.18429e-06)
+bones/30/rotation = Quaternion(0.0011628692, 0.20957588, -0.39493775, 0.8944835)
+bones/31/position = Vector3(-3.92273e-05, 0.41216, -3.0343002e-05)
+bones/31/rotation = Quaternion(0.634772, 0.00038036657, -0.0042135315, 0.772688)
+bones/32/position = Vector3(-0.000104066, -3.56849e-07, -9.1696e-07)
+bones/32/rotation = Quaternion(-6.7462304e-07, 0.00814243, 1.4020299e-07, 0.9999669)
+bones/33/position = Vector3(9.35622e-06, 0.167859, -1.10157e-05)
+bones/33/rotation = Quaternion(-4.51142e-06, -0.015493799, -2.40745e-06, 0.99987996)
+bones/34/position = Vector3(-0.000104123, -3.79278e-07, -8.65497e-07)
+bones/34/rotation = Quaternion(-0.022120003, 0.008756489, -0.0028392803, 0.999713)
+bones/35/position = Vector3(-0.000146095, 0.335733, -6.618069e-06)
+bones/35/rotation = Quaternion(0.047467213, -0.16026801, -0.0146886, 0.98582214)
+bones/36/position = Vector3(-0.000113532, 0.122399, 0.0326031)
+bones/36/rotation = Quaternion(-0.053583086, 0.06065768, -0.6596699, 0.7471849)
+bones/37/position = Vector3(-7.20168e-05, 0.0613205, -4.87026e-06)
+bones/37/rotation = Quaternion(-0.043623194, 0.011335698, -0.47439793, 0.87915593)
+bones/38/position = Vector3(1.76292e-05, 0.0330557, 4.24843e-06)
+bones/38/rotation = Quaternion(-0.055447906, 0.023308402, -0.32414904, 0.94409204)
+bones/39/position = Vector3(-0.00156408, 0.119412, 0.0706534)
+bones/39/rotation = Quaternion(0.027744394, 0.0363075, -0.6872168, 0.72501385)
+bones/40/position = Vector3(-4.82418e-05, 0.0522281, -2.91363e-06)
+bones/40/rotation = Quaternion(-0.04121699, 0.009619818, -0.43915695, 0.89741284)
+bones/41/position = Vector3(-4.18898e-05, 0.0301401, -1.15883e-06)
+bones/41/rotation = Quaternion(-0.08730128, 0.03462609, -0.29757497, 0.95006776)
+bones/42/position = Vector3(-1.04654e-05, 0.121841, 3.5155e-06)
+bones/42/rotation = Quaternion(-0.09169509, 0.09897731, -0.6499811, 0.74787706)
+bones/43/rotation = Quaternion(-0.035678595, 0.0149507, -0.5116059, 0.8583489)
+bones/44/rotation = Quaternion(-0.054661214, 0.016914401, -0.33437607, 0.94070125)
+bones/45/position = Vector3(-0.00156599, 0.116021, -0.0323863)
+bones/45/rotation = Quaternion(-0.22803694, 0.11842199, -0.687802, 0.678899)
+bones/46/position = Vector3(-8.44721e-05, 0.0485418, -8.41289e-07)
+bones/46/rotation = Quaternion(-0.036037188, 0.029697798, -0.47824898, 0.8769819)
+bones/47/rotation = Quaternion(-0.05776921, 0.025141703, -0.34170207, 0.93769413)
+bones/48/position = Vector3(0.0241065, 0.0247219, 0.0368256)
+bones/48/rotation = Quaternion(0.35830796, -0.13573597, -0.24860594, 0.88959897)
+bones/49/position = Vector3(-8.79866e-05, 0.0562737, 4.3649e-05)
+bones/49/rotation = Quaternion(-0.2513391, -0.03309841, 0.07122352, 0.9647075)
+bones/50/position = Vector3(3.15231e-05, 0.05041, -2.19398e-05)
+bones/50/rotation = Quaternion(0.13764408, 0.015336111, 0.0103987055, 0.99030846)
+bones/51/position = Vector3(-3.09911e-05, -7.07588e-08, 4.6599203e-07)
+bones/51/rotation = Quaternion(7.1858597e-07, -0.00019088015, -2.6736203e-07, 1)
+bones/52/position = Vector3(-4.45722e-05, 0.206083, -1.03598e-05)
+bones/52/rotation = Quaternion(-1.5704098e-06, 0.00019228595, 8.1708396e-07, 1)
+bones/53/position = Vector3(-0.0765796, 0.314236, -0.0154676)
+bones/53/rotation = Quaternion(0.09632939, -0.019168496, 0.7888168, 0.60673)
+bones/54/position = Vector3(0.000159789, 0.129111, -4.84053e-06)
+bones/54/rotation = Quaternion(0.07472421, -0.21363299, 0.31556302, 0.92151904)
+bones/55/position = Vector3(-1.13519e-05, -6.26943e-06, 1.74129e-06)
+bones/55/rotation = Quaternion(4.3054098e-07, 0.00021352619, 6.1503094e-08, 1)
+bones/56/position = Vector3(2.81141e-05, 0.206079, 7.925e-06)
+bones/56/rotation = Quaternion(-1.5977898e-06, -0.00021126634, -8.45992e-07, 1)
+bones/57/position = Vector3(3.8014e-05, 0.412153, 2.81414e-05)
+bones/57/rotation = Quaternion(0.6818819, -0.001868468, 0.005141517, 0.7314419)
+bones/58/position = Vector3(4.22959e-05, 1.20761e-06, -1.56257e-06)
+bones/58/rotation = Quaternion(-3.3049497e-07, -0.00813452, 4.1451e-07, 0.9999669)
+bones/59/position = Vector3(3.83152e-06, 0.167857, 3.316e-05)
+bones/59/rotation = Quaternion(-4.803991e-06, 0.015484102, 1.7149302e-06, 0.99988014)
+bones/60/position = Vector3(4.22546e-05, 1.22584e-06, -1.50353e-06)
+bones/60/rotation = Quaternion(-0.022120899, -0.008754982, 0.0028422298, 0.99971294)
+bones/61/position = Vector3(4.65397e-05, 0.335736, 4.40213e-06)
+bones/61/rotation = Quaternion(-0.029655408, 0.12243402, -0.031121608, 0.9915453)
+bones/62/position = Vector3(8.77604e-05, 0.122421, 0.0326067)
+bones/62/rotation = Quaternion(-0.01636609, -0.05374678, 0.45058775, 0.89096254)
+bones/63/position = Vector3(6.60627e-05, 0.0612489, -6.18661e-06)
+bones/63/rotation = Quaternion(0.0005457878, -0.005874029, 0.48891482, 0.8723116)
+bones/64/position = Vector3(3.443e-05, 0.0330552, -9.53097e-08)
+bones/64/rotation = Quaternion(0.025088292, -0.06988387, 0.36562085, 0.92779756)
+bones/65/position = Vector3(-2.13726e-05, 0.121862, 1.37761e-05)
+bones/65/rotation = Quaternion(-0.061448194, -0.0826755, 0.477665, 0.8724821)
+bones/66/position = Vector3(6.69407e-05, 0.054733, -8.3103e-06)
+bones/66/rotation = Quaternion(-0.025214894, -0.014669694, 0.5114649, 0.8588089)
+bones/67/rotation = Quaternion(-0.054990385, -0.015583895, 0.4114339, 0.9096457)
+bones/68/position = Vector3(-0.0241254, 0.0247096, 0.036827)
+bones/68/rotation = Quaternion(0.31639013, 0.13078307, 0.32936913, 0.8799483)
+bones/69/position = Vector3(0.000110299, 0.0562339, 2.89178e-05)
+bones/69/rotation = Quaternion(-0.2424929, 0.037618577, -0.06932626, 0.96694154)
+bones/70/position = Vector3(3.06313e-05, 0.0505029, 2.28375e-05)
+bones/70/rotation = Quaternion(-0.036126312, 0.015482303, -0.13437201, 0.9901513)
+bones/71/position = Vector3(0.00154051, 0.119426, 0.0706549)
+bones/71/rotation = Quaternion(0.014360096, -0.047845673, 0.44895577, 0.8921566)
+bones/72/position = Vector3(7.70344e-05, 0.0522445, -6.55856e-06)
+bones/72/rotation = Quaternion(-0.0219293, -0.009528864, 0.37745017, 0.9257212)
+bones/73/rotation = Quaternion(-0.079118095, -0.033444196, 0.29899502, 0.9503809)
+bones/74/position = Vector3(0.0015227, 0.116051, -0.0323768)
+bones/74/rotation = Quaternion(-0.12150399, -0.0643529, 0.525264, 0.8397578)
+bones/75/rotation = Quaternion(-0.029026307, -0.030933814, 0.49970323, 0.86515737)
+bones/76/rotation = Quaternion(-0.0595204, -0.025377499, 0.43667597, 0.897289)
 
 [node name="Mesh" parent="Player/visuals/mixamo_base/Josie/Skeleton3D" index="0"]
 material_override = ExtResource("8_8onjr")
 surface_material_override/0 = null
 surface_material_override/1 = null
+
+[node name="BoneAttachment3D" parent="Player/visuals/mixamo_base/Josie/Skeleton3D" index="1"]
+transform = Transform3D(0.99251515, -0.07352829, 0.09750501, 0.0939257, 0.9698937, -0.2246865, -0.07804866, 0.23216295, 0.96954024, -0.079041995, 1.8179394, 0.4130158)
+
+[node name="TextureRect" parent="Player/CanvasLayer/Control" index="0"]
+texture = ExtResource("10_x2fmw")
+
+[node name="DialoguePanel" parent="Player/CanvasLayer/Control" index="1"]
+offset_left = -358.0
+offset_top = 191.0
+offset_right = 353.0
+offset_bottom = 263.0
 
 [node name="MainCamera3D" type="Camera3D" parent="."]
 physics_interpolation_mode = 1
@@ -1307,13 +1688,22 @@ script = ExtResource("7_host")
 script = ExtResource("10_interact_mgr")
 pauseMenu = NodePath("../PauseMenu")
 
+[node name="ExperimentManager" type="Node" parent="."]
+script = ExtResource("23_expman")
+PlayerPath = Object(CharacterBody3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"disable_mode":0,"collision_layer":1,"collision_mask":1,"collision_priority":1.0,"input_ray_pickable":true,"input_capture_on_drag":false,"axis_lock_linear_x":false,"axis_lock_linear_y":false,"axis_lock_linear_z":false,"axis_lock_angular_x":false,"axis_lock_angular_y":false,"axis_lock_angular_z":false,"motion_mode":0,"up_direction":Vector3(0, 1, 0),"slide_on_ceiling":true,"velocity":Vector3(0, 0, 0),"max_slides":6,"wall_min_slide_angle":0.2617994,"floor_stop_on_slope":true,"floor_constant_speed":false,"floor_block_on_wall":true,"floor_max_angle":0.7853982,"floor_snap_length":0.1,"platform_on_leave":0,"platform_floor_layers":4294967295,"platform_wall_layers":0,"safe_margin":0.001,"script":Resource("res://scenes/Player/PlayerMovement.cs"),"WalkSpeed":3.0,"RunSpeed":8.0,"VisualsPath":NodePath("Player/visuals"),"gameManagerPath":null)
+
+Experiments = Array[ExtResource("24_expinfo")]([SubResource("Resource_friction"), SubResource("Resource_aluminum"), SubResource("Resource_ohms")])
+
 [node name="Hint3D" type="Label3D" parent="."]
 visible = false
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("gameManager") instance=ExtResource("13_bbv3w")]
 gameManager = NodePath("../GameManager")
 
+[editable path="Objects/Gramophone"]
 [editable path="Objects/PhotoWall/Photos/Photo"]
 [editable path="Objects/PhotoWall/Photos/Photo2"]
 [editable path="Labs/LabItem"]
+[editable path="Labs/LabItem2"]
+[editable path="Labs/LabItem3"]
 [editable path="Player"]

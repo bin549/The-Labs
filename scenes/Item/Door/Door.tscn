@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://d3noroadywjg" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_color.png" id="4_xcwhu"]
 [ext_resource type="Texture2D" uid="uid://dmemqpbkgclwx" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_metallic.png-doorfinal_roughness.png" id="5_4qjkn"]
 [ext_resource type="Texture2D" uid="uid://dblmy2hxqgqdf" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_normal.png" id="6_y1i8q"]
-[ext_resource type="AudioStream" uid="uid://7f1vtms5ao8g" path="res://assets/sounds/splash.ogg" id="7_16674"]
-[ext_resource type="AudioStream" uid="uid://008gkfvqxl7b" path="res://assets/sounds/stretch2.ogg" id="8_xjkmu"]
+[ext_resource type="AudioStream" uid="uid://7f1vtms5ao8g" path="res://assets/sounds/music/splash.ogg" id="7_16674"]
+[ext_resource type="AudioStream" uid="uid://008gkfvqxl7b" path="res://assets/sounds/music/stretch2.ogg" id="8_xjkmu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tggud"]
 render_priority = 0

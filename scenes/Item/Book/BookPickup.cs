@@ -23,13 +23,17 @@ public partial class BookPickup : Interactable {
 		this.ResolvePickupVisual();
 	}
 
+	public override void _Input(InputEvent @event) {
+		if (!this.isInteractingWithBook) return;
+		if (@event.IsActionPressed("pause") || @event.IsActionPressed("ui_cancel")) {
+			GetViewport().SetInputAsHandled();
+			this.ExitInteraction();
+		}
+	}
+
 	public override void _Process(double delta) {
 		base._Process(delta);
 		if (!this.isInteractingWithBook) return;
-		if (Input.IsActionJustPressed("pause") || Input.IsActionJustPressed("ui_cancel")) {
-			this.ExitInteraction();
-			return;
-		}
 		if (!this.canExitInteraction && Input.IsActionJustReleased("interact")) {
 			this.canExitInteraction = true;
 		} else if (this.canExitInteraction && Input.IsActionJustPressed("interact")) {
@@ -53,11 +57,10 @@ public partial class BookPickup : Interactable {
 	public override void ExitInteraction() {
 		if (!this.isInteractingWithBook) return;
 		this.ShowPlayerBook(false);
+		this.ShowPickupVisual(true);
 		BoostCameraPriority(false);
 		this.isInteractingWithBook = false;
 		this.canExitInteraction = false;
-		Input.ActionRelease("pause");
-		Input.ActionRelease("ui_cancel");
 		base.ExitInteraction();
 		if (gameManager != null) {
 			gameManager.SetCurrentInteractable(null);

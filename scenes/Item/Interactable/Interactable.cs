@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public partial class Interactable : Node3D {
     [Export] protected string DisplayName { get; set; } = "物体";
     [Export] protected string ActionName { get; set; } = "交互";
+    [Export] public bool LockPlayerControl { get; set; } = true;
     [Export] protected ShaderMaterial outlineMat;
     [Export] protected float outlineSize = 1.05f;
     [Export] public Godot.Collections.Array<NodePath> OutlineTargetPaths { get; set; } = new();
@@ -22,9 +23,14 @@ public partial class Interactable : Node3D {
 	[Export] public float curveThicknessMultiplier { get; set; } = 3.0f;
 	[Export] public float arrowThicknessMultiplier { get; set; } = 0.5f;
 	[Export] public float arrowLengthMultiplier { get; set; } = 4.0f;
+	[Export] public Godot.Collections.Array<DialogueEntry> Dialogues { get; set; } = new();
     protected bool isFocus = false;
     protected bool isInteracting = false;
     [Export] protected GameManager gameManager;
+	private AudioStreamPlayer dialogueAudioPlayer;
+	private int currentDialogueIndex = 0;
+	private static Label dialogueLabel;
+	private Timer dialogueTimer;
     private readonly List<GeometryInstance3D> outlineTargets = new();
     private readonly Dictionary<GeometryInstance3D, Material> originalOverlays = new();
 	private Node3D lineRoot;
@@ -44,6 +50,8 @@ public partial class Interactable : Node3D {
 		this.InitLineSegment();
 		this.InitCurvedArrow();
         this.ResolveGameManager();
+		this.InitDialoguePlayer();
+		this.ResolveDialogueLabel();
         if (this.nameLabel != null) {
             this.nameLabel.Text = DisplayName;
             this.nameLabel.Visible = true;
@@ -67,15 +75,26 @@ public partial class Interactable : Node3D {
     }
 
     public virtual void EnterInteraction() {
-        if (this.gameManager != null) {
+        if (this.gameManager != null && LockPlayerControl) {
             this.gameManager.SetCurrentInteractable(this);
-        } else {
+        } else if (this.gameManager == null) {
             GD.PushWarning($"{Name}: GameManager 未绑定，交互状态无法同步。");
         }
-        Input.MouseMode = Input.MouseModeEnum.Visible;
+        if (LockPlayerControl) {
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
+		this.PlayDialogue(true);
     }
 
     public virtual void ExitInteraction() {
+		this.PlayDialogue(false);
+		this.HideDialogue();
+		if (this.gameManager != null && LockPlayerControl) {
+			this.gameManager.SetCurrentInteractable(null);
+		}
+		if (LockPlayerControl) {
+			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
     }
 
     public virtual void OnFocusEnter() {
@@ -313,6 +332,96 @@ public partial class Interactable : Node3D {
 			arrowConeMesh.TopRadius = 0.0f;
 			arrowConeMesh.BottomRadius = arrowRadius;
 			arrowConeMesh.Height = arrowHeight;
+		}
+	}
+
+	private void InitDialoguePlayer() {
+		dialogueAudioPlayer = new AudioStreamPlayer();
+		dialogueAudioPlayer.Name = "DialogueAudioPlayer";
+		dialogueAudioPlayer.Bus = "Master";
+		AddChild(dialogueAudioPlayer);
+		dialogueTimer = new Timer();
+		dialogueTimer.Name = "DialogueTimer";
+		dialogueTimer.OneShot = true;
+		dialogueTimer.Timeout += OnDialogueTimeout;
+		AddChild(dialogueTimer);
+	}
+
+	private void PlayDialogue(bool isEnterInteraction) {
+		if (Dialogues == null || Dialogues.Count == 0) return;
+		DialogueEntry dialogue = null;
+		for (int i = 0; i < Dialogues.Count; i++) {
+			var entry = Dialogues[i];
+			if (entry != null && entry.PlayBeforeInteraction == isEnterInteraction) {
+				dialogue = entry;
+				currentDialogueIndex = i;
+				break;
+			}
+		}
+		if (dialogue == null) return;
+		if (dialogue.Audio != null && dialogueAudioPlayer != null) {
+			dialogueAudioPlayer.Stream = dialogue.Audio;
+			dialogueAudioPlayer.Play();
+		}
+		if (!string.IsNullOrEmpty(dialogue.Text)) {
+			ShowDialogue(dialogue.Text);
+			GD.Print($"[{DisplayName}]: {dialogue.Text}");
+		}
+	}
+
+	private void ShowDialogue(string text) {
+		if (dialogueLabel != null) {
+			dialogueLabel.Text = text;
+			dialogueLabel.Visible = true;
+			var panel = dialogueLabel.GetParent()?.GetParent() as Control;
+			if (panel != null) {
+				panel.Visible = true;
+			}
+		}
+		var dialogue = GetCurrentDialogue();
+		if (dialogue != null && dialogue.Duration > 0 && dialogueTimer != null) {
+			dialogueTimer.Start(dialogue.Duration);
+		}
+	}
+
+	private void HideDialogue() {
+		if (dialogueTimer != null && !dialogueTimer.IsStopped()) {
+			dialogueTimer.Stop();
+		}
+		if (dialogueLabel != null) {
+			dialogueLabel.Visible = false;
+			var panel = dialogueLabel.GetParent()?.GetParent() as Control;
+			if (panel != null) {
+				panel.Visible = false;
+			}
+		}
+	}
+
+	private void OnDialogueTimeout() {
+		this.HideDialogue();
+	}
+
+	private void ResolveDialogueLabel() {
+		if (dialogueLabel != null) return;
+		var player = GetTree().Root.FindChild("Player", true, false);
+		if (player != null) {
+			dialogueLabel = player.FindChild("DialogueLabel", true, false) as Label;
+		}
+		if (dialogueLabel == null) {
+			GD.PushWarning($"{Name}: 未找到 DialogueLabel，对话文本将无法显示在屏幕上。");
+		}
+	}
+
+	public DialogueEntry GetCurrentDialogue() {
+		if (Dialogues == null || Dialogues.Count == 0 || currentDialogueIndex < 0 || currentDialogueIndex >= Dialogues.Count) {
+			return null;
+		}
+		return Dialogues[currentDialogueIndex];
+	}
+
+	public void StopDialogueAudio() {
+		if (dialogueAudioPlayer != null && dialogueAudioPlayer.Playing) {
+			dialogueAudioPlayer.Stop();
 		}
 	}
 }

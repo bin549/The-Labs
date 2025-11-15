@@ -9,7 +9,6 @@
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_xcisb"]
 [ext_resource type="Texture2D" uid="uid://dg2lcvn01ami8" path="res://assets/Josie/Textures/Mouth_02.png" id="5_cd157"]
 [ext_resource type="Texture2D" uid="uid://by2q6ybroafj7" path="res://assets/Josie/Textures/Eye Texture.png" id="6_8djf2"]
-[ext_resource type="Texture2D" uid="uid://b6yppsi0gkw0n" path="res://assets/photos/1103044653.jpg" id="6_socpp"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://scenes/Item/Book/Book.tscn" id="11_tl8lu"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v6fml"]
@@ -6739,9 +6738,42 @@ offset_right = 602.00006
 offset_bottom = 350.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_socpp")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="DialoguePanel" type="PanelContainer" parent="CanvasLayer/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -120.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/DialoguePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="DialogueLabel" type="Label" parent="CanvasLayer/Control/DialoguePanel/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 24
+text = "对话内容显示在这里..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+visible = false
 
 [node name="Book" parent="." instance=ExtResource("11_tl8lu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6392417, -1.9767611)
