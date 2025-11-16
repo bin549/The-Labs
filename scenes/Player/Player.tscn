@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://cni4dh48mykc1"]
+[gd_scene load_steps=28 format=4 uid="uid://cni4dh48mykc1"]
 
 [ext_resource type="Script" uid="uid://b8iekfj3s5xek" path="res://scenes/Player/PlayerMovement.cs" id="1_v6fml"]
 [ext_resource type="Shader" uid="uid://ssgesi78vg38" path="res://assets/Josie/Toon Shader/Outline_Shader.gdshader" id="2_dqp0f"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_xcisb"]
 [ext_resource type="Texture2D" uid="uid://dg2lcvn01ami8" path="res://assets/Josie/Textures/Mouth_02.png" id="5_cd157"]
 [ext_resource type="Texture2D" uid="uid://by2q6ybroafj7" path="res://assets/Josie/Textures/Eye Texture.png" id="6_8djf2"]
+[ext_resource type="Script" uid="uid://b7sscac03ch5h" path="res://scenes/Player/PainterImage.cs" id="10_tl8lu"]
+[ext_resource type="Script" uid="uid://dyhamiit81bd7" path="res://scenes/Player/ColorGrid.cs" id="11_qt7jd"]
 [ext_resource type="PackedScene" uid="uid://byxkmj117ohx0" path="res://scenes/Item/Book/Book.tscn" id="11_tl8lu"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v6fml"]
@@ -6763,6 +6765,7 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 15
 
 [node name="DialogueLabel" type="Label" parent="CanvasLayer/Control/DialoguePanel/MarginContainer"]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
@@ -6773,7 +6776,125 @@ text = "对话内容显示在这里..."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
-visible = false
+
+[node name="PaintContrl" type="Control" parent="CanvasLayer/Control"]
+anchors_preset = 0
+offset_left = -940.0
+offset_top = -520.0
+offset_right = -900.0
+offset_bottom = -480.0
+
+[node name="PainterImage" type="Sprite2D" parent="CanvasLayer/Control/PaintContrl"]
+position = Vector2(327, 102)
+script = ExtResource("10_tl8lu")
+img_size = Vector2i(256, 340)
+currentColorRectPath = NodePath("../Panel/CurrentColorRect")
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/PaintContrl"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 3.0
+offset_right = 155.0
+offset_bottom = 261.0
+
+[node name="HSlider" type="HSlider" parent="CanvasLayer/Control/PaintContrl/Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 16.0
+grow_horizontal = 2
+min_value = 1.0
+max_value = 11.0
+value = 3.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/PaintContrl/Panel/HSlider"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -39.5
+offset_top = 15.0
+offset_right = 40.5
+offset_bottom = 38.0
+grow_horizontal = 2
+text = "Brush Size"
+
+[node name="ColorGrid" type="GridContainer" parent="CanvasLayer/Control/PaintContrl/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -36.5
+offset_top = -122.0
+offset_right = 37.5
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+columns = 3
+script = ExtResource("11_qt7jd")
+
+[node name="ColorRect7" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+
+[node name="ColorRect8" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0.16455616, 0.6952417, 1.014451, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(3.5271307e-06, 0.7902246, 0.28466007, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0.7359285, 0.9187332, 0, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0.981136, 0.48688164, 0.44284323, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(1.0139999, 0.47821355, 0.16624935, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0.90369993, 0.406884, 1.0139999, 1)
+
+[node name="ColorRect9" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel/ColorGrid"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+color = Color(0.23669258, 0.7615698, 0.73225564, 1)
+
+[node name="CurrentColorRect" type="ColorRect" parent="CanvasLayer/Control/PaintContrl/Panel"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 0
+offset_left = 34.0
+offset_top = 44.0
+offset_right = 69.0
+offset_bottom = 79.0
+color = Color(1.0139999, 1.0139999, 1.0139999, 1)
+
+[node name="PixelModeToggle" type="CheckButton" parent="CanvasLayer/Control/PaintContrl/Panel"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 85.0
+offset_right = 100.0
+offset_bottom = 116.0
+text = "像素模式"
 
 [node name="Book" parent="." instance=ExtResource("11_tl8lu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6392417, -1.9767611)
