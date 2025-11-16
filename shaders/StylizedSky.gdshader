@@ -13,6 +13,8 @@ uniform int shadow_sample : hint_range(1, 4, 1) = 4;
 uniform float clouds_density : hint_range(0.0, 1.0, 0.1) = 0.5;
 uniform float clouds_scale : hint_range(0.5, 1.5, 0.1) = 1.0;
 uniform float clouds_smoothness : hint_range(0.01, 0.1, 0.01) = 0.035;
+uniform float clouds_speed : hint_range(0.0, 10.0, 0.1) = 1.0;
+uniform vec2 clouds_direction = vec2(1.0, 0.0);
 uniform vec3 clouds_light_color : source_color;
 uniform float clouds_shadow_intensity : hint_range(0.1, 10.0, 0.1) = 1.0;
 
@@ -20,6 +22,7 @@ group_uniforms high_clouds;
 
 uniform sampler2D high_clouds_sampler;
 uniform float high_clouds_density : hint_range(0.0, 1.0, 0.05) = 0.0;
+uniform float high_clouds_speed : hint_range(0.0, 10.0, 0.1) = 1.0;
 
 group_uniforms sky;
 
@@ -91,10 +94,12 @@ mat3 direction_to_matrix(vec3 direction) {
 }
 
 float cloud_density(vec3 p, float progress){
-	float t_o = TIME * 0.001;
-	float t_o_small = TIME * -0.005;
-	float noise = texture(cloud_noise_sampler, p.xy * 4.0 + t_o_small).x * 0.1 + 0.9;
-	float clouds_shape = texture(cloud_shape_sampler, (p.xy + t_o) * clouds_scale).x;
+	float t_o = TIME * 0.001 * clouds_speed;
+	float t_o_small = TIME * -0.005 * clouds_speed;
+	vec2 wind_offset = clouds_direction * t_o;
+	vec2 noise_offset = clouds_direction * t_o_small;
+	float noise = texture(cloud_noise_sampler, p.xy * 4.0 + noise_offset).x * 0.1 + 0.9;
+	float clouds_shape = texture(cloud_shape_sampler, (p.xy + wind_offset) * clouds_scale).x;
 	float height_curve = texture(cloud_curves, vec2(progress, 0.0)).x;
 	float base_density = 1.0 - clouds_density;
 	float density = 
@@ -207,15 +212,15 @@ void sky() {
 	// Add high clouds
 	
 	if(high_clouds_density > 0.0){
-		vec2 high_clouds_uv = (EYEDIR.xz / clamp(EYEDIR.y, 0.0, 1.0)) * 0.25 + TIME * 0.001;
+		vec2 high_clouds_uv = (EYEDIR.xz / clamp(EYEDIR.y, 0.0, 1.0)) * 0.25 + TIME * 0.001 * high_clouds_speed;
 		float high_clouds_mask = texture(high_clouds_sampler, high_clouds_uv).x;
 		sky_color = mix(sky_color, clouds_light_color, smoothstep(0.0, 1.0, high_clouds_mask) * horizon_mask * bottom_mask * high_clouds_density);
 	}
 	
 	// clouds
 	if (AT_HALF_RES_PASS) {
-		vec3 clouds_direction = vec3(EYEDIR.xz / clamp(EYEDIR.y, 0.0, 1.0), 1.0);
-		vec2 clouds = EYEDIR.y > 0.0 ? cloud_ray_march(clouds_direction, LIGHT0_DIRECTION) : vec2(0.0);
+		vec3 clouds_ray_direction = vec3(EYEDIR.xz / clamp(EYEDIR.y, 0.0, 1.0), 1.0);
+		vec2 clouds = EYEDIR.y > 0.0 ? cloud_ray_march(clouds_ray_direction, LIGHT0_DIRECTION) : vec2(0.0);
 		
 		COLOR = mix(bottom_color, clouds_light_color, exp(-clouds.y * clouds_shadow_intensity));
 		ALPHA = (1.0 - exp(-clouds.x * horizon_mask * bottom_mask * 10.0));

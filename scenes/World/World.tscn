@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=136 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -42,7 +42,6 @@
 [ext_resource type="Texture2D" uid="uid://cggex14siiuu6" path="res://assets/images/Grass.png" id="36_iege6"]
 [ext_resource type="Script" uid="uid://2juaclm8gc1n" path="res://addons/simplegrasstextured/grass.gd" id="37_3i1j7"]
 [ext_resource type="Texture2D" uid="uid://21yebqbv2wj7" path="res://assets/CaveTextures/Cliff (10).png" id="38_rlmkw"]
-[ext_resource type="PackedScene" path="res://assets/WoodObjects/Scenes/objects/boat.tscn" id="42_d3guo"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqijp"]
 resource_name = "main"
@@ -124,7 +123,7 @@ shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/size = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x2fmw"]
-size = Vector3(0.2, 0.6, 0.23852539)
+size = Vector3(0.3, 0.8, 0.23852539)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l6fyw"]
 _surfaces = [{
@@ -357,7 +356,7 @@ shader_parameter/size = 0.0
 [sub_resource type="Resource" id="Resource_xet21"]
 script = ExtResource("13_nxajo")
 Audio = ExtResource("14_xet21")
-Text = "sdfdsf	"
+Text = "我是谁，我在哪？"
 metadata/_custom_type_script = "uid://dfpts3xel8bf8"
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tggud"]
@@ -1082,12 +1081,13 @@ mesh = SubResource("ArrayMesh_s3u2a")
 skeleton = NodePath("")
 
 [node name="BookPickup" type="Node3D" parent="Objects" node_paths=PackedStringArray("nameLabel", "lineNode")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.81585133, 0, -1.6061612)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.81585133, 0, -2.7061613)
 script = ExtResource("3_nxajo")
 PlayerPath = NodePath("../../Player")
 PlayerBookPath = NodePath("../../Player/Book")
 PhantomCameraPath = NodePath("../../Player/Book/PhantomCamera3D")
 PickupVisualRootPath = NodePath("Cube_010")
+DisplayName = "操作手册"
 outlineMat = SubResource("ShaderMaterial_tggud")
 OutlineTargetPaths = Array[NodePath]([NodePath("Cube_010")])
 nameLabel = NodePath("NameLabel")
@@ -1100,6 +1100,7 @@ lineColor = Color(1, 1, 1, 1)
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Objects/BookPickup/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.099999994, 0)
 shape = SubResource("BoxShape3D_x2fmw")
 
 [node name="Cube_010" type="MeshInstance3D" parent="Objects/BookPickup"]
@@ -1108,8 +1109,8 @@ mesh = SubResource("ArrayMesh_neek2")
 skeleton = NodePath("")
 
 [node name="NameLabel" type="Label3D" parent="Objects/BookPickup"]
-transform = Transform3D(-0.9982357, 0.009795688, -0.058562286, -6.818444e-08, 0.9862969, 0.1649786, 0.059375927, 0.16468753, -0.9845568, -0.17390317, 1.2488205, -0.538627)
-text = "照片"
+transform = Transform3D(0.9631814, 0.044355005, -0.26516858, -6.818444e-08, 0.9862969, 0.1649786, 0.26885265, -0.15890427, 0.9499828, -0.17390317, 1.2488205, -0.5386269)
+text = "操作手册"
 
 [node name="lineNode" type="Node3D" parent="Objects/BookPickup"]
 transform = Transform3D(1, 0, 0, 0, 0.3241816, 0.94599473, 0, -0.94599473, 0.3241816, -0.17390311, 0.67797387, -1.1265196)
@@ -1118,7 +1119,7 @@ transform = Transform3D(1, 0, 0, 0, 0.3241816, 0.94599473, 0, -0.94599473, 0.324
 transform = Transform3D(1, 0, 3.5527137e-15, 0, 0.99999994, 2.9802322e-08, 0, -2.9802322e-08, 0.99999994, -5.9604645e-08, -0.55961704, 0.52547884)
 
 [node name="lineNode2" type="Node3D" parent="Objects/BookPickup/lineNode"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.4901161e-08, 0, 1.4901161e-08, 1, 0.28946304, -1.190129, 1.2068018e-08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18946302, -1.190129, 5.9604645e-08)
 
 [node name="Table_013" type="MeshInstance3D" parent="Objects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.386161, 0, -3.1187258)
@@ -1270,6 +1271,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -6.0
 material_override = SubResource("StandardMaterial3D_el0ym")
 mesh = SubResource("PlaneMesh_x2fmw")
 script = ExtResource("12_tggud")
+DisplayName = "镜子"
 LockPlayerControl = false
 outlineMat = SubResource("ShaderMaterial_xet21")
 nameLabel = NodePath("NameLabel")
@@ -1280,8 +1282,8 @@ lineColor = Color(1, 1, 1, 1)
 Dialogues = Array[ExtResource("13_nxajo")]([SubResource("Resource_xet21")])
 
 [node name="NameLabel" type="Label3D" parent="Objects/Mirror"]
-transform = Transform3D(0.9718653, 0.0696251, -0.22501257, 0.22860974, -0.048828244, 0.97229284, 0.05670909, -0.9963772, -0.0633713, -1.5574296, -0.3194338, 0.31107894)
-text = "照片"
+transform = Transform3D(0.5472204, -0.022070313, 0.8366976, -0.8350656, -0.08212648, 0.54398644, 0.05670914, -0.9963772, -0.06337128, -1.8847723, 0.2255373, -0.61100876)
+text = "镜子"
 
 [node name="SubViewport" type="SubViewport" parent="Objects/Mirror"]
 
@@ -1292,7 +1294,7 @@ transform = Transform3D(-0.99999994, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0,
 transform = Transform3D(0.9999999, 0, 0, 0, 0.3241816, 0.94599473, 0, -0.9459946, 0.32418153, 0, 0, 0)
 
 [node name="lineNode" type="Node3D" parent="Objects/Mirror/lineNode"]
-transform = Transform3D(1.0000006, 0, -7.450581e-09, -5.9604645e-08, 0.99999994, 1.7881393e-07, 7.450581e-09, -3.8184226e-08, 0.9999999, -1.2016182, -0.23887673, -0.10164302)
+transform = Transform3D(1.0000006, 0, -7.450581e-09, -5.9604645e-08, 0.99999994, 1.7881393e-07, 7.450581e-09, -2.9802322e-08, 0.9999999, -1.2016182, 0.715083, 0.5228257)
 
 [node name="lineNode3" type="Node3D" parent="Objects/Mirror/lineNode"]
 transform = Transform3D(1, 0, 3.5527137e-15, 0, 0.99999994, 2.9802322e-08, 0, -2.9802322e-08, 0.99999994, 0, 0, 0)
@@ -2387,9 +2389,6 @@ mesh = SubResource("PlaneMesh_3scf1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3, 0.1, -23.8)
 material_override = SubResource("StandardMaterial3D_3i1j7")
 mesh = SubResource("PlaneMesh_3scf1")
-
-[node name="RigidBody" parent="." instance=ExtResource("42_d3guo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4, -5.6, -58.7)
 
 [editable path="Objects/Gramophone"]
 [editable path="Objects/PhotoWall/Photos/Photo"]

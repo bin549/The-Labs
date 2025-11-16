@@ -6785,17 +6785,17 @@ offset_right = -900.0
 offset_bottom = -480.0
 
 [node name="PainterImage" type="Sprite2D" parent="CanvasLayer/Control/PaintContrl"]
-position = Vector2(327, 102)
+position = Vector2(526, 280)
 script = ExtResource("10_tl8lu")
-img_size = Vector2i(256, 340)
+img_size = Vector2i(400, 340)
 currentColorRectPath = NodePath("../Panel/CurrentColorRect")
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Control/PaintContrl"]
 layout_mode = 0
-offset_left = 9.0
-offset_top = 3.0
-offset_right = 155.0
-offset_bottom = 261.0
+offset_left = 71.0
+offset_top = 123.0
+offset_right = 280.0
+offset_bottom = 416.0
 
 [node name="HSlider" type="HSlider" parent="CanvasLayer/Control/PaintContrl/Panel"]
 layout_mode = 1

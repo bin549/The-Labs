@@ -83,6 +83,13 @@ public partial class Interactable : Node3D {
         if (LockPlayerControl) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
+		// 隐藏名称标签和指示线
+		if (this.nameLabel != null) {
+			this.nameLabel.Visible = false;
+		}
+		if (this.lineNode != null) {
+			this.lineNode.Visible = false;
+		}
 		this.PlayDialogue(true);
     }
 
@@ -94,6 +101,13 @@ public partial class Interactable : Node3D {
 		}
 		if (LockPlayerControl) {
 			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
+		// 重新显示名称标签和指示线
+		if (this.nameLabel != null) {
+			this.nameLabel.Visible = true;
+		}
+		if (this.lineNode != null) {
+			this.lineNode.Visible = true;
 		}
     }
 
@@ -399,6 +413,11 @@ public partial class Interactable : Node3D {
 
 	private void OnDialogueTimeout() {
 		this.HideDialogue();
+		this.OnDialogueFinished();
+	}
+	
+	// 对话结束时调用，子类可以重写此方法
+	protected virtual void OnDialogueFinished() {
 	}
 
 	private void ResolveDialogueLabel() {
