@@ -2,9 +2,8 @@ using Godot;
 using System;
 
 public partial class World : Node3D {
-    [Export]
-    public bool CreateTestNodes { get; set; } = false;
-    
+    [Export] public bool CreateTestNodes { get; set; } = false;
+
     public override void _Ready() {
         var simpleGrass = GetNode<Node>("/root/SimpleGrass");
         simpleGrass?.Call("set_interactive", true);

@@ -5,7 +5,6 @@ public partial class ForceMeter : Node3D {
 	[Export] public NodePath DisplayLabelPath { get; set; }
 	[Export] public float MaxForce { get; set; } = 50.0f;
 	[Export] public float MaxRotation { get; set; } = 180.0f;
-
 	private Node3D pointer;
 	private Label3D displayLabel;
 	private float currentForce = 0.0f;

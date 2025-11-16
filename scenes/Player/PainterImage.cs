@@ -156,8 +156,7 @@ public partial class PainterImage : Sprite2D {
                         int num = Mathf.CeilToInt(mm.Relative.Length());
                         Vector2I target_pos = (Vector2I)(imposF - mm.Relative);
                         Vector2 current = impos;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             Vector2 toTarget = (Vector2)target_pos - current;
                             if (toTarget.LengthSquared() <= 1e-6f)
                                 break;
@@ -188,8 +187,7 @@ public partial class PainterImage : Sprite2D {
                         int num = Mathf.CeilToInt(mm.Relative.Length());
                         Vector2I target_pos = (Vector2I)(imposF - mm.Relative);
                         Vector2 current = impos;
-                        for (int i = 0; i < num; i++)
-                        {
+                        for (int i = 0; i < num; i++) {
                             Vector2 toTarget = (Vector2)target_pos - current;
                             if (toTarget.LengthSquared() <= 1e-6f)
                                 break;

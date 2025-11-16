@@ -29,7 +29,6 @@ public partial class AluminumReactionExperiment : LabItem {
 	private bool isReacting = false;
 	private float reactionProgress = 0.0f;
 	private List<string> observations = new();
-
 	private Label stepLabel;
 	private Label instructionLabel;
 	private RichTextLabel observationText;

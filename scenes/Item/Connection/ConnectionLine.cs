@@ -2,24 +2,17 @@ using Godot;
 
 [Tool]
 public partial class ConnectionLine : Node3D, IConnectionLine {
-    [Export]
-    public float LineRadius { get; set; } = 0.02f;
-    
-    [Export]
-    public Color LineColor { get; set; } = Colors.Blue;
-    
-    [Export]
-    public Color HoverColor { get; set; } = Colors.Red;
-    
+    [Export] public float LineRadius { get; set; } = 0.02f;
+    [Export] public Color LineColor { get; set; } = Colors.Blue;
+    [Export] public Color HoverColor { get; set; } = Colors.Red;
     public ConnectableNode StartNode { get; private set; }
     public ConnectableNode EndNode { get; private set; }
-    
     private MeshInstance3D _meshInstance;
     private StaticBody3D _staticBody;
     private CollisionShape3D _collision;
     private bool _isHovered = false;
     private StandardMaterial3D _material;
-    
+
     public void Initialize(ConnectableNode startNode, ConnectableNode endNode) {
         StartNode = startNode;
         EndNode = endNode;
@@ -41,21 +34,21 @@ public partial class ConnectionLine : Node3D, IConnectionLine {
         _meshInstance.AddChild(_staticBody);
         if (GetTree()?.EditedSceneRoot != null)
             _staticBody.Owner = GetTree().EditedSceneRoot;
-        _staticBody.CollisionLayer = 1 << 20; 
-        _staticBody.CollisionMask = 0; 
+        _staticBody.CollisionLayer = 1 << 20;
+        _staticBody.CollisionMask = 0;
         _collision = new CollisionShape3D();
         _staticBody.AddChild(_collision);
         if (GetTree()?.EditedSceneRoot != null)
             _collision.Owner = GetTree().EditedSceneRoot;
         UpdatePath();
     }
-    
+
     public override void _Process(double delta) {
         if (StartNode != null && EndNode != null) {
             UpdatePath();
         }
     }
-    
+
     private void UpdatePath() {
         if (_meshInstance == null || StartNode == null || EndNode == null) return;
         Vector3 startPos = StartNode.GetConnectionPoint();
@@ -81,23 +74,22 @@ public partial class ConnectionLine : Node3D, IConnectionLine {
             _collision.Shape = capsule;
         }
     }
-    
+
     public void OnHoverEnter() {
         _isHovered = true;
         if (_material != null) {
             _material.AlbedoColor = HoverColor;
         }
     }
-    
+
     public void OnHoverExit() {
         _isHovered = false;
         if (_material != null) {
             _material.AlbedoColor = LineColor;
         }
     }
-    
+
     public void Destroy() {
         QueueFree();
     }
 }
-

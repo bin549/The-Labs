@@ -356,7 +356,6 @@ public partial class FrictionExperiment : LabItem {
 				};
 				experimentDataList.Add(data);
 				UpdateDataDisplay();
-
 				currentStep = ExperimentStep.ChangeCondition;
 				UpdateStepUI();
 			}
