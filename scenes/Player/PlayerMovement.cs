@@ -29,6 +29,8 @@ public partial class PlayerMovement : CharacterBody3D {
 			this.ResolveGameManager();
 		}
         this.ApplyMovement(delta);
+		var simpleGrass = GetNodeOrNull<Node>("/root/SimpleGrass");
+		simpleGrass?.Call("set_player_position", GlobalPosition);
     }
 
     private void ApplyMovement(double delta) {

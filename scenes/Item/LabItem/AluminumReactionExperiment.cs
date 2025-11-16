@@ -49,7 +49,6 @@ public partial class AluminumReactionExperiment : LabItem {
 
 	public override void _Process(double delta) {
 		base._Process(delta);
-
 		if (isReacting) {
 			reactionProgress += (float)delta * 0.2f;
 			if (reactionProgress >= 1.0f) {
@@ -57,7 +56,7 @@ public partial class AluminumReactionExperiment : LabItem {
 				isReacting = false;
 				OnReactionComplete();
 			}
-			UpdateReactionVisuals();
+			this.UpdateReactionVisuals();
 		}
 	}
 
@@ -74,7 +73,7 @@ public partial class AluminumReactionExperiment : LabItem {
 		if (experimentUIPanel != null) {
 			experimentUIPanel.Visible = true;
 		}
-		UpdateStepUI();
+		this.UpdateStepUI();
 	}
 
 	public override void ExitInteraction() {
@@ -104,7 +103,6 @@ public partial class AluminumReactionExperiment : LabItem {
 		if (experimentUIPanel == null) {
 			CreateRuntimeUI();
 		}
-
 		if (experimentUIPanel != null) {
 			experimentUIPanel.Visible = false;
 		}
@@ -202,7 +200,6 @@ public partial class AluminumReactionExperiment : LabItem {
 ⚠ 氢氧化钠溶液具有强腐蚀性
 ⚠ 反应产生的氢气易燃易爆";
 				break;
-
 			case ExperimentStep.PrepareMaterials:
 				stepLabel.Text = "步骤 2: 准备材料";
 				instructionLabel.Text = @"实验器材：
@@ -211,32 +208,26 @@ public partial class AluminumReactionExperiment : LabItem {
 - 铝片（Al）
 - 火柴（用于检验气体）";
 				break;
-
 			case ExperimentStep.AddAluminum:
 				stepLabel.Text = "步骤 3: 加入铝片";
 				instructionLabel.Text = "将打磨光亮的铝片放入试管中。";
 				break;
-
 			case ExperimentStep.AddNaOH:
 				stepLabel.Text = "步骤 4: 加入氢氧化钠溶液";
 				instructionLabel.Text = "向试管中加入氢氧化钠溶液，点击\"开始反应\"按钮。";
 				break;
-
 			case ExperimentStep.ObserveReaction:
 				stepLabel.Text = "步骤 5: 观察反应现象";
 				instructionLabel.Text = "仔细观察反应过程中的变化。";
 				break;
-
 			case ExperimentStep.CollectGas:
 				stepLabel.Text = "步骤 6: 收集气体";
 				instructionLabel.Text = "反应产生的气体可以收集起来。";
 				break;
-
 			case ExperimentStep.TestGas:
 				stepLabel.Text = "步骤 7: 检验气体";
 				instructionLabel.Text = "点击\"检验气体\"按钮，用燃着的火柴检验产生的气体。";
 				break;
-
 			case ExperimentStep.Conclusion:
 				stepLabel.Text = "步骤 8: 实验结论";
 				instructionLabel.Text = @"实验结论：

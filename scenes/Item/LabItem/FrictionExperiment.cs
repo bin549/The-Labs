@@ -109,7 +109,6 @@ public partial class FrictionExperiment : LabItem {
 		} else {
 			ResolveUIElements();
 		}
-
 		if (experimentUIPanel != null) {
 			experimentUIPanel.Visible = false;
 		}

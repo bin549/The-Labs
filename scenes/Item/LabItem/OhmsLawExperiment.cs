@@ -264,17 +264,13 @@ public partial class OhmsLawExperiment : LabItem {
 
 	private void UpdateReadings() {
 		currentCurrent = resistance > 0 ? currentVoltage / resistance : 0;
-
 		float error = (float)GD.RandRange(-0.01f, 0.01f);
 		currentCurrent += error;
-
 		if (voltageValueLabel != null) {
 			voltageValueLabel.Text = $"{currentVoltage:F1} V";
 		}
-
 		if (currentValueLabel != null) {
 			currentValueLabel.Text = $"{currentCurrent:F3} A";
-
 			if (currentCurrent > 0.5f) {
 				currentValueLabel.AddThemeColorOverride("font_color", Colors.Red);
 			} else if (currentCurrent > 0.2f) {

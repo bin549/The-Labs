@@ -6,8 +6,7 @@ public partial class ExperimentBlock : Node3D {
 	[Export] public float Mass { get; set; } = 1.0f;
 	[Export] public Color BlockColor { get; set; } = Colors.Blue;
 	[Export] public NodePath MeshPath { get; set; }
-	[Signal]
-	public delegate void OnBlockSelectedEventHandler(ExperimentBlock block);
+	[Signal] public delegate void OnBlockSelectedEventHandler(ExperimentBlock block);
 	private MeshInstance3D mesh;
 	private bool isDragging = false;
 	private bool isHovered = false;
