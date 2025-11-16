@@ -3,8 +3,6 @@ using Godot;
 public partial class GameManager : Node {
     [Export] public Interactable currentInteractable = null;
     [Export] public PauseMenu pauseMenu = null;
-    
-    // 其他菜单显示状态（如实验选择菜单）
     public bool IsMenuOpen { get; set; } = false;
 
     public override void _Ready() {

@@ -146,7 +146,6 @@ public partial class FrictionExperiment : LabItem {
 		surfaceLabel.Text = "接触面材质：";
 		surfaceLabel.AddThemeColorOverride("font_color", Colors.White);
 		surfaceHBox.AddChild(surfaceLabel);
-
 		surfaceSelector = new OptionButton();
 		surfaceSelector.AddItem("木板", (int)SurfaceType.Wood);
 		surfaceSelector.AddItem("玻璃", (int)SurfaceType.Glass);
@@ -155,27 +154,21 @@ public partial class FrictionExperiment : LabItem {
 		surfaceSelector.ItemSelected += OnSurfaceSelected;
 		surfaceHBox.AddChild(surfaceSelector);
 		mainVBox.AddChild(surfaceHBox);
-
 		forceValueLabel = new Label();
 		forceValueLabel.AddThemeColorOverride("font_color", Colors.Cyan);
 		forceValueLabel.AddThemeFontSizeOverride("font_size", 24);
 		mainVBox.AddChild(forceValueLabel);
-
 		var buttonHBox = new HBoxContainer();
 		buttonHBox.Alignment = BoxContainer.AlignmentMode.Center;
-
 		startPullButton = new Button();
 		startPullButton.Text = "开始拉动";
 		startPullButton.Pressed += OnStartPull;
 		buttonHBox.AddChild(startPullButton);
-
 		recordDataButton = new Button();
 		recordDataButton.Text = "记录数据";
 		recordDataButton.Pressed += OnRecordData;
 		buttonHBox.AddChild(recordDataButton);
-
 		mainVBox.AddChild(buttonHBox);
-
 		dataPanel = new PanelContainer();
 		dataPanel.CustomMinimumSize = new Vector2(0, 200);
 		var dataScroll = new ScrollContainer();
@@ -183,32 +176,25 @@ public partial class FrictionExperiment : LabItem {
 		dataScroll.AddChild(dataContainer);
 		dataPanel.AddChild(dataScroll);
 		mainVBox.AddChild(dataPanel);
-
 		analysisButton = new Button();
 		analysisButton.Text = "分析实验结果";
 		analysisButton.Pressed += OnAnalyzeData;
 		mainVBox.AddChild(analysisButton);
-
 		analysisText = new RichTextLabel();
 		analysisText.CustomMinimumSize = new Vector2(0, 150);
 		analysisText.BbcodeEnabled = true;
 		mainVBox.AddChild(analysisText);
-
 		var navHBox = new HBoxContainer();
 		navHBox.Alignment = BoxContainer.AlignmentMode.Center;
-
 		previousStepButton = new Button();
 		previousStepButton.Text = "< 上一步";
 		previousStepButton.Pressed += OnPreviousStep;
 		navHBox.AddChild(previousStepButton);
-
 		nextStepButton = new Button();
 		nextStepButton.Text = "下一步 >";
 		nextStepButton.Pressed += OnNextStep;
 		navHBox.AddChild(nextStepButton);
-
 		mainVBox.AddChild(navHBox);
-
 		var player = GetTree().Root.FindChild("Player", true, false);
 		if (player != null) {
 			var canvasLayer = player.FindChild("CanvasLayer", false, false);
@@ -252,43 +238,35 @@ public partial class FrictionExperiment : LabItem {
 滑动摩擦力 f = μN
 其中：μ为动摩擦因数，N为正压力";
 				break;
-
 			case ExperimentStep.SelectBlock:
 				stepLabel.Text = "步骤 2: 选择物块";
 				instructionLabel.Text = "点击一个物块开始实验。不同的物块有不同的质量，质量越大，对接触面的压力越大。";
 				break;
-
 			case ExperimentStep.PlaceBlock:
 				stepLabel.Text = "步骤 3: 放置物块";
 				instructionLabel.Text = "拖动物块放置到实验平台上。";
 				break;
-
 			case ExperimentStep.SelectSurface:
 				stepLabel.Text = "步骤 4: 选择接触面";
 				instructionLabel.Text = "从下拉菜单中选择不同的接触面材质。不同材质的粗糙程度不同，摩擦因数也不同。";
 				break;
-
 			case ExperimentStep.PullBlock:
 				stepLabel.Text = "步骤 5: 拉动物块";
 				instructionLabel.Text = "点击\"开始拉动\"按钮，使用测力计匀速拉动物块。观察测力计显示的拉力大小（等于摩擦力）。";
 				break;
-
 			case ExperimentStep.RecordData:
 				stepLabel.Text = "步骤 6: 记录数据";
 				instructionLabel.Text = "点击\"记录数据\"按钮，将实验数据记录到表格中。";
 				break;
-
 			case ExperimentStep.ChangeCondition:
 				stepLabel.Text = "步骤 7: 改变条件";
 				instructionLabel.Text = "改变物块质量或接触面材质，重复实验至少3次，收集对比数据。";
 				break;
-
 			case ExperimentStep.Analysis:
 				stepLabel.Text = "步骤 8: 分析结论";
 				instructionLabel.Text = "点击\"分析实验结果\"查看实验数据分析和结论。";
 				break;
 		}
-
 		UpdateButtonStates();
 	}
 
@@ -296,19 +274,15 @@ public partial class FrictionExperiment : LabItem {
 		if (previousStepButton != null) {
 			previousStepButton.Disabled = currentStep == ExperimentStep.Introduction;
 		}
-
 		if (startPullButton != null) {
 			startPullButton.Visible = currentStep == ExperimentStep.PullBlock;
 		}
-
 		if (recordDataButton != null) {
 			recordDataButton.Visible = currentStep == ExperimentStep.RecordData;
 		}
-
 		if (surfaceSelector != null) {
 			surfaceSelector.Disabled = currentStep != ExperimentStep.SelectSurface;
 		}
-
 		if (analysisButton != null) {
 			analysisButton.Visible = currentStep == ExperimentStep.Analysis;
 			analysisButton.Disabled = experimentDataList.Count < 3;
@@ -425,7 +399,6 @@ public partial class FrictionExperiment : LabItem {
 			analysis += $"- 质量 {sameSurfaceData[^1].Mass}kg 时，摩擦力 {sameSurfaceData[^1].FrictionForce:F2}N\n";
 			analysis += "[color=green]结论：压力越大，摩擦力越大[/color]\n\n";
 		}
-
 		analysis += "[b]二、接触面粗糙程度的影响：[/b]\n";
 		var sameMassData = new Dictionary<SurfaceType, float>();
 		foreach (var data in experimentDataList) {
@@ -439,13 +412,11 @@ public partial class FrictionExperiment : LabItem {
 			}
 			analysis += "[color=green]结论：接触面越粗糙，动摩擦因数越大，摩擦力越大[/color]\n\n";
 		}
-
 		analysis += "[b]三、实验总结：[/b]\n";
 		analysis += "[color=cyan]滑动摩擦力的大小与以下因素有关：\n";
 		analysis += "1. 压力大小：压力越大，滑动摩擦力越大\n";
 		analysis += "2. 接触面粗糙程度：接触面越粗糙，滑动摩擦力越大\n";
 		analysis += "滑动摩擦力与接触面积大小无关[/color]";
-
 		analysisText.Text = analysis;
 	}
 

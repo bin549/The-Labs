@@ -97,17 +97,14 @@ public partial class ExperimentBlock : Node3D {
 			var mousePos = GetViewport().GetMousePosition();
 			var from = camera.ProjectRayOrigin(mousePos);
 			var to = from + camera.ProjectRayNormal(mousePos) * 1000;
-
 			var spaceState = GetWorld3D().DirectSpaceState;
 			var query = PhysicsRayQueryParameters3D.Create(from, to);
 			var result = spaceState.IntersectRay(query);
-
 			if (result.Count > 0 && result.ContainsKey("position")) {
 				var hitPos = result["position"].AsVector3();
 				dragOffset = GlobalPosition - hitPos;
 			}
 		}
-
 		EmitSignal(SignalName.OnBlockSelected, this);
 		GD.Print($"开始拖动物块：{BlockName}");
 	}
