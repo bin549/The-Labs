@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://d3noroadywjg" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_color.png" id="4_xcwhu"]
 [ext_resource type="Texture2D" uid="uid://dmemqpbkgclwx" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_metallic.png-doorfinal_roughness.png" id="5_4qjkn"]
 [ext_resource type="Texture2D" uid="uid://dblmy2hxqgqdf" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/door_doorfinal_normal.png" id="6_y1i8q"]
-[ext_resource type="AudioStream" uid="uid://7f1vtms5ao8g" path="res://assets/sounds/music/splash.ogg" id="7_16674"]
-[ext_resource type="AudioStream" uid="uid://008gkfvqxl7b" path="res://assets/sounds/music/stretch2.ogg" id="8_xjkmu"]
+[ext_resource type="AudioStream" uid="uid://clidgmvrnnhqg" path="res://assets/sounds/sfx/Door_Open.wav" id="7_dijaw"]
+[ext_resource type="AudioStream" uid="uid://bb7r8tnvqu8so" path="res://assets/sounds/sfx/Door_Close.wav" id="8_uom4x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tggud"]
 render_priority = 0
@@ -69,14 +69,14 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0,
 script = ExtResource("1_dijaw")
 DoorPivotPath = NodePath("walldoor_0012/Pivot")
 OpenRotationDegrees = Vector3(0, -100, 0)
-OpenSound = NodePath("AudioStreamPlayer3D")
-CloseSound = NodePath("AudioStreamPlayer3D2")
+OpenSound = NodePath("OpenAudio")
+CloseSound = NodePath("CloseAudio")
 DisplayName = "化学实验室"
 outlineMat = SubResource("ShaderMaterial_tggud")
-nameLabel = NodePath("NameLabel")
-lineNode = NodePath("lineNode")
-linePointAPath = NodePath("lineNode/lineNode")
-linePointBPath = NodePath("lineNode/lineNode2")
+nameLabel = NodePath("walldoor_0012/Pivot/NameLabel")
+lineNode = NodePath("walldoor_0012/Pivot/lineNode")
+linePointAPath = NodePath("walldoor_0012/Pivot/lineNode/lineNode")
+linePointBPath = NodePath("walldoor_0012/Pivot/lineNode/lineNode2")
 lineColor = Color(1, 1, 1, 1)
 
 [node name="walldoor_0012" parent="." instance=ExtResource("3_8qrsw")]
@@ -98,21 +98,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.490116e-07, -1.1920929e-07,
 [node name="CollisionShape3D" type="CollisionShape3D" parent="walldoor_0012/Pivot/door2/door/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_nxajo")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("7_16674")
+[node name="lineNode" type="Node3D" parent="walldoor_0012/Pivot"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, -1.4901163e-08, 0, 1.4901163e-08, 1, 0.22609681, 0.23203573, -0.6391367)
 
-[node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("8_xjkmu")
-
-[node name="lineNode" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.9999999, -1.4901161e-08, 0, 1.4901161e-08, 0.9999999, -0.17390323, 0.03203571, -0.88913655)
-
-[node name="lineNode" type="Node3D" parent="lineNode"]
+[node name="lineNode" type="Node3D" parent="walldoor_0012/Pivot/lineNode"]
 transform = Transform3D(1, -1.0587912e-21, -3.5527137e-14, 0, 0.99999994, -1.4901161e-08, 3.5527137e-14, 1.4901161e-08, 0.99999994, 0, 0.31221092, 0.51238585)
 
-[node name="lineNode2" type="Node3D" parent="lineNode"]
+[node name="lineNode2" type="Node3D" parent="walldoor_0012/Pivot/lineNode"]
 transform = Transform3D(1, 0, -7.1054274e-15, 0, 1, -1.4901159e-08, 7.1054274e-15, 1.4901159e-08, 1, 0.28946304, 1.1920929e-07, 0.85000014)
 
-[node name="NameLabel" type="Label3D" parent="."]
-transform = Transform3D(-1, 0, -8.742275e-08, 0, 0.99999964, 0, 8.742278e-08, 0, -0.99999964, -0.37390316, 0.31092072, -0.4126618)
+[node name="NameLabel" type="Label3D" parent="walldoor_0012/Pivot"]
+transform = Transform3D(-1.0000001, 0, -8.742275e-08, 0, 0.9999999, 0, 8.7422784e-08, 0, -0.9999999, 0.02609685, 0.51092076, -0.16266187)
 text = "照片"
+
+[node name="OpenAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("7_dijaw")
+
+[node name="CloseAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("8_uom4x")
