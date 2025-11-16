@@ -83,7 +83,6 @@ public partial class Interactable : Node3D {
         if (LockPlayerControl) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
-		// 隐藏名称标签和指示线
 		if (this.nameLabel != null) {
 			this.nameLabel.Visible = false;
 		}
@@ -102,7 +101,6 @@ public partial class Interactable : Node3D {
 		if (LockPlayerControl) {
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 		}
-		// 重新显示名称标签和指示线
 		if (this.nameLabel != null) {
 			this.nameLabel.Visible = true;
 		}
@@ -363,15 +361,26 @@ public partial class Interactable : Node3D {
 
 	private void PlayDialogue(bool isEnterInteraction) {
 		if (Dialogues == null || Dialogues.Count == 0) return;
-		DialogueEntry dialogue = null;
+		var matchingDialogues = new List<int>();
 		for (int i = 0; i < Dialogues.Count; i++) {
 			var entry = Dialogues[i];
 			if (entry != null && entry.PlayBeforeInteraction == isEnterInteraction) {
-				dialogue = entry;
-				currentDialogueIndex = i;
-				break;
+				matchingDialogues.Add(i);
 			}
 		}
+		if (matchingDialogues.Count == 0) return;
+		if (matchingDialogues.Count == 1) {
+			currentDialogueIndex = matchingDialogues[0];
+		} else {
+			int currentPosInList = matchingDialogues.IndexOf(currentDialogueIndex);
+			if (currentPosInList < 0) {
+				currentDialogueIndex = matchingDialogues[0];
+			}  else {
+				int nextPos = (currentPosInList + 1) % matchingDialogues.Count;
+				currentDialogueIndex = matchingDialogues[nextPos];
+			}
+		}
+		var dialogue = Dialogues[currentDialogueIndex];
 		if (dialogue == null) return;
 		if (dialogue.Audio != null && dialogueAudioPlayer != null) {
 			dialogueAudioPlayer.Stream = dialogue.Audio;
@@ -379,7 +388,7 @@ public partial class Interactable : Node3D {
 		}
 		if (!string.IsNullOrEmpty(dialogue.Text)) {
 			ShowDialogue(dialogue.Text);
-			GD.Print($"[{DisplayName}]: {dialogue.Text}");
+			GD.Print($"[{DisplayName}] 对话 {currentDialogueIndex + 1}/{Dialogues.Count}: {dialogue.Text}");
 		}
 	}
 
@@ -416,7 +425,6 @@ public partial class Interactable : Node3D {
 		this.OnDialogueFinished();
 	}
 	
-	// 对话结束时调用，子类可以重写此方法
 	protected virtual void OnDialogueFinished() {
 	}
 

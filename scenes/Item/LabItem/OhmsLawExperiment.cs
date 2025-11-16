@@ -2,6 +2,16 @@ using Godot;
 using System.Collections.Generic;
 
 public partial class OhmsLawExperiment : LabItem {
+	
+	public override void _Ready() {
+		base._Ready();
+		GD.Print("欧姆定律实验已加载 - 当前仅用于测试连线功能");
+	}
+}
+
+/*
+// ========== 以下是原欧姆实验的完整代码，暂时注释掉 ==========
+public partial class OhmsLawExperiment_Original : LabItem {
 	[Export] public NodePath ExperimentUIPanelPath { get; set; }
 	[Export] public NodePath CircuitBoardPath { get; set; }
 	[Export] public NodePath AmmeterPath { get; set; }
@@ -216,10 +226,16 @@ public partial class OhmsLawExperiment : LabItem {
 2. 探究电流与电阻的关系
 3. 验证欧姆定律 I = U / R";
 				break;
-			case ExperimentStep.SetupCircuit:
-				stepLabel.Text = "步骤 2: 连接电路";
-				instructionLabel.Text = "按照电路图连接：电源 - 开关 - 电流表 - 定值电阻 - 电压表";
-				break;
+			// TODO: 集成真正的连接系统
+			// 将来需要：
+			// 1. 在场景中添加电源、开关、电流表、电阻、电压表等 ConnectableNode
+			// 2. 检测用户是否正确连接了所有组件
+			// 3. 验证连接顺序是否正确
+			// 4. 只有正确连接后才能进入下一步骤
+			// case ExperimentStep.SetupCircuit:
+			// 	stepLabel.Text = "步骤 2: 连接电路";
+			// 	instructionLabel.Text = "按照电路图连接：电源 - 开关 - 电流表 - 定值电阻 - 电压表";
+			// 	break;
 			case ExperimentStep.AdjustVoltage:
 				stepLabel.Text = "步骤 3: 调节电压";
 				instructionLabel.Text = "拖动滑块调节电源电压，观察电流表读数的变化。";
@@ -377,3 +393,4 @@ public partial class OhmsLawExperiment : LabItem {
 		public float Resistance;
 	}
 }
+*/

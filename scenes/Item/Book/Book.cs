@@ -69,8 +69,10 @@ public partial class Book : Node3D {
     }
 
     private void TurnLeft() {
-        if (currentPageNumber <= 1)
+        if (currentPageNumber <= 1) {
+            GD.Print("已经是第一页了，无法继续往前翻");
             return;
+        }
         this.SetTexture(pf1, v1);
         this.SetTexture(pf2, v2);
         this.SetTexture(pf3, v3);
@@ -90,16 +92,18 @@ public partial class Book : Node3D {
 
     private void UpdatePageNumber(int pageOffset = 0) {
         currentPageNumber = Math.Max(1, currentPageNumber + pageOffset);
-        int startPage = Math.Max(1, currentPageNumber - 2);
         Viewport[] viewports = { v1, v2, v3, v4, v5, v6 };
+        int startPage = currentPageNumber - 2;
         for (int i = 0; i < viewports.Length; i++) {
             var page = viewports[i].GetNodeOrNull<Page>("Page");
             if (page == null) {
                 GD.PushWarning($"{Name}: 视口 {viewports[i].Name} 中未找到 Page 组件，无法设置页码。");
                 continue;
             }
-            page.SetNumber(startPage + i);
+            int pageNumber = startPage + i;
+            page.SetNumber(Math.Max(1, pageNumber));
         }
+        GD.Print($"当前页码: {currentPageNumber}-{currentPageNumber + 1}");
     }
 
     private void SetTexture(MeshInstance3D page, Viewport viewport) {

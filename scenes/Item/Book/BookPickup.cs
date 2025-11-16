@@ -26,8 +26,13 @@ public partial class BookPickup : Interactable {
 	public override void _Input(InputEvent @event) {
 		if (!this.isInteractingWithBook) return;
 		if (@event.IsActionPressed("pause") || @event.IsActionPressed("ui_cancel")) {
-			GetViewport().SetInputAsHandled();
-			this.ExitInteraction();
+			if (this.canExitInteraction) {
+				GetViewport().SetInputAsHandled();
+				this.ExitInteraction();
+			} else {
+				GetViewport().SetInputAsHandled();
+				GD.Print("请稍等片刻再按 Esc 退出");
+			}
 		}
 	}
 
@@ -38,6 +43,9 @@ public partial class BookPickup : Interactable {
 			this.canExitInteraction = true;
 		} else if (this.canExitInteraction && Input.IsActionJustPressed("interact")) {
 			this.ExitInteraction();
+		}
+		if (!this.canExitInteraction && (Input.IsActionJustReleased("pause") || Input.IsActionJustReleased("ui_cancel"))) {
+			this.canExitInteraction = true;
 		}
 	}
 
