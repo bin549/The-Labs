@@ -58,7 +58,7 @@ public partial class BookPickup : Interactable {
 		this.canExitInteraction = false;
 		this.ShowPickupVisual(false);
 		this.ShowPlayerBook(true);
-		BoostCameraPriority(true);
+		this.BoostCameraPriority(true);
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
@@ -66,7 +66,7 @@ public partial class BookPickup : Interactable {
 		if (!this.isInteractingWithBook) return;
 		this.ShowPlayerBook(false);
 		this.ShowPickupVisual(true);
-		BoostCameraPriority(false);
+		this.BoostCameraPriority(false);
 		this.isInteractingWithBook = false;
 		this.canExitInteraction = false;
 		base.ExitInteraction();

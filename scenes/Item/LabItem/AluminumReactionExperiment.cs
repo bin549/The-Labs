@@ -43,7 +43,7 @@ public partial class AluminumReactionExperiment : LabItem {
 		base._Ready();
 		ResolveComponents();
 		InitializeUI();
-		UpdateStepUI();
+		this.UpdateStepUI();
 	}
 
 	public override void _Process(double delta) {
@@ -259,15 +259,15 @@ public partial class AluminumReactionExperiment : LabItem {
 		isReacting = true;
 		reactionProgress = 0.0f;
 		observations.Clear();
-		AddObservation("加入氢氧化钠溶液...");
-		AddObservation("溶液开始变热（放热反应）");
-		AddObservation("铝片表面产生气泡");
-		AddObservation("气泡不断上升");
+		this.AddObservation("加入氢氧化钠溶液...");
+		this.AddObservation("溶液开始变热（放热反应）");
+		this.AddObservation("铝片表面产生气泡");
+		this.AddObservation("气泡不断上升");
 		if (bubbleEffect != null) {
 			bubbleEffect.Emitting = true;
 		}
 		currentStep = ExperimentStep.ObserveReaction;
-		UpdateStepUI();
+		this.UpdateStepUI();
 	}
 
 	private void UpdateReactionVisuals() {
@@ -284,24 +284,24 @@ public partial class AluminumReactionExperiment : LabItem {
 	}
 
 	private void OnReactionComplete() {
-		AddObservation("反应完成");
-		AddObservation("铝片大部分溶解");
-		AddObservation("继续产生气体");
+		this.AddObservation("反应完成");
+		this.AddObservation("铝片大部分溶解");
+		this.AddObservation("继续产生气体");
 		if (testGasButton != null) {
 			testGasButton.Disabled = false;
 		}
 		currentStep = ExperimentStep.CollectGas;
-		UpdateStepUI();
+		this.UpdateStepUI();
 	}
 
 	private void OnTestGas() {
-		AddObservation("\n[color=yellow]== 检验气体 ==[/color]");
-		AddObservation("将燃着的火柴靠近试管口...");
-		AddObservation("[color=orange]气体被点燃，发出淡蓝色火焰[/color]");
-		AddObservation("[color=cyan]\"噗\"的一声，产生爆鸣[/color]");
-		AddObservation("\n[b]结论：生成的气体是氢气（H₂）[/b]");
+		this.AddObservation("\n[color=yellow]== 检验气体 ==[/color]");
+		this.AddObservation("将燃着的火柴靠近试管口...");
+		this.AddObservation("[color=orange]气体被点燃，发出淡蓝色火焰[/color]");
+		this.AddObservation("[color=cyan]\"噗\"的一声，产生爆鸣[/color]");
+		this.AddObservation("\n[b]结论：生成的气体是氢气（H₂）[/b]");
 		currentStep = ExperimentStep.Conclusion;
-		UpdateStepUI();
+		this.UpdateStepUI();
 	}
 
 	private void AddObservation(string text) {
@@ -321,14 +321,14 @@ public partial class AluminumReactionExperiment : LabItem {
 	private void OnNextStep() {
 		if (currentStep < ExperimentStep.Conclusion) {
 			currentStep++;
-			UpdateStepUI();
+			this.UpdateStepUI();
 		}
 	}
 
 	private void OnPreviousStep() {
 		if (currentStep > ExperimentStep.Introduction) {
 			currentStep--;
-			UpdateStepUI();
+			this.UpdateStepUI();
 		}
 	}
 

@@ -14,26 +14,26 @@ public partial class ExperimentManager : Node {
 
 	public override void _Ready() {
 		this.ProcessMode = ProcessModeEnum.Always;
-		ResolvePlayer();
-		ResolveGameManager();
-		CreateExperimentMenu();
-		CategorizeExperiments();
-		UpdateMenuUI();
+		this.ResolvePlayer();
+		this.ResolveGameManager();
+		this.CreateExperimentMenu();
+		this.CategorizeExperiments();
+		this.UpdateMenuUI();
 	}
 
 	public override void _PhysicsProcess(double delta) {
 		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
-			ResolveGameManager();
+			this.ResolveGameManager();
 		}
 	}
 
 	public override void _Input(InputEvent @event) {
 		if (@event.IsActionPressed("toggle_experiment_menu")) {
-			ToggleExperimentMenu();
+			this.ToggleExperimentMenu();
 			GetViewport().SetInputAsHandled();
 		}
 		if (isMenuVisible && (@event.IsActionPressed("ui_cancel") || @event.IsActionPressed("pause"))) {
-			HideExperimentMenu();
+			this.HideExperimentMenu();
 			GetViewport().SetInputAsHandled();
 		}
 	}
@@ -99,7 +99,7 @@ public partial class ExperimentManager : Node {
 		categorizedExperiments[ExperimentCategory.Mechanics] = new List<ExperimentInfo>();
 		categorizedExperiments[ExperimentCategory.Electricity] = new List<ExperimentInfo>();
 		categorizedExperiments[ExperimentCategory.Chemistry] = new List<ExperimentInfo>();
-		foreach (var exp in Experiments) {
+		foreach (var exp in this.Experiments) {
 			if (exp != null && categorizedExperiments.ContainsKey(exp.Category)) {
 				categorizedExperiments[exp.Category].Add(exp);
 			}
@@ -168,9 +168,9 @@ public partial class ExperimentManager : Node {
 
 	private void ToggleExperimentMenu() {
 		if (isMenuVisible) {
-			HideExperimentMenu();
+			this.HideExperimentMenu();
 		} else {
-			ShowExperimentMenu();
+			this.ShowExperimentMenu();
 		}
 	}
 
@@ -195,18 +195,18 @@ public partial class ExperimentManager : Node {
 	}
 
 	public void RegisterExperiment(ExperimentInfo exp) {
-		Experiments.Add(exp);
-		CategorizeExperiments();
-		UpdateMenuUI();
+		this.Experiments.Add(exp);
+		this.CategorizeExperiments();
+		this.UpdateMenuUI();
 	}
 
 	public void UnregisterExperiment(string experimentName) {
-		for (int i = Experiments.Count - 1; i >= 0; i--) {
-			if (Experiments[i].ExperimentName == experimentName) {
-				Experiments.RemoveAt(i);
+		for (int i = this.Experiments.Count - 1; i >= 0; i--) {
+			if (this.Experiments[i].ExperimentName == experimentName) {
+				this.Experiments.RemoveAt(i);
 			}
 		}
-		CategorizeExperiments();
-		UpdateMenuUI();
+		this.CategorizeExperiments();
+		this.UpdateMenuUI();
 	}
 }

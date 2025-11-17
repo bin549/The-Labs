@@ -45,7 +45,7 @@ public partial class ConnectionLine : Node3D, IConnectionLine {
 
     public override void _Process(double delta) {
         if (StartNode != null && EndNode != null) {
-            UpdatePath();
+            this.UpdatePath();
         }
     }
 

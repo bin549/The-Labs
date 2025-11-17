@@ -48,12 +48,12 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
         _staticBody.AddChild(_collision);
         if (GetTree()?.EditedSceneRoot != null)
             _collision.Owner = GetTree().EditedSceneRoot;
-        UpdatePath();
+        this.UpdatePath();
     }
 
     public override void _Process(double delta) {
         if (StartNode != null && EndNode != null) {
-            UpdatePath();
+            this.UpdatePath();
         }
     }
 

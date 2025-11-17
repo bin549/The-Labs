@@ -15,18 +15,18 @@ public partial class ConnectionManager : Node3D {
     public override void _Input(InputEvent @event) {
         if (@event is InputEventMouseButton mouseEvent) {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
-                HandleLeftClick(mouseEvent.Position);
+                this.HandleLeftClick(mouseEvent.Position);
             }
             else if (mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed) {
-                HandleRightClick(mouseEvent.Position);
+                this.HandleRightClick(mouseEvent.Position);
             }
         }
         if (@event is InputEventMouseMotion motionEvent) {
-            HandleMouseMotion(motionEvent.Position);
+            this.HandleMouseMotion(motionEvent.Position);
         }
     }
 
-    private void HandleLeftClick(Vector2 mousePos) {
+    private void this.(Vector2 mousePos) {
         var rayResult = PerformRaycast(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider"))  {
             GD.Print("射线未击中任何物体");
@@ -83,21 +83,16 @@ public partial class ConnectionManager : Node3D {
 
     private void HandleMouseMotion(Vector2 mousePos) {
         var rayResult = PerformRaycastForLines(mousePos);
-
         if (_hoveredLine != null) {
             _hoveredLine.OnHoverExit();
             _hoveredLine = null;
         }
-
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             return;
         }
-
         var collider = rayResult["collider"].As<Node>();
         if (collider == null) return;
-
         var line = FindConnectionLine(collider);
-
         if (line != null) {
             _hoveredLine = line;
             _hoveredLine.OnHoverEnter();
@@ -131,7 +126,6 @@ public partial class ConnectionManager : Node3D {
                 return;
             }
         }
-
         var line = new ConnectionLine_ImmediateMesh();
         line.LineRadius = 0.01f;
         line.LineColor = new Color(0.1f, 0.1f, 0.1f);
@@ -141,7 +135,6 @@ public partial class ConnectionManager : Node3D {
         line.Owner = GetTree().EditedSceneRoot;
         line.Initialize(startNode, endNode);
         _connections.Add(line);
-
         GD.Print($"创建连线: {startNode.Name} -> {endNode.Name}");
     }
 
@@ -156,16 +149,12 @@ public partial class ConnectionManager : Node3D {
             _camera = GetViewport().GetCamera3D();
             if (_camera == null) return null;
         }
-
         var from = _camera.ProjectRayOrigin(screenPos);
         var to = from + _camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
-
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;
-
         query.CollisionMask = 1 << 19;
-
         return spaceState.IntersectRay(query);
     }
 

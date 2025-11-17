@@ -48,7 +48,6 @@ public partial class ConnectableNode : Node3D {
     
     private void SetupCollisionLayers() {
         var staticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
-        
         if (staticBody != null) {
             staticBody.CollisionLayer = 1 << 19; 
             staticBody.CollisionMask = 0; 
@@ -62,7 +61,6 @@ public partial class ConnectableNode : Node3D {
     
     private void EnsurePhysicsBody() {
         var staticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
-        
         if (staticBody != null) {
             var collisionShape = staticBody.GetNodeOrNull<CollisionShape3D>("CollisionShape3D");
             if (collisionShape != null) {
@@ -80,7 +78,6 @@ public partial class ConnectableNode : Node3D {
                 return;
             }
         }
-        
         if (GetParent() is StaticBody3D || GetParent() is Area3D) {
             var collisionShape = GetNodeOrNull<CollisionShape3D>("CollisionShape3D");
             if (collisionShape == null) {
@@ -106,7 +103,6 @@ public partial class ConnectableNode : Node3D {
             staticBody.AddChild(collisionShape);
             if (GetTree()?.EditedSceneRoot != null)
                 collisionShape.Owner = GetTree().EditedSceneRoot;
-            
             GD.Print($"为 {Name} 创建了新的 StaticBody3D 和碰撞体");
         }
     }
