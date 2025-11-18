@@ -26,7 +26,7 @@ public partial class ConnectionManager : Node3D {
         }
     }
 
-    private void this.(Vector2 mousePos) {
+    private void HandleLeftClick(Vector2 mousePos) {
         var rayResult = PerformRaycast(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider"))  {
             GD.Print("射线未击中任何物体");
