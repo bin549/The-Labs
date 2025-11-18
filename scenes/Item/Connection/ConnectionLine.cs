@@ -40,7 +40,7 @@ public partial class ConnectionLine : Node3D, IConnectionLine {
         _staticBody.AddChild(_collision);
         if (GetTree()?.EditedSceneRoot != null)
             _collision.Owner = GetTree().EditedSceneRoot;
-        UpdatePath();
+        this.UpdatePath();
     }
 
     public override void _Process(double delta) {

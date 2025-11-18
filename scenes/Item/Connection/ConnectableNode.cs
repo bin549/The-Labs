@@ -7,7 +7,7 @@ public partial class ConnectableNode : Node3D {
     private bool _isSelected = false;
     private MeshInstance3D _meshInstance;
     private StandardMaterial3D _material;
-    
+
     public bool IsSelected  {
         get => _isSelected;
         set {
@@ -15,9 +15,9 @@ public partial class ConnectableNode : Node3D {
             UpdateColor();
         }
     }
-    
+
     public override void _Ready() {
-        EnsurePhysicsBody();
+        this.EnsurePhysicsBody();
         SetupCollisionLayers();
         _meshInstance = GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
         if (_meshInstance == null) {
@@ -45,12 +45,12 @@ public partial class ConnectableNode : Node3D {
         }
         GD.Print($"ConnectableNode {Name} 已初始化");
     }
-    
+
     private void SetupCollisionLayers() {
         var staticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
         if (staticBody != null) {
-            staticBody.CollisionLayer = 1 << 19; 
-            staticBody.CollisionMask = 0; 
+            staticBody.CollisionLayer = 1 << 19;
+            staticBody.CollisionMask = 0;
             GD.Print($"{Name} 碰撞层已设置为 Layer 20");
         } else if (GetParent() is StaticBody3D parentBody) {
             parentBody.CollisionLayer = 1 << 19;
@@ -58,7 +58,7 @@ public partial class ConnectableNode : Node3D {
             GD.Print($"{Name} 父节点碰撞层已设置为 Layer 20");
         }
     }
-    
+
     private void EnsurePhysicsBody() {
         var staticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
         if (staticBody != null) {
@@ -106,14 +106,14 @@ public partial class ConnectableNode : Node3D {
             GD.Print($"为 {Name} 创建了新的 StaticBody3D 和碰撞体");
         }
     }
-    
+
     public void OnClicked() {
         var manager = GetTree().Root.GetNode<ConnectionManager>("World/ConnectionManager");
         if (manager != null) {
             manager.OnNodeClicked(this);
         }
     }
-    
+
     public void UpdateColor() {
         if (_material == null) return;
         if (_isSelected) {
@@ -122,9 +122,8 @@ public partial class ConnectableNode : Node3D {
             _material.AlbedoColor = NormalColor;
         }
     }
-    
+
     public Vector3 GetConnectionPoint() {
         return GlobalPosition;
     }
 }
-
