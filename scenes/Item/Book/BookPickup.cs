@@ -8,7 +8,6 @@ public partial class BookPickup : Interactable {
 	[Export] public NodePath PickupVisualRootPath { get; set; } = default;
 	[Export] public int InspectCameraPriority { get; set; } = 1200;
 	[Export] public int HiddenCameraPriority { get; set; } = 0;
-
 	private Node3D playerNode;
 	private Node3D playerBook;
 	private PhantomCamera3D phantomCamera;

@@ -518,7 +518,7 @@ public partial class MoviePlayer : Interactable {
 			canvasLayer.AddChild(panel);
 		}
 		this.playlistPanel = panel;
-		CreateRuntimePlaylistContainer();
+		this.CreateRuntimePlaylistContainer();
 		PlaylistPanelPath = this.playlistPanel.GetPath();
 		if (playlistButtonContainer != null) {
 			PlaylistButtonContainerPath = playlistButtonContainer.GetPath();

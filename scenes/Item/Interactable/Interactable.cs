@@ -387,7 +387,7 @@ public partial class Interactable : Node3D {
 			dialogueAudioPlayer.Play();
 		}
 		if (!string.IsNullOrEmpty(dialogue.Text)) {
-			ShowDialogue(dialogue.Text);
+			this.ShowDialogue(dialogue.Text);
 			GD.Print($"[{DisplayName}] 对话 {currentDialogueIndex + 1}/{Dialogues.Count}: {dialogue.Text}");
 		}
 	}

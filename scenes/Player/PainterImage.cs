@@ -25,6 +25,7 @@ public partial class PainterImage : Sprite2D {
 				currentColorRect.Color = value;
         }
     }
+    
     public override void _Ready() {
 		currentColorRect = null;
 		if (currentColorRectPath != null && !currentColorRectPath.IsEmpty)

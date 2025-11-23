@@ -104,15 +104,13 @@ public partial class ConnectionManager : Node3D {
             _selectedNode = clickedNode;
             _selectedNode.IsSelected = true;
             GD.Print($"✓ 选中节点: {_selectedNode.Name}");
-        }
-        else if (_selectedNode == clickedNode) {
+        } else if (_selectedNode == clickedNode) {
             _selectedNode.IsSelected = false;
             GD.Print($"✓ 取消选中: {_selectedNode.Name}");
             _selectedNode = null;
-        }
-        else {
+        } else {
             GD.Print($"✓ 创建连线: {_selectedNode.Name} -> {clickedNode.Name}");
-            CreateConnection(_selectedNode, clickedNode);
+            this.CreateConnection(_selectedNode, clickedNode);
             _selectedNode.IsSelected = false;
             _selectedNode = null;
         }

@@ -100,7 +100,7 @@ public partial class AluminumReactionExperiment : LabItem {
 
 	private void InitializeUI() {
 		if (experimentUIPanel == null) {
-			CreateRuntimeUI();
+			this.CreateRuntimeUI();
 		}
 		if (experimentUIPanel != null) {
 			experimentUIPanel.Visible = false;
@@ -237,8 +237,7 @@ public partial class AluminumReactionExperiment : LabItem {
 4. 生成的气体是氢气，可以燃烧，发出淡蓝色火焰";
 				break;
 		}
-
-		UpdateButtonStates();
+		this.UpdateButtonStates();
 	}
 
 	private void UpdateButtonStates() {

@@ -57,9 +57,9 @@ public partial class ExperimentBlock : Node3D {
 		if (@event is InputEventMouseButton mouseButton) {
 			if (mouseButton.ButtonIndex == MouseButton.Left) {
 				if (mouseButton.Pressed && isHovered && !isDragging) {
-					StartDrag();
+					this.StartDrag();
 				} else if (!mouseButton.Pressed && isDragging) {
-					EndDrag();
+					this.EndDrag();
 				}
 			}
 		}

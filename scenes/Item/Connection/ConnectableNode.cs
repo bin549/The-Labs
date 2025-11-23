@@ -18,7 +18,7 @@ public partial class ConnectableNode : Node3D {
 
     public override void _Ready() {
         this.EnsurePhysicsBody();
-        SetupCollisionLayers();
+        this.SetupCollisionLayers();
         _meshInstance = GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
         if (_meshInstance == null) {
             foreach (var child in GetChildren()) {

@@ -32,7 +32,7 @@ public partial class ForceMeter : Node3D {
 		}
 		if (pointer == null) {
 			GD.PushWarning($"{Name}: 未找到指针节点，将创建默认指针。");
-			CreateDefaultPointer();
+			this.CreateDefaultPointer();
 		}
 		if (!string.IsNullOrEmpty(DisplayLabelPath?.ToString())) {
 			displayLabel = GetNodeOrNull<Label3D>(DisplayLabelPath);

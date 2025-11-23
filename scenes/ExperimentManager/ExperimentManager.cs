@@ -53,7 +53,6 @@ public partial class ExperimentManager : Node {
 	private void ResolveGameManager() {
 		gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
 			GetTree().Root.FindChild("GameManager", true, false) as GameManager;
-
 		if (gameManager == null) {
 			GD.PushWarning("ExperimentManager: 未找到GameManager节点，菜单显示时摄像头控制可能无法禁用。");
 		}
@@ -95,13 +94,13 @@ public partial class ExperimentManager : Node {
 	}
 
 	private void CategorizeExperiments() {
-		categorizedExperiments.Clear();
-		categorizedExperiments[ExperimentCategory.Mechanics] = new List<ExperimentInfo>();
-		categorizedExperiments[ExperimentCategory.Electricity] = new List<ExperimentInfo>();
-		categorizedExperiments[ExperimentCategory.Chemistry] = new List<ExperimentInfo>();
+		this.categorizedExperiments.Clear();
+		this.categorizedExperiments[ExperimentCategory.Mechanics] = new List<ExperimentInfo>();
+		this.categorizedExperiments[ExperimentCategory.Electricity] = new List<ExperimentInfo>();
+		this.categorizedExperiments[ExperimentCategory.Chemistry] = new List<ExperimentInfo>();
 		foreach (var exp in this.Experiments) {
-			if (exp != null && categorizedExperiments.ContainsKey(exp.Category)) {
-				categorizedExperiments[exp.Category].Add(exp);
+			if (exp != null && this.categorizedExperiments.ContainsKey(exp.Category)) {
+				this.categorizedExperiments[exp.Category].Add(exp);
 			}
 		}
 	}
@@ -121,8 +120,8 @@ public partial class ExperimentManager : Node {
 			{ ExperimentCategory.Electricity, Colors.Yellow },
 			{ ExperimentCategory.Chemistry, Colors.LightGreen }
 		};
-		foreach (var category in categorizedExperiments.Keys) {
-			var experiments = categorizedExperiments[category];
+		foreach (var category in this.categorizedExperiments.Keys) {
+			var experiments = this.categorizedExperiments[category];
 			if (experiments.Count == 0) continue;
 			var categoryLabel = new Label();
 			categoryLabel.Text = $"【{categoryNames[category]}】";
