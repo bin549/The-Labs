@@ -8,12 +8,12 @@ public partial class PainterImage : Sprite2D {
     [Export] public NodePath canvasMeshPath;
     [Export] public int pixelGridSize = 8;
     private Image img;
-	private ColorRect currentColorRect;
-	private MeshInstance3D canvasMesh;
-	private StandardMaterial3D canvasMaterial;
-	private bool canvasMeshInitialized = false;
-	private bool pixelMode = false;
-	private Vector2I lastPixelGrid = new Vector2I(-1, -1);
+    private ColorRect currentColorRect;
+    private MeshInstance3D canvasMesh;
+    private StandardMaterial3D canvasMaterial;
+    private bool canvasMeshInitialized = false;
+    private bool pixelMode = false;
+    private Vector2I lastPixelGrid = new Vector2I(-1, -1);
     private Color _paintColor = Colors.Red;
 
     [Export]
@@ -21,68 +21,68 @@ public partial class PainterImage : Sprite2D {
         get => _paintColor;
         set {
             _paintColor = value;
-			if (currentColorRect != null)
-				currentColorRect.Color = value;
+            if (currentColorRect != null)
+                currentColorRect.Color = value;
         }
     }
-    
+
     public override void _Ready() {
-		currentColorRect = null;
-		if (currentColorRectPath != null && !currentColorRectPath.IsEmpty)
-			currentColorRect = GetNodeOrNull<ColorRect>(currentColorRectPath);
-		if (currentColorRect == null)
-			currentColorRect = GetNodeOrNull<ColorRect>("../Panel/CurrentColorRect");
-		if (currentColorRect != null)
-			currentColorRect.Color = PaintColor;
+        currentColorRect = null;
+        if (currentColorRectPath != null && !currentColorRectPath.IsEmpty)
+            currentColorRect = GetNodeOrNull<ColorRect>(currentColorRectPath);
+        if (currentColorRect == null)
+            currentColorRect = GetNodeOrNull<ColorRect>("../Panel/CurrentColorRect");
+        if (currentColorRect != null)
+            currentColorRect.Color = PaintColor;
         img = Image.CreateEmpty(img_size.X, img_size.Y, false, Image.Format.Rgba8);
         img.Fill(Colors.White);
         Texture = ImageTexture.CreateFromImage(img);
-		var slider = GetNodeOrNull<HSlider>("../Panel/HSlider");
-		if (slider != null) {
-			slider.ValueChanged += _OnHSliderValueChanged;
-		}
-		var pixelModeToggle = GetNodeOrNull<CheckButton>("../Panel/PixelModeToggle");
-		if (pixelModeToggle != null) {
-			pixelModeToggle.Toggled += _OnPixelModeToggled;
-		} else {
-			GD.PushWarning("PainterImage: 未找到 PixelModeToggle 按钮");
-		}
-		if (canvasMeshPath != null && !canvasMeshPath.IsEmpty) {
-			canvasMesh = GetNodeOrNull<MeshInstance3D>(canvasMeshPath);
-			if (canvasMesh != null) {
-				canvasMaterial = new StandardMaterial3D();
-				canvasMaterial.AlbedoTexture = ImageTexture.CreateFromImage(img);
-				canvasMaterial.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
-				canvasMesh.MaterialOverride = canvasMaterial;
-			}
-		}
+        var slider = GetNodeOrNull<HSlider>("../Panel/HSlider");
+        if (slider != null) {
+            slider.ValueChanged += _OnHSliderValueChanged;
+        }
+        var pixelModeToggle = GetNodeOrNull<CheckButton>("../Panel/PixelModeToggle");
+        if (pixelModeToggle != null) {
+            pixelModeToggle.Toggled += _OnPixelModeToggled;
+        } else {
+            GD.PushWarning("PainterImage: 未找到 PixelModeToggle 按钮");
+        }
+        if (canvasMeshPath != null && !canvasMeshPath.IsEmpty) {
+            canvasMesh = GetNodeOrNull<MeshInstance3D>(canvasMeshPath);
+            if (canvasMesh != null) {
+                canvasMaterial = new StandardMaterial3D();
+                canvasMaterial.AlbedoTexture = ImageTexture.CreateFromImage(img);
+                canvasMaterial.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
+                canvasMesh.MaterialOverride = canvasMaterial;
+            }
+        }
     }
 
-	public void SetCanvasMesh(MeshInstance3D mesh) {
-		canvasMesh = mesh;
-		if (canvasMesh != null && img != null) {
-			InitializeCanvasMesh();
-		}
-	}
+    public void SetCanvasMesh(MeshInstance3D mesh) {
+        canvasMesh = mesh;
+        if (canvasMesh != null && img != null) {
+            InitializeCanvasMesh();
+        }
+    }
 
-	private void InitializeCanvasMesh() {
-		if (canvasMesh == null || img == null || canvasMeshInitialized) return;
-		canvasMaterial = new StandardMaterial3D();
-		canvasMaterial.AlbedoTexture = ImageTexture.CreateFromImage(img);
-		canvasMaterial.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
-		canvasMesh.MaterialOverride = canvasMaterial;
-		canvasMeshInitialized = true;
-		GD.Print($"PainterImage: CanvasMesh 初始化成功");
-	}
+    private void InitializeCanvasMesh() {
+        if (canvasMesh == null || img == null || canvasMeshInitialized) return;
+        canvasMaterial = new StandardMaterial3D();
+        canvasMaterial.AlbedoTexture = ImageTexture.CreateFromImage(img);
+        canvasMaterial.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
+        canvasMesh.MaterialOverride = canvasMaterial;
+        canvasMeshInitialized = true;
+        GD.Print($"PainterImage: CanvasMesh 初始化成功");
+    }
 
-	private void UpdateCanvasMeshTexture() {
-		if (!canvasMeshInitialized && canvasMesh != null && img != null) {
-			InitializeCanvasMesh();
-		}
-		if (canvasMesh != null && canvasMaterial != null && canvasMaterial.AlbedoTexture is ImageTexture imgTex) {
-			imgTex.Update(img);
-		}
-	}
+    private void UpdateCanvasMeshTexture() {
+        if (!canvasMeshInitialized && canvasMesh != null && img != null) {
+            InitializeCanvasMesh();
+        }
+        if (canvasMesh != null && canvasMaterial != null && canvasMaterial.AlbedoTexture is ImageTexture imgTex) {
+            imgTex.Update(img);
+        }
+    }
 
     private void _PaintTex(Vector2I pos, bool forcePixelMode = false) {
         if (pixelMode || forcePixelMode) {

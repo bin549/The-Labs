@@ -2,7 +2,10 @@ using Godot;
 
 public partial class PaintBoard : Interactable {
     [Export] public NodePath paintContrlPath = new NodePath("/root/World/Player/CanvasLayer/Control/PaintContrl");
-    [Export] public NodePath painterImagePath = new NodePath("/root/World/Player/CanvasLayer/Control/PaintContrl/PainterImage");
+
+    [Export] public NodePath painterImagePath =
+        new NodePath("/root/World/Player/CanvasLayer/Control/PaintContrl/PainterImage");
+
     private Control paintContrl;
     private PainterImage painterImage;
 

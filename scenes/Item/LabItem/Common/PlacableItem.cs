@@ -91,11 +91,7 @@ public partial class PlacableItem : Node3D {
 		float t = (targetY - from.Y) / normal.Y;
 		if (t > 0) {
 			Vector3 newPos = from + normal * t + dragOffset;
-			if (KeepOriginalHeight) {
-				newPos.Y = originalPosition.Y;
-			} else {
-				newPos.Y = DragHeight;
-			}
+			newPos.Y = KeepOriginalHeight ? originalPosition.Y : DragHeight;
 			GlobalPosition = newPos;
 		}
 	}

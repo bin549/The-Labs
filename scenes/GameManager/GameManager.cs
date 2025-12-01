@@ -19,6 +19,7 @@ public partial class GameManager : Node {
     public void SetCurrentInteractable(Interactable interactable) {
         this.currentInteractable = interactable;
     }
+
     public bool IsBusy => this.currentInteractable != null || IsMenuOpen;
 
     public override void _Process(double delta) {

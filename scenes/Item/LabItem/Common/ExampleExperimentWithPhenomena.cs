@@ -14,7 +14,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	private RichTextLabel instructionLabel;
 	private RichTextLabel logLabel;
 	private Button resetButton;
-	
 	private Godot.Collections.Array<string> experimentLog = new();
 	
 	public override void _Ready() {
@@ -41,8 +40,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		}
 		base.ExitInteraction();
 	}
-	
-	#region 初始化
 	
 	private void InitializePhenomenonManager() {
 		phenomenonManager = new ExperimentPhenomenonManager();
@@ -84,9 +81,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		GD.Print($"[ExampleExperiment] 注册物品：{item.ItemName} (类型: {item.ItemType})");
 	}
 	
-	#endregion
-	
-	#region UI 管理
 	
 	private void InitializeUI() {
 		if (!string.IsNullOrEmpty(ExperimentUIPanelPath?.ToString())) {
@@ -172,10 +166,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		GD.Print($"[实验日志] {message}");
 	}
 	
-	#endregion
-	
-	#region 信号处理
-	
 	private void OnItemDragStarted(PlacableItem item) {
 		LogMessage($"开始拖动 [b]{item.ItemName}[/b]", "yellow");
 	}
@@ -198,7 +188,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	
 	private void OnPhenomenonTriggered(ExperimentPhenomenon phenomenon, PlacableItem triggerItem) {
 		LogMessage($"[color=red]★ 触发现象：{phenomenon.PhenomenonName}！[/color]", "red");
-		
 		if (!string.IsNullOrEmpty(phenomenon.ResultMessage)) {
 			LogMessage($"[i]{phenomenon.ResultMessage}[/i]", "cyan");
 		}
@@ -219,15 +208,11 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		GD.Print("[ExampleExperiment] 实验已重置");
 	}
 	
-	#endregion
-	
-	#region 示例现象创建
-	
 	private void CreateExamplePhenomena() {
 		var acidBaseReaction = new ExperimentPhenomenon();
 		acidBaseReaction.PhenomenonName = "酸碱中和反应";
 		acidBaseReaction.Description = "酸和碱混合产生中和反应";
-		acidBaseReaction.TriggerItemType = "acid"; // 酸
+		acidBaseReaction.TriggerItemType = "acid";
 		acidBaseReaction.RequiredItemTypes = new Godot.Collections.Array<string> { "base" }; 
 		acidBaseReaction.EffectColor = Colors.Yellow;
 		acidBaseReaction.EffectDuration = 3.0f;
@@ -237,7 +222,7 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		var metalAcidReaction = new ExperimentPhenomenon();
 		metalAcidReaction.PhenomenonName = "金属与酸反应";
 		metalAcidReaction.Description = "活泼金属与酸反应产生氢气";
-		metalAcidReaction.TriggerItemType = "metal"; // 金属
+		metalAcidReaction.TriggerItemType = "metal"; 
 		metalAcidReaction.RequiredItemTypes = new Godot.Collections.Array<string> { "acid" };
 		metalAcidReaction.EffectColor = Colors.Cyan;
 		metalAcidReaction.EffectDuration = 5.0f;
@@ -247,7 +232,7 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		var sodiumWaterReaction = new ExperimentPhenomenon();
 		sodiumWaterReaction.PhenomenonName = "钠与水反应";
 		sodiumWaterReaction.Description = "钠与水发生剧烈反应";
-		sodiumWaterReaction.TriggerItemType = "sodium"; // 钠
+		sodiumWaterReaction.TriggerItemType = "sodium"; 
 		sodiumWaterReaction.RequiredItemTypes = new Godot.Collections.Array<string> { "water" };
 		sodiumWaterReaction.TriggerDelay = 0.5f; 
 		sodiumWaterReaction.EffectColor = Colors.OrangeRed;
@@ -258,5 +243,4 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		Phenomena.Add(sodiumWaterReaction);
 		GD.Print($"[ExampleExperiment] 已创建 {Phenomena.Count} 个示例现象");
 	}
-	#endregion
 }

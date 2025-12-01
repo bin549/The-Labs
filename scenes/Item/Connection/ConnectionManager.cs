@@ -16,8 +16,7 @@ public partial class ConnectionManager : Node3D {
         if (@event is InputEventMouseButton mouseEvent) {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
                 this.HandleLeftClick(mouseEvent.Position);
-            }
-            else if (mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed) {
+            } else if (mouseEvent.ButtonIndex == MouseButton.Right && mouseEvent.Pressed) {
                 this.HandleRightClick(mouseEvent.Position);
             }
         }
@@ -28,7 +27,7 @@ public partial class ConnectionManager : Node3D {
 
     private void HandleLeftClick(Vector2 mousePos) {
         var rayResult = PerformRaycast(mousePos);
-        if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider"))  {
+        if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             GD.Print("射线未击中任何物体");
             if (_selectedNode != null) {
                 _selectedNode.IsSelected = false;

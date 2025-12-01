@@ -12,25 +12,25 @@ public partial class PlayerMovement : CharacterBody3D {
     private AnimationPlayer animationPlayer;
     private Node3D visuals;
     private bool isJumping = false;
-	[Export] public NodePath VisualsPath { get; set; } = "Player/visuals";
-	[Export] private NodePath gameManagerPath;
-	private GameManager gameManager;
-	private bool IsInteracting => gameManager != null && gameManager.IsBusy;
+    [Export] public NodePath VisualsPath { get; set; } = "Player/visuals";
+    [Export] private NodePath gameManagerPath;
+    private GameManager gameManager;
+    private bool IsInteracting => gameManager != null && gameManager.IsBusy;
 
     public override void _Ready() {
         Input.MouseMode = Input.MouseModeEnum.Captured;
         this.animationPlayer = GetNode<AnimationPlayer>("visuals/mixamo_base/AnimationPlayer");
         this.visuals = GetNode<Node3D>("visuals");
-		this.ResolveGameManager();
+        this.ResolveGameManager();
     }
 
     public override void _PhysicsProcess(double delta) {
-		if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
-			this.ResolveGameManager();
-		}
+        if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
+            this.ResolveGameManager();
+        }
         this.ApplyMovement(delta);
-		var simpleGrass = GetNodeOrNull<Node>("/root/SimpleGrass");
-		simpleGrass?.Call("set_player_position", GlobalPosition);
+        var simpleGrass = GetNodeOrNull<Node>("/root/SimpleGrass");
+        simpleGrass?.Call("set_player_position", GlobalPosition);
     }
 
     private void ApplyMovement(double delta) {
@@ -38,7 +38,7 @@ public partial class PlayerMovement : CharacterBody3D {
         bool onFloor = IsOnFloor();
         if (!onFloor)
             velocity.Y -= gravity * (float)delta;
-		bool interacting = IsInteracting;
+        bool interacting = IsInteracting;
         if (onFloor) {
             if (Input.IsActionJustPressed("jump")) {
                 velocity.Y = JUMP_VELOCITY;
@@ -50,7 +50,9 @@ public partial class PlayerMovement : CharacterBody3D {
         } else if (this.isJumping && velocity.Y <= 0.0f) {
             this.isJumping = false;
         }
-        Vector2 inputDir = interacting ? Vector2.Zero : Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
+        Vector2 inputDir = interacting
+            ? Vector2.Zero
+            : Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         bool isRunning = !interacting && Input.IsActionPressed("run");
         float speed = isRunning ? RunSpeed : WalkSpeed;
         Node3D cameraPivot = GetNode<Node3D>("CameraPivot");
@@ -92,16 +94,16 @@ public partial class PlayerMovement : CharacterBody3D {
         }
     }
 
-	private void ResolveGameManager() {
-		if (gameManagerPath != null && gameManagerPath.ToString() != string.Empty) {
-			gameManager = GetNodeOrNull<GameManager>(gameManagerPath);
-		}
-		if (gameManager == null) {
-			gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
-				GetTree().Root.FindChild("GameManager", true, false) as GameManager;
-		}
-		if (gameManager == null) {
-			GD.PushWarning($"{Name}: 未找到 GameManager，无法同步交互状态锁定移动。");
-		}
-	}
+    private void ResolveGameManager() {
+        if (gameManagerPath != null && gameManagerPath.ToString() != string.Empty) {
+            gameManager = GetNodeOrNull<GameManager>(gameManagerPath);
+        }
+        if (gameManager == null) {
+            gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
+                          GetTree().Root.FindChild("GameManager", true, false) as GameManager;
+        }
+        if (gameManager == null) {
+            GD.PushWarning($"{Name}: 未找到 GameManager，无法同步交互状态锁定移动。");
+        }
+    }
 }

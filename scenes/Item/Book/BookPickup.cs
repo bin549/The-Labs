@@ -133,11 +133,7 @@ public partial class BookPickup : Interactable {
 		if (!originalCameraPriority.HasValue) {
 			originalCameraPriority = phantomCamera.Priority;
 		}
-		if (enable) {
-			phantomCamera.Priority = InspectCameraPriority;
-		} else {
-			phantomCamera.Priority = HiddenCameraPriority;
-		}
+		phantomCamera.Priority = enable ? InspectCameraPriority : HiddenCameraPriority;
 	}
 
 	private static bool NodePathIsValid(NodePath path) {

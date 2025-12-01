@@ -1,17 +1,17 @@
 using Godot;
 
 public partial class ConnectableNode : Node3D {
-    [Export] public Color NormalColor { get; set; } = Colors.White; [Export]
-    public Color SelectedColor { get; set; } = Colors.Yellow;
+    [Export] public Color NormalColor { get; set; } = Colors.White;
+    [Export] public Color SelectedColor { get; set; } = Colors.Yellow;
     [Export] public Color ConnectedColor { get; set; } = Colors.Green;
-    private bool _isSelected = false;
+    private bool isSelected = false;
     private MeshInstance3D _meshInstance;
     private StandardMaterial3D _material;
 
-    public bool IsSelected  {
-        get => _isSelected;
+    public bool IsSelected {
+        get => this.isSelected;
         set {
-            _isSelected = value;
+            this.isSelected = value;
             UpdateColor();
         }
     }
@@ -116,7 +116,7 @@ public partial class ConnectableNode : Node3D {
 
     public void UpdateColor() {
         if (_material == null) return;
-        if (_isSelected) {
+        if (this.isSelected) {
             _material.AlbedoColor = SelectedColor;
         } else {
             _material.AlbedoColor = NormalColor;
