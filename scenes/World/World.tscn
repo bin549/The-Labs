@@ -1,4 +1,4 @@
-[gd_scene load_steps=176 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=177 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -18,8 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://b6ub5c82b4pab" path="res://assets/GLB/Tubes and Flasks/Flasks/bottle_glassware_beaker_small.glb" id="8_p47ta"]
 [ext_resource type="PackedScene" uid="uid://bvsfc3r4jjgu6" path="res://scenes/Item/Door/Door.tscn" id="9_xyyef"]
 [ext_resource type="PackedScene" uid="uid://bdb0hxlmah2e" path="res://assets/StylooClassroomAssetPack GLTF & FBX/computer/GLTF/COMPUTERscreen.glb" id="10_d3guo"]
-[ext_resource type="VideoStream" uid="uid://cb2d7o4afnjrw" path="res://assets/videos/TWOZ7255.ogv" id="10_fwi4c"]
 [ext_resource type="Script" uid="uid://d2sorh3adrxob" path="res://scenes/GameManager/GameManager.cs" id="10_interact_mgr"]
+[ext_resource type="VideoStream" uid="uid://dneocskihqdx8" path="res://assets/videos/25.欧姆定律(I).ogv" id="10_nndnj"]
 [ext_resource type="Texture2D" uid="uid://1fchufgmnu5d" path="res://assets/images/bafkreigavk5b64vkhjknydgg6tohwhp3p4s45ocorwyew4hipcff2pkgai.jpg" id="10_x2fmw"]
 [ext_resource type="VideoStream" uid="uid://bdgbylu7gci3h" path="res://assets/videos/timkrief_com_20251022_053219.ogv" id="11_fwi4c"]
 [ext_resource type="VideoStream" uid="uid://bhsut844l5d4l" path="res://assets/videos/pedipanol_bsky_social_20251105_080214.ogv" id="12_gmpns"]
@@ -57,6 +57,7 @@
 [ext_resource type="Shader" path="res://shaders/stylized_liquid.gdshader" id="42_1m4v3"]
 [ext_resource type="Texture2D" uid="uid://hlitbiamgv2y" path="res://assets/photos/bafkreiereg7i4k5dbexfa5p7e3vmj67qvygczvdxlxubl5fpo2bemws72m.jpg" id="42_qg6ly"]
 [ext_resource type="PackedScene" uid="uid://ba3pyobte13gt" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/chair.glb" id="43_5qnt6"]
+[ext_resource type="VideoStream" uid="uid://cf17p7hyndjxi" path="res://assets/videos/高中物理必修一牛顿运动定律 3.实验探究加速度与力、质量的关系.ogv" id="53_85ror"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqijp"]
 resource_name = "main"
@@ -818,7 +819,7 @@ albedo_texture = ExtResource("38_rlmkw")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3scf1"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f6cs8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88vt2"]
 render_priority = 0
 shader = ExtResource("4_ef1mk")
 shader_parameter/color = Color(1, 1, 1, 1)
@@ -826,29 +827,6 @@ shader_parameter/size = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xyyef"]
 size = Vector3(2.6000001, 2.2, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4h21d"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_dl15k"]
-material = SubResource("StandardMaterial3D_4h21d")
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_node01"]
-size = Vector3(0.3, 0.3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_node02"]
-size = Vector3(0.3, 0.3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_node03"]
-size = Vector3(0.3, 0.3, 0.3)
-
-[sub_resource type="Curve3D" id="Curve3D_4h21d"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_88vt2"]
-render_priority = 0
-shader = ExtResource("4_ef1mk")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/size = 0.0
 
 [sub_resource type="PrismMesh" id="PrismMesh_gyf3s"]
 left_to_right = 0.0
@@ -1162,6 +1140,29 @@ data = PackedVector3Array(1, -1, 0.036599997, -1, 1, 0.036599997, 1, 1, 0.036599
 [sub_resource type="BoxShape3D" id="BoxShape3D_fbdsj"]
 size = Vector3(2.6000001, 2, 0.1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f6cs8"]
+render_priority = 0
+shader = ExtResource("4_ef1mk")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4h21d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dl15k"]
+material = SubResource("StandardMaterial3D_4h21d")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_node01"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_node02"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_node03"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="Curve3D" id="Curve3D_4h21d"]
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_u8nga"]
 size = Vector2(500, 500)
 
@@ -1330,7 +1331,8 @@ autoplay = true
 [node name="MoviePlayer" type="Node3D" parent="Objects" node_paths=PackedStringArray("nameLabel", "lineNode")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 14.566835, 4.463881, -2.0468807)
 script = ExtResource("6_el0ym")
-VideoStreams = Array[VideoStream]([ExtResource("10_fwi4c"), ExtResource("12_gmpns"), ExtResource("11_fwi4c"), ExtResource("12_k6r6a")])
+VideoStreams = Array[VideoStream]([ExtResource("12_gmpns"), ExtResource("11_fwi4c"), ExtResource("12_k6r6a")])
+DisplayName = "视频教程"
 outlineMat = SubResource("ShaderMaterial_x2fmw")
 OutlineTargetPaths = Array[NodePath]([NodePath("Keyboard")])
 nameLabel = NodePath("NameLabel")
@@ -2236,82 +2238,6 @@ skeleton = NodePath("../../..")
 
 [node name="Labs" type="Node3D" parent="."]
 
-[node name="OhmsLawLabItem" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
-transform = Transform3D(-4.3711385e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, -4.3711385e-08, 23.381353, 0.5, -22.703466)
-script = ExtResource("19_88vt2")
-ExperimentName = "欧姆实验"
-ExperimentDescription = "欧姆~~~"
-ExperimentCategory = 1
-TeleportPosition = NodePath("TeleportPos")
-DisplayName = "欧姆定律"
-outlineMat = SubResource("ShaderMaterial_f6cs8")
-OutlineTargetPaths = Array[NodePath]([])
-
-[node name="NameLabel" parent="Labs/OhmsLawLabItem" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6149805, 0)
-
-[node name="PhantomCamera3D" parent="Labs/OhmsLawLabItem" index="1"]
-transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
-
-[node name="linePointAPath" parent="Labs/OhmsLawLabItem/lineNode" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5324762, 1.4901161e-08)
-
-[node name="TeleportPos" parent="Labs/OhmsLawLabItem" index="4"]
-transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 3.8146973e-06, 0, 2.1992912)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Labs/OhmsLawLabItem"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/OhmsLawLabItem/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-shape = SubResource("BoxShape3D_xyyef")
-
-[node name="Node01" type="MeshInstance3D" parent="Labs/OhmsLawLabItem"]
-transform = Transform3D(1, 0, 1.0658141e-14, 0, 1, 0, -1.0658141e-14, 0, 1, -0.9756794, 0.5121319, 0.23373032)
-mesh = SubResource("BoxMesh_dl15k")
-script = ExtResource("24_connnode")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Labs/OhmsLawLabItem/Node01"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/OhmsLawLabItem/Node01/StaticBody3D"]
-shape = SubResource("BoxShape3D_node01")
-
-[node name="Node02" type="MeshInstance3D" parent="Labs/OhmsLawLabItem"]
-transform = Transform3D(1, 0, 1.7763568e-14, 0, 1, 0, -1.7763568e-14, 0, 1, -0.2655239, 0.5121319, -0.2236824)
-mesh = SubResource("BoxMesh_dl15k")
-script = ExtResource("24_connnode")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Labs/OhmsLawLabItem/Node02"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/OhmsLawLabItem/Node02/StaticBody3D"]
-shape = SubResource("BoxShape3D_node02")
-
-[node name="Node03" type="MeshInstance3D" parent="Labs/OhmsLawLabItem"]
-transform = Transform3D(1, 0, 2.842171e-14, 0, 1, 0, -2.842171e-14, 0, 1, 0.37039375, 0.5121319, 0.14086533)
-mesh = SubResource("BoxMesh_dl15k")
-script = ExtResource("24_connnode")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Labs/OhmsLawLabItem/Node03"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/OhmsLawLabItem/Node03/StaticBody3D"]
-shape = SubResource("BoxShape3D_node03")
-
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Labs/OhmsLawLabItem"]
-polygon = PackedVector2Array()
-mode = 2
-path_node = NodePath("../Path3D")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_rotation_accurate = false
-path_local = false
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-
-[node name="Path3D" type="Path3D" parent="Labs/OhmsLawLabItem"]
-curve = SubResource("Curve3D_4h21d")
-
 [node name="FrictionLabItem" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -30.734667, 0.5, -14.818308)
 script = ExtResource("21_el0ym")
@@ -3132,159 +3058,384 @@ skeleton = NodePath("")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room02/wall_026/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="Room03" type="Node3D" parent="Rooms"]
+[node name="ElectricRoom" type="Node3D" parent="Rooms"]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -4.799999, 0, -11.932722)
 
-[node name="wall_015" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -9.320075, 0, -6.571962)
+[node name="Lab-OhmsLaw" type="Node3D" parent="Rooms/ElectricRoom"]
+transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, -3.697932, -1, -16.285683)
+
+[node name="OhmsLawLabItem" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
+transform = Transform3D(-4.3711385e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, -4.3711385e-08, 23.381353, 0.5, -22.703466)
+script = ExtResource("19_88vt2")
+ExperimentName = "欧姆实验"
+ExperimentDescription = "欧姆~~~"
+ExperimentCategory = 1
+TeleportPosition = NodePath("TeleportPos")
+DisplayName = "欧姆定律"
+outlineMat = SubResource("ShaderMaterial_f6cs8")
+OutlineTargetPaths = Array[NodePath]([])
+
+[node name="NameLabel" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6149805, 0)
+
+[node name="PhantomCamera3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
+
+[node name="linePointAPath" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/lineNode" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5324762, 1.4901161e-08)
+
+[node name="TeleportPos" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem" index="4"]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 3.8146973e-06, 0, 2.1992912)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_xyyef")
+
+[node name="Node01" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+transform = Transform3D(1, 0, 1.0658141e-14, 0, 1, 0, -1.0658141e-14, 0, 1, -0.9756794, 0.5121319, 0.23373032)
+mesh = SubResource("BoxMesh_dl15k")
+script = ExtResource("24_connnode")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node01"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node01/StaticBody3D"]
+shape = SubResource("BoxShape3D_node01")
+
+[node name="Node02" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+transform = Transform3D(1, 0, 1.7763568e-14, 0, 1, 0, -1.7763568e-14, 0, 1, -0.2655239, 0.5121319, -0.2236824)
+mesh = SubResource("BoxMesh_dl15k")
+script = ExtResource("24_connnode")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node02"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node02/StaticBody3D"]
+shape = SubResource("BoxShape3D_node02")
+
+[node name="Node03" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+transform = Transform3D(1, 0, 2.842171e-14, 0, 1, 0, -2.842171e-14, 0, 1, 0.37039375, 0.5121319, 0.14086533)
+mesh = SubResource("BoxMesh_dl15k")
+script = ExtResource("24_connnode")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node03"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem/Node03/StaticBody3D"]
+shape = SubResource("BoxShape3D_node03")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+polygon = PackedVector2Array()
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Path3D" type="Path3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+curve = SubResource("Curve3D_4h21d")
+
+[node name="MoviePlayer" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("nameLabel", "lineNode")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 34.566837, 4.463881, -29.746881)
+script = ExtResource("6_el0ym")
+VideoPlayerPath = NodePath("../../../../Objects/SubViewport/SubViewportContainer/VideoStreamPlayer")
+VideoStreams = Array[VideoStream]([ExtResource("10_nndnj")])
+DisplayName = "视频教程"
+outlineMat = SubResource("ShaderMaterial_x2fmw")
+OutlineTargetPaths = Array[NodePath]([NodePath("Keyboard")])
+nameLabel = NodePath("NameLabel")
+lineNode = NodePath("lineNode")
+linePointAPath = NodePath("lineNode/lineNode")
+linePointBPath = NodePath("lineNode/lineNode3")
+lineColor = Color(1, 1, 1, 1)
+
+[node name="NameLabel" type="Label3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+transform = Transform3D(-0.9982353, 0.009795695, -0.05856233, -6.818444e-08, 0.9862969, 0.1649786, 0.059376054, 0.16468745, -0.98455644, -4.0730233, -3.0131693, -9.067275)
+text = "照片"
+
+[node name="lineNode" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+transform = Transform3D(0.9999994, 7.1054274e-15, 1.7763568e-15, 0, 0.3241816, 0.94599473, 7.1054274e-15, -0.94599414, 0.32418132, -3.030474, -4.0704274, -9.228974)
+
+[node name="lineNode" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer/lineNode"]
+transform = Transform3D(1.0000006, 0, -7.450582e-09, -5.9604645e-08, 1, 1.7881393e-07, 7.450581e-09, -2.9802322e-08, 0.99999994, -1.008129, 0.12933469, 0.8989893)
+
+[node name="lineNode3" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer/lineNode"]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, 0.99999994, 2.9802322e-08, 0, -2.9802322e-08, 0.99999994, 0, 0, 0)
+
+[node name="Keyboard" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+transform = Transform3D(-2.9564807, 0, -0.5091314, 0, 3, 0, 0.5091314, 0, -2.9564807, -3.033269, -4.30589, -9.450071)
+mesh = SubResource("ArrayMesh_gp055")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+transform = Transform3D(0.99999946, 0, -7.1054274e-15, 0, 1, 0, 7.1054274e-15, 0, 0.99999946, -3.0304737, -4.0704274, -9.228973)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer/StaticBody3D"]
+transform = Transform3D(0.9999978, 0, -1.4901167e-08, 0, 1.9040002, 0, 1.4901167e-08, 0, 0.9999978, 0, -0.036836922, 0)
+shape = SubResource("BoxShape3D_d3guo")
+
+[node name="Body" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer" instance=ExtResource("10_d3guo")]
+transform = Transform3D(2.9999998, 0, -2.842171e-14, 0, 3, 0, 2.842171e-14, 0, 2.9999998, -2.8999977, -3.7999997, -8.199997)
+
+[node name="Screen" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+transform = Transform3D(-1.5477055, 0.0007209303, -0.007643936, 0.014317474, 0.07792916, -0.82630605, 1.4210855e-14, -2.5667999, -0.025089022, -2.8884096, -3.0057597, -8.337592)
+material_override = SubResource("StandardMaterial3D_qx83b")
+mesh = SubResource("PlaneMesh_nxajo")
+surface_material_override/0 = SubResource("StandardMaterial3D_tggud")
+
+[node name="PlaylistUI" type="CanvasLayer" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer"]
+
+[node name="Panel" type="Panel" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer/PlaylistUI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -160.0
+offset_right = 240.0
+offset_bottom = 160.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer/PlaylistUI/Panel"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+theme_override_constants/separation = 12
+
+[node name="MoviePlayer2" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("nameLabel", "lineNode")]
+transform = Transform3D(1.4901161e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, 1.4901161e-08, -43.133163, 4.463881, -15.046882)
+script = ExtResource("6_el0ym")
+VideoPlayerPath = NodePath("../../../../Objects/SubViewport/SubViewportContainer/VideoStreamPlayer")
+VideoStreams = Array[VideoStream]([ExtResource("53_85ror")])
+DisplayName = "视频教程"
+outlineMat = SubResource("ShaderMaterial_x2fmw")
+OutlineTargetPaths = Array[NodePath]([NodePath("Keyboard")])
+nameLabel = NodePath("NameLabel")
+lineNode = NodePath("lineNode")
+linePointAPath = NodePath("lineNode/lineNode")
+linePointBPath = NodePath("lineNode/lineNode3")
+lineColor = Color(1, 1, 1, 1)
+
+[node name="NameLabel" type="Label3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+transform = Transform3D(-0.9982353, 0.009795695, -0.05856233, -6.818444e-08, 0.9862969, 0.1649786, 0.059376054, 0.16468745, -0.98455644, -4.0730233, -3.0131693, -9.067275)
+text = "照片"
+
+[node name="lineNode" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+transform = Transform3D(0.9999994, 7.1054274e-15, 1.7763568e-15, 0, 0.3241816, 0.94599473, 7.1054274e-15, -0.94599414, 0.32418132, -3.030474, -4.0704274, -9.228974)
+
+[node name="lineNode" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2/lineNode"]
+transform = Transform3D(1.0000006, 0, -7.450582e-09, -5.9604645e-08, 1, 1.7881393e-07, 7.450581e-09, -2.9802322e-08, 0.99999994, -1.008129, 0.12933469, 0.8989893)
+
+[node name="lineNode3" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2/lineNode"]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, 0.99999994, 2.9802322e-08, 0, -2.9802322e-08, 0.99999994, 0, 0, 0)
+
+[node name="Keyboard" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+transform = Transform3D(-2.9564807, 0, -0.5091314, 0, 3, 0, 0.5091314, 0, -2.9564807, -3.033269, -4.30589, -9.450071)
+mesh = SubResource("ArrayMesh_gp055")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+transform = Transform3D(0.99999946, 0, -7.1054274e-15, 0, 1, 0, 7.1054274e-15, 0, 0.99999946, -3.0304737, -4.0704274, -9.228973)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2/StaticBody3D"]
+transform = Transform3D(0.9999978, 0, -1.4901167e-08, 0, 1.9040002, 0, 1.4901167e-08, 0, 0.9999978, 0, -0.036836922, 0)
+shape = SubResource("BoxShape3D_d3guo")
+
+[node name="Body" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2" instance=ExtResource("10_d3guo")]
+transform = Transform3D(2.9999998, 0, -2.842171e-14, 0, 3, 0, 2.842171e-14, 0, 2.9999998, -2.8999977, -3.7999997, -8.199997)
+
+[node name="Screen" type="MeshInstance3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+transform = Transform3D(-1.5477055, 0.0007209303, -0.007643936, 0.014317474, 0.07792916, -0.82630605, 1.4210855e-14, -2.5667999, -0.025089022, -2.8884096, -3.0057597, -8.337592)
+material_override = SubResource("StandardMaterial3D_qx83b")
+mesh = SubResource("PlaneMesh_nxajo")
+surface_material_override/0 = SubResource("StandardMaterial3D_tggud")
+
+[node name="PlaylistUI" type="CanvasLayer" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2"]
+
+[node name="Panel" type="Panel" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2/PlaylistUI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -160.0
+offset_right = 240.0
+offset_bottom = 160.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Rooms/ElectricRoom/Lab-OhmsLaw/MoviePlayer2/PlaylistUI/Panel"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+theme_override_constants/separation = 12
+
+[node name="Walls" type="Node3D" parent="Rooms/ElectricRoom"]
+
+[node name="wall_015" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-4.371139e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.371139e-08, -9.320075, 0, -6.5719614)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_015"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_015"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_015/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_015/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29999995, 0, 0)
 shape = SubResource("BoxShape3D_fbdsj")
 
-[node name="wall_016" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -9.394738, 0, -2.5949817)
+[node name="wall_016" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-4.371139e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.371139e-08, -9.394738, 0, -2.5949812)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_016"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_016"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_016/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_016/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.30000007, 0, 0)
 shape = SubResource("BoxShape3D_fbdsj")
 
-[node name="wall_017" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.348422, -0.020002067, -1.5499997)
+[node name="wall_017" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.348422, -0.020002067, -1.5500002)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_017"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_017"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_017/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_017/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_018" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.348422, -0.020002067, -1.5499997)
+[node name="wall_018" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.348423, -0.020002067, -1.5500002)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_018"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_018"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_018/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_018/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_019" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.348422, -0.020002067, -1.5499997)
+[node name="wall_019" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.348423, -0.020002067, -1.5500002)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_019"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_019"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_019/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_019/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_020" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.348421, -0.020002067, -1.5499997)
+[node name="wall_020" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.348421, -0.020002067, -1.5500002)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_020"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_020"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_020/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_020/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_021" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -18.348421, -0.020002067, -1.5499997)
+[node name="wall_021" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -18.348421, -0.020002067, -1.5500002)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_021"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_021"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_021/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_021/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_027" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -2.6)
+[node name="wall_027" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -2.6000004)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_027"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_027"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_027/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_027/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_028" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -4.6)
+[node name="wall_028" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -4.6000013)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_028"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_028"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_028/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_028/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_029" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -6.6)
+[node name="wall_029" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -19.24842, -0.020002067, -6.6000013)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_029"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_029"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_029/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_029/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_022" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.348422, -0.020002067, -7.5000005)
+[node name="wall_022" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.348422, -0.020002067, -7.500001)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_022"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_022"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_022/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_022/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_023" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.348422, -0.020002067, -7.5000005)
+[node name="wall_023" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.348422, -0.020002067, -7.500001)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_023"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_023"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_023/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_023/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_024" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.348422, -0.020002067, -7.5000005)
+[node name="wall_024" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.348422, -0.020002067, -7.500001)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_024"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_024"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_024/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_024/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_025" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.348421, -0.020002067, -7.5000005)
+[node name="wall_025" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.348421, -0.020002067, -7.500001)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_025"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_025"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_025/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_025/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="wall_026" type="MeshInstance3D" parent="Rooms/Room03"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348421, -0.020002067, -7.5000005)
+[node name="wall_026" type="MeshInstance3D" parent="Rooms/ElectricRoom/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.348421, -0.020002067, -7.500001)
 mesh = SubResource("ArrayMesh_vn34e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room03/wall_026"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Walls/wall_026"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room03/wall_026/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/ElectricRoom/Walls/wall_026/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
 [node name="Water" type="MeshInstance3D" parent="."]
@@ -3323,8 +3474,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1794524, 0.18144058, -3.938
 [editable path="map/Door"]
 [editable path="map/Door2"]
 [editable path="map/Door4"]
-[editable path="Labs/OhmsLawLabItem"]
 [editable path="Labs/FrictionLabItem"]
 [editable path="Labs/AluminumLabItem"]
 [editable path="Labs/ForceLab"]
 [editable path="Player"]
+[editable path="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]

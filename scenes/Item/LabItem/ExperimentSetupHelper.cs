@@ -101,8 +101,6 @@ public class ExperimentBuilder {
         return new ExperimentBuilder(root, experimentName);
     }
 
-    #region 添加物品的便捷方法
-
     public ExperimentBuilder AddItem(string name, string type, Vector3 position, Color? color = null) {
         helper.AddPlacableItem(name, type, position, color);
         return this;
@@ -142,8 +140,6 @@ public class ExperimentBuilder {
         helper.AddPlacableItem(name, ItemTypePresets.MAGNET, position);
         return this;
     }
-
-    #endregion
 
     public ExperimentBuilder WithPhenomenon(ExperimentPhenomenon phenomenon) {
         helper.AddPhenomenon(phenomenon);

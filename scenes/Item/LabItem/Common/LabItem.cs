@@ -4,7 +4,6 @@ using PhantomCamera;
 public partial class LabItem : Interactable {
     private PhantomCamera3D phantomCam;
     private ExperimentManager experimentManager;
-
     [ExportGroup("Teleport Settings")]
     [Export] public bool RegisterToMenu { get; set; } = true;
     [Export] public string ExperimentName { get; set; } = "实验";

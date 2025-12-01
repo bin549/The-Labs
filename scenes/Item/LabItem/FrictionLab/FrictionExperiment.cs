@@ -503,12 +503,10 @@ public partial class FrictionExperiment : LabItem {
                 }
             } else {
                 GD.Print($"[FrictionExperiment] 射线未命中任何物体" + (detailedDebug ? "" : "（右键点击查看详细信息）"));
-
                 if (detailedDebug) {
                     GD.Print($"[FrictionExperiment] 射线起点: {from}, 终点: {to}");
                     GD.Print($"[FrictionExperiment] 鼠标位置: {mousePos}");
                     GD.Print($"[FrictionExperiment] === 开始详细检测 ===");
-
                     bool foundAny = false;
                     for (uint layer = 1; layer <= 32; layer++) {
                         var layerQuery = PhysicsRayQueryParameters3D.Create(from, to);
