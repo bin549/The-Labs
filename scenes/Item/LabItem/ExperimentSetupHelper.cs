@@ -40,9 +40,7 @@ public partial class ExperimentSetupHelper : RefCounted {
 		if (phenomenonManager != null) {
 			phenomenonManager.RegisterItem(item);
 		}
-		
 		items.Add(item);
-		
 		GD.Print($"[ExperimentSetupHelper] 添加物品：{itemName} (类型: {itemType})");
 		return item;
 	}
@@ -80,15 +78,12 @@ public partial class ExperimentSetupHelper : RefCounted {
 	private void CreateDefaultMesh(PlacableItem item, Vector3 size) {
 		var mesh = new MeshInstance3D();
 		mesh.Name = "Mesh";
-		
 		var boxMesh = new BoxMesh();
 		boxMesh.Size = size;
 		mesh.Mesh = boxMesh;
-		
 		var material = new StandardMaterial3D();
 		material.AlbedoColor = item.ItemColor;
 		mesh.MaterialOverride = material;
-		
 		item.AddChild(mesh);
 		mesh.Owner = rootNode.GetTree().EditedSceneRoot;
 	}
@@ -150,8 +145,6 @@ public class ExperimentBuilder {
 	
 	#endregion
 	
-	#region 添加现象的便捷方法
-	
 	public ExperimentBuilder WithPhenomenon(ExperimentPhenomenon phenomenon) {
 		helper.AddPhenomenon(phenomenon);
 		return this;
@@ -181,18 +174,6 @@ public class ExperimentBuilder {
 		helper.AddPhenomenon(PhenomenonPresets.CreateMagnetizationPhenomenon());
 		return this;
 	}
-	
-	public ExperimentBuilder WithAllChemistryPresets() {
-		helper.AddChemistryPresets();
-		return this;
-	}
-	
-	public ExperimentBuilder WithAllPhysicsPresets() {
-		helper.AddPhysicsPresets();
-		return this;
-	}
-	
-	#endregion
 	
 	public void Build() {
 		helper.Finalize();

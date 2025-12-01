@@ -166,7 +166,7 @@ public partial class MoviePlayer : Interactable {
 		if (this.videoPlayer == null || !this.isPaused) return;
 		this.videoPlayer.Paused = false;
 		if (!this.videoPlayer.IsPlaying()) {
-		this.videoPlayer.Play();
+			this.videoPlayer.Play();
 		}
 		this.isPlaying = true;
 		this.isPaused = false;
@@ -445,7 +445,7 @@ public partial class MoviePlayer : Interactable {
 		if (base.gameManager == null || !GodotObject.IsInstanceValid(base.gameManager)) return;
 		if (enabled) {
 			if (base.gameManager.currentInteractable != this) {
-			base.gameManager.SetCurrentInteractable(this);
+				base.gameManager.SetCurrentInteractable(this);
 			}
 		} else if (base.gameManager.currentInteractable == this) {
 			base.gameManager.SetCurrentInteractable(null);
@@ -454,7 +454,7 @@ public partial class MoviePlayer : Interactable {
 
 	private void TogglePlaylistUI(bool visible) {
 		if (this.playlistPanel == null) return;
-		if (isPlaylistVisible == visible) return;
+		if (this.isPlaylistVisible == visible) return;
 		if (visible) {
 			this.ShowPlaylistUI();
 		} else {
@@ -466,8 +466,8 @@ public partial class MoviePlayer : Interactable {
 		if (this.playlistPanel == null) return;
 		this.BuildPlaylistButtons();
 		this.playlistPanel.Visible = true;
-		isPlaylistVisible = true;
-		SetGameInteractionLock(true);
+		this.isPlaylistVisible = true;
+		this.SetGameInteractionLock(true);
 		this.UpdatePlaylistSelection();
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 		GetViewport().SetInputAsHandled();
@@ -476,8 +476,8 @@ public partial class MoviePlayer : Interactable {
 	private void HidePlaylistUI() {
 		if (this.playlistPanel == null) return;
 		this.playlistPanel.Visible = false;
-		isPlaylistVisible = false;
-		SetGameInteractionLock(false);
+		this.isPlaylistVisible = false;
+		this.SetGameInteractionLock(false);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
@@ -548,7 +548,7 @@ public partial class MoviePlayer : Interactable {
 
 	private void EndInteractionSession() {
 		if (base.gameManager != null) {
-		base.gameManager.SetCurrentInteractable(null);
+			base.gameManager.SetCurrentInteractable(null);
 		}
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}

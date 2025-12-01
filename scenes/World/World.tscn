@@ -1,10 +1,10 @@
-[gd_scene load_steps=173 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=176 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
 [ext_resource type="PackedScene" uid="uid://bqudbxql8lbkd" path="res://scenes/Sky/SkyDay.tscn" id="2_u8nga"]
 [ext_resource type="PackedScene" uid="uid://cp8rcnljv3duj" path="res://scenes/Item/Photo/Photo.tscn" id="3_ety44"]
-[ext_resource type="PackedScene" uid="uid://jtliji0ma1xl" path="res://scenes/Item/LabItem/LabItem.tscn" id="3_kurpr"]
+[ext_resource type="PackedScene" uid="uid://jtliji0ma1xl" path="res://scenes/Item/LabItem/Common/LabItem.tscn" id="3_kurpr"]
 [ext_resource type="Script" uid="uid://dxoq13efuokh6" path="res://scenes/Item/Book/BookPickup.cs" id="3_nxajo"]
 [ext_resource type="PackedScene" uid="uid://cht2ry1qh5q0t" path="res://scenes/Item/Gramophone/Gramophone.tscn" id="3_tggud"]
 [ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="4_ef1mk"]
@@ -35,9 +35,9 @@
 [ext_resource type="Texture2D" uid="uid://dusv0g1mrun1h" path="res://assets/WoodObjects/Gltf/WoodenObjects_AORM_MoldWall2.png" id="17_5qnt6"]
 [ext_resource type="Texture2D" uid="uid://pnffpe52hqmt" path="res://assets/WoodObjects/Gltf/WoodenObjects_NORMAL_MoldWall2.png" id="18_fbdsj"]
 [ext_resource type="Script" uid="uid://coc2gkp7w1pxi" path="res://scenes/Item/PaintBoard/PaintBoard.cs" id="19_5qnt6"]
-[ext_resource type="Script" uid="uid://te5tvbm5k7pl" path="res://scenes/Item/LabItem/OhmsLawExperiment.cs" id="19_88vt2"]
-[ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Item/LabItem/FrictionExperiment.cs" id="21_el0ym"]
-[ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Item/LabItem/AluminumReactionExperiment.cs" id="22_g7bw1"]
+[ext_resource type="Script" uid="uid://te5tvbm5k7pl" path="res://scenes/Item/LabItem/OhmsLawLab/OhmsLawExperiment.cs" id="19_88vt2"]
+[ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Item/LabItem/FrictionLab/FrictionExperiment.cs" id="21_el0ym"]
+[ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Item/LabItem/AluminumLab/AluminumReactionExperiment.cs" id="22_g7bw1"]
 [ext_resource type="Script" uid="uid://dvl0x4l10i824" path="res://scenes/ExperimentManager/ExperimentManager.cs" id="23_expman"]
 [ext_resource type="Script" uid="uid://cchf1w2k483wh" path="res://scenes/Item/Connection/ConnectableNode.cs" id="24_connnode"]
 [ext_resource type="Script" uid="uid://dvumky18el73i" path="res://scenes/Item/Connection/ConnectionManager.cs" id="25_connmgr"]
@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://cklfa3h0xah3h" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/floorpattern.glb" id="34_usbto"]
 [ext_resource type="Shader" uid="uid://bi3o8elbtqoni" path="res://addons/simplegrasstextured/shaders/grass.gdshader" id="35_iege6"]
 [ext_resource type="Texture2D" uid="uid://cggex14siiuu6" path="res://assets/images/Grass.png" id="36_iege6"]
+[ext_resource type="Script" uid="uid://djd13x6sqncx0" path="res://scenes/Item/LabItem/Common/PlacableItem.cs" id="36_nndnj"]
 [ext_resource type="Script" uid="uid://2juaclm8gc1n" path="res://addons/simplegrasstextured/grass.gd" id="37_3i1j7"]
 [ext_resource type="Texture2D" uid="uid://cvp2qkrixdnnc" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/wall_001_Wall1t_color.png" id="37_5qnt6"]
 [ext_resource type="Texture2D" uid="uid://c43nyydt5ki6f" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/wall_001_Wall1t_metallic-Wall1t_roughness.png" id="38_fbdsj"]
@@ -858,6 +859,12 @@ size = Vector3(1.325, 0.38, 0.46)
 [sub_resource type="BoxMesh" id="BoxMesh_7y02i"]
 material = SubResource("StandardMaterial3D_gyf3s")
 size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nndnj"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nndnj"]
+size = Vector3(0.2, 0.2, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o5rrj"]
 render_priority = 0
@@ -2308,10 +2315,11 @@ curve = SubResource("Curve3D_4h21d")
 [node name="FrictionLabItem" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -30.734667, 0.5, -14.818308)
 script = ExtResource("21_el0ym")
-ExperimentUIPanelPath = null
-ForceMeterPath = null
 SurfacePlatformPath = null
-BlockPaths = Array[NodePath]([])
+DraggableObjectPaths = Array[NodePath]([])
+GridSize = 0.5
+EnableGridSnapping = false
+DragPlane = 1
 ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
 TeleportPosition = NodePath("TeleportPos")
@@ -2344,8 +2352,21 @@ mesh = SubResource("PrismMesh_gyf3s")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Labs/FrictionLabItem"]
 transform = Transform3D(0.92718387, 0.37460658, -3.1829082e-09, -0.37460658, 0.92718387, -1.637457e-08, -3.1828833e-09, 1.6374573e-08, 1, -0.6999998, 0.79999995, 0)
 mesh = SubResource("BoxMesh_7y02i")
+script = ExtResource("36_nndnj")
 
-[node name="AluminumLabItem" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Labs/FrictionLabItem"]
+transform = Transform3D(1, 0, -3.5527137e-15, 0, 1, 0, 3.5527137e-15, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_nndnj")
+script = ExtResource("36_nndnj")
+ItemColor = Color(0, 0, 0, 1)
+CollisionAreaPath = NodePath("CollisionArea")
+
+[node name="CollisionArea" type="Area3D" parent="Labs/FrictionLabItem/MeshInstance3D3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/FrictionLabItem/MeshInstance3D3/CollisionArea"]
+shape = SubResource("BoxShape3D_nndnj")
+
+[node name="AluminumLabItem" parent="Labs" instance=ExtResource("3_kurpr")]
 transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -29.766123, 0.5, -31.634695)
 script = ExtResource("22_g7bw1")
 ExperimentUIPanelPath = null
@@ -2355,7 +2376,6 @@ TestTubePath = null
 BubbleEffectPath = null
 ExperimentName = "铝和氢氧化钠反应实验"
 ExperimentCategory = 2
-TeleportPosition = NodePath("TeleportPos")
 DisplayName = "铝和氢氧化钠反应实验"
 outlineMat = SubResource("ShaderMaterial_o5rrj")
 OutlineTargetPaths = Array[NodePath]([])
@@ -2410,7 +2430,7 @@ libraries = {
 }
 autoplay = "new_animation"
 
-[node name="LabItem3" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
+[node name="ForceLab" parent="Labs" instance=ExtResource("3_kurpr")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -25.598465, 0.5, -21.334694)
 script = ExtResource("22_g7bw1")
 ExperimentUIPanelPath = null
@@ -2419,26 +2439,25 @@ NaOHSolutionPath = null
 TestTubePath = null
 BubbleEffectPath = null
 ExperimentName = "牛顿定律实验"
-TeleportPosition = NodePath("TeleportPos")
 DisplayName = "牛顿定律实验"
 outlineMat = SubResource("ShaderMaterial_o5rrj")
 OutlineTargetPaths = Array[NodePath]([])
 
-[node name="NameLabel" parent="Labs/LabItem3" index="0"]
+[node name="NameLabel" parent="Labs/ForceLab" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5611017, 0)
 
-[node name="PhantomCamera3D" parent="Labs/LabItem3" index="1"]
+[node name="PhantomCamera3D" parent="Labs/ForceLab" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
 
-[node name="linePointAPath" parent="Labs/LabItem3/lineNode" index="0"]
+[node name="linePointAPath" parent="Labs/ForceLab/lineNode" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5218554, 1.4901161e-08)
 
-[node name="TeleportPos" parent="Labs/LabItem3" index="4"]
+[node name="TeleportPos" parent="Labs/ForceLab" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3268166)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Labs/LabItem3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Labs/ForceLab"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/LabItem3/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/ForceLab/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("BoxShape3D_xyyef")
 
@@ -2623,7 +2642,6 @@ pauseMenu = NodePath("../PauseMenu")
 
 [node name="ExperimentManager" type="Node" parent="."]
 script = ExtResource("23_expman")
-metadata/_edit_lock_ = true
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("gameManager") instance=ExtResource("13_bbv3w")]
 gameManager = NodePath("../GameManager")
@@ -3308,5 +3326,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1794524, 0.18144058, -3.938
 [editable path="Labs/OhmsLawLabItem"]
 [editable path="Labs/FrictionLabItem"]
 [editable path="Labs/AluminumLabItem"]
-[editable path="Labs/LabItem3"]
+[editable path="Labs/ForceLab"]
 [editable path="Player"]

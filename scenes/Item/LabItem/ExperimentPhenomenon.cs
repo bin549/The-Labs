@@ -85,7 +85,6 @@ public partial class ExperimentPhenomenonManager : Node {
 		if (item == null) return;
 		item.OnItemPlaced += (placedItem, position) => OnItemPlaced(placedItem);
 		item.OnItemOverlapStarted += (item1, item2) => CheckPhenomena(item1);
-		
 		GD.Print($"[PhenomenonManager] 注册物品：{item.ItemName}");
 	}
 	
@@ -95,9 +94,7 @@ public partial class ExperimentPhenomenonManager : Node {
 	
 	public void CheckPhenomena(PlacableItem item) {
 		if (item == null || Phenomena.Count == 0) return;
-		
 		var overlappingItems = item.GetOverlappingItems();
-		
 		foreach (var phenomenon in Phenomena) {
 			if (phenomenon.CheckTriggerCondition(item, overlappingItems)) {
 				TriggerPhenomenon(phenomenon, item);
@@ -137,7 +134,6 @@ public partial class ExperimentPhenomenonManager : Node {
 		if (phenomenon.PlaySound && phenomenon.SoundEffect != null) {
 			PlaySoundEffect(phenomenon.SoundEffect, position);
 		}
-		
 		if (phenomenon.ShowMessage && !string.IsNullOrEmpty(phenomenon.ResultMessage)) {
 			ShowMessage(phenomenon.ResultMessage, position);
 		}

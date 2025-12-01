@@ -6,12 +6,10 @@ public partial class PlacableItem : Node3D {
 	[Export] public string ItemName { get; set; } = "实验物品";
 	[Export] public string ItemType { get; set; } = "default";
 	[Export] public Color ItemColor { get; set; } = Colors.White;
-	
 	[ExportGroup("拖拽设置")]
 	[Export] public bool IsDraggable { get; set; } = true;
 	[Export] public float DragHeight { get; set; } = 0.0f; 
 	[Export] public bool KeepOriginalHeight { get; set; } = true;
-	
 	[ExportGroup("视觉设置")]
 	[Export] public NodePath MeshPath { get; set; }
 	[Export] public float HoverBrightness { get; set; } = 0.3f;
@@ -64,8 +62,6 @@ public partial class PlacableItem : Node3D {
 		}
 	}
 	
-	#region 拖拽功能
-	
 	private void StartDrag() {
 		isDragging = true;
 		if (camera != null) {
@@ -112,19 +108,12 @@ public partial class PlacableItem : Node3D {
 		CheckOverlappingPhenomena();
 	}
 	
-	#endregion
-	
-	#region 碰撞检测
-	
 	private void SetupCollisionArea() {
 		if (!string.IsNullOrEmpty(CollisionAreaPath?.ToString())) {
 			collisionArea = GetNodeOrNull<Area3D>(CollisionAreaPath);
 		}
 		if (collisionArea == null) {
 			collisionArea = GetNodeOrNull<Area3D>("CollisionArea");
-		}
-		if (collisionArea == null && AutoCreateCollisionArea) {
-			CreateDefaultCollisionArea();
 		}
 		if (collisionArea != null) {
 			collisionArea.AreaEntered += OnAreaEntered;
@@ -137,18 +126,6 @@ public partial class PlacableItem : Node3D {
 			collisionArea.Monitoring = true;
 			collisionArea.InputRayPickable = true;
 		}
-	}
-	
-	private void CreateDefaultCollisionArea() {
-		collisionArea = new Area3D();
-		collisionArea.Name = "CollisionArea";
-		AddChild(collisionArea);
-		collisionShape = new CollisionShape3D();
-		var boxShape = new BoxShape3D();
-		boxShape.Size = new Vector3(0.2f, 0.2f, 0.2f); // 默认大小
-		collisionShape.Shape = boxShape;
-		collisionArea.AddChild(collisionShape);
-		GD.Print($"[PlacableItem] 为 {ItemName} 自动创建碰撞区域");
 	}
 	
 	private void OnAreaEntered(Area3D area) {
@@ -174,13 +151,8 @@ public partial class PlacableItem : Node3D {
 	private void CheckOverlappingPhenomena() {
 		if (overlappingItems.Count > 0) {
 			GD.Print($"[PlacableItem] {ItemName} 检测到 {overlappingItems.Count} 个重叠物品");
-			// 可以在这里触发现象检测
 		}
 	}
-	
-	#endregion
-	
-	#region 鼠标交互
 	
 	private void OnMouseEnter() {
 		if (!isDragging) {
@@ -199,10 +171,6 @@ public partial class PlacableItem : Node3D {
 	public void _OnArea3DMouseExited() {
 		OnMouseExit();
 	}
-	
-	#endregion
-	
-	#region 视觉效果
 	
 	private void ResolveMesh() {
 		if (!string.IsNullOrEmpty(MeshPath?.ToString())) {
@@ -248,10 +216,6 @@ public partial class PlacableItem : Node3D {
 		}
 	}
 	
-	#endregion
-	
-	#region 公共方法
-	
 	public void ResetPosition() {
 		GlobalPosition = originalPosition;
 		GD.Print($"[PlacableItem] 重置 {ItemName} 位置");
@@ -278,6 +242,4 @@ public partial class PlacableItem : Node3D {
 		}
 		return null;
 	}
-	#endregion
 }
-

@@ -19,7 +19,7 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	
 	public override void _Ready() {
 		base._Ready();
-		InitializePhenomenonManager();
+		this.InitializePhenomenonManager();
 		CollectPlacableItems();
 		InitializeUI();
 		if (Phenomena.Count == 0) {
@@ -81,7 +81,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		item.OnItemPlaced += OnItemPlaced;
 		item.OnItemOverlapStarted += OnItemOverlapStarted;
 		item.OnItemOverlapEnded += OnItemOverlapEnded;
-		
 		GD.Print($"[ExampleExperiment] 注册物品：{item.ItemName} (类型: {item.ItemType})");
 	}
 	
