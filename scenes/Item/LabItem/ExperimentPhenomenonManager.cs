@@ -1,5 +1,4 @@
 ﻿using Godot;
-using System;
 using System.Collections.Generic;
 
 
@@ -8,15 +7,14 @@ public partial class ExperimentPhenomenonManager : Node {
     [Export] public Node3D EffectsParent { get; set; }
     [Signal]
     public delegate void OnPhenomenonTriggeredEventHandler(ExperimentPhenomenon phenomenon, PlacableItem triggerItem);
-
     private Dictionary<string, Timer> activeTimers = new();
     private Dictionary<string, Node3D> activeEffects = new();
     private AudioStreamPlayer3D audioPlayer;
     private Label3D messageLabel;
 
     public override void _Ready() {
-        InitializeAudioPlayer();
-        InitializeMessageLabel();
+        this.InitializeAudioPlayer();
+        this.InitializeMessageLabel();
     }
 
     private void InitializeAudioPlayer() {

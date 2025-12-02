@@ -6,7 +6,6 @@ public partial class MoviePlayer : Interactable {
     [Export]
     public NodePath VideoPlayerPath { get; set; } =
         new NodePath("../SubViewport/SubViewportContainer/VideoStreamPlayer");
-
     [Export] public bool ResetOnStop { get; set; } = true;
     [Export] public bool HideScreenOnStop { get; set; } = true;
     [Export] public string PlayActionText { get; set; } = "播放影片";

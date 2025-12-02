@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public partial class ConnectionManager : Node3D {
     [Export] public float MaxRaycastDistance { get; set; } = 100f;
-    private ConnectableNode _selectedNode = null;
-    private List<IConnectionLine> _connections = new List<IConnectionLine>();
-    private IConnectionLine _hoveredLine = null;
-    private Camera3D _camera;
+    private ConnectableNode selectedNode = null;
+    private List<IConnectionLine> connections = new List<IConnectionLine>();
+    private IConnectionLine hoveredLine = null;
+    private Camera3D camera;
 
     public override void _Ready() {
-        _camera = GetViewport().GetCamera3D();
+        this.camera = GetViewport().GetCamera3D();
     }
 
     public override void _Input(InputEvent @event) {
@@ -29,9 +29,9 @@ public partial class ConnectionManager : Node3D {
         var rayResult = PerformRaycast(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             GD.Print("射线未击中任何物体");
-            if (_selectedNode != null) {
-                _selectedNode.IsSelected = false;
-                _selectedNode = null;
+            if (this.selectedNode != null) {
+                this.selectedNode.IsSelected = false;
+                this.selectedNode = null;
                 GD.Print("取消选择");
             }
             return;
@@ -71,8 +71,8 @@ public partial class ConnectionManager : Node3D {
             RemoveConnection(line);
         } else {
             GD.Print("✗ 未找到连线（FindConnectionLine 返回 null）");
-            GD.Print($"当前共有 {_connections.Count} 条连线");
-            foreach (var conn in _connections) {
+            GD.Print($"当前共有 {this.connections.Count} 条连线");
+            foreach (var conn in this.connections) {
                 if (conn is Node3D node) {
                     GD.Print($"  - 连线: {node.Name}");
                 }
@@ -82,9 +82,9 @@ public partial class ConnectionManager : Node3D {
 
     private void HandleMouseMotion(Vector2 mousePos) {
         var rayResult = PerformRaycastForLines(mousePos);
-        if (_hoveredLine != null) {
-            _hoveredLine.OnHoverExit();
-            _hoveredLine = null;
+        if (this.hoveredLine != null) {
+            this.hoveredLine.OnHoverExit();
+            this.hoveredLine = null;
         }
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             return;
@@ -93,30 +93,30 @@ public partial class ConnectionManager : Node3D {
         if (collider == null) return;
         var line = FindConnectionLine(collider);
         if (line != null) {
-            _hoveredLine = line;
-            _hoveredLine.OnHoverEnter();
+            this.hoveredLine = line;
+            this.hoveredLine.OnHoverEnter();
         }
     }
 
     public void OnNodeClicked(ConnectableNode clickedNode) {
-        if (_selectedNode == null) {
-            _selectedNode = clickedNode;
-            _selectedNode.IsSelected = true;
-            GD.Print($"✓ 选中节点: {_selectedNode.Name}");
-        } else if (_selectedNode == clickedNode) {
-            _selectedNode.IsSelected = false;
-            GD.Print($"✓ 取消选中: {_selectedNode.Name}");
-            _selectedNode = null;
+        if (this.selectedNode == null) {
+            this.selectedNode = clickedNode;
+            this.selectedNode.IsSelected = true;
+            GD.Print($"✓ 选中节点: {this.selectedNode.Name}");
+        } else if (this.selectedNode == clickedNode) {
+            this.selectedNode.IsSelected = false;
+            GD.Print($"✓ 取消选中: {this.selectedNode.Name}");
+            this.selectedNode = null;
         } else {
-            GD.Print($"✓ 创建连线: {_selectedNode.Name} -> {clickedNode.Name}");
-            this.CreateConnection(_selectedNode, clickedNode);
-            _selectedNode.IsSelected = false;
-            _selectedNode = null;
+            GD.Print($"✓ 创建连线: {this.selectedNode.Name} -> {clickedNode.Name}");
+            this.CreateConnection(this.selectedNode, clickedNode);
+            this.selectedNode.IsSelected = false;
+            this.selectedNode = null;
         }
     }
 
     private void CreateConnection(ConnectableNode startNode, ConnectableNode endNode) {
-        foreach (var conn in _connections) {
+        foreach (var conn in this.connections) {
             if ((conn.StartNode == startNode && conn.EndNode == endNode) ||
                 (conn.StartNode == endNode && conn.EndNode == startNode)) {
                 GD.Print("连线已存在");
@@ -131,23 +131,23 @@ public partial class ConnectionManager : Node3D {
         AddChild(line);
         line.Owner = GetTree().EditedSceneRoot;
         line.Initialize(startNode, endNode);
-        _connections.Add(line);
+        this.connections.Add(line);
         GD.Print($"创建连线: {startNode.Name} -> {endNode.Name}");
     }
 
     private void RemoveConnection(IConnectionLine line) {
-        _connections.Remove(line);
+        this.connections.Remove(line);
         line.Destroy();
         GD.Print("删除连线");
     }
 
     private Godot.Collections.Dictionary PerformRaycast(Vector2 screenPos) {
-        if (_camera == null) {
-            _camera = GetViewport().GetCamera3D();
-            if (_camera == null) return null;
+        if (this.camera == null) {
+            this.camera = GetViewport().GetCamera3D();
+            if (this.camera == null) return null;
         }
-        var from = _camera.ProjectRayOrigin(screenPos);
-        var to = from + _camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
+        var from = this.camera.ProjectRayOrigin(screenPos);
+        var to = from + this.camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;
@@ -156,15 +156,15 @@ public partial class ConnectionManager : Node3D {
     }
 
     private Godot.Collections.Dictionary PerformRaycastForLines(Vector2 screenPos) {
-        if (_camera == null) {
-            _camera = GetViewport().GetCamera3D();
-            if (_camera == null) {
+        if (this.camera == null) {
+            this.camera = GetViewport().GetCamera3D();
+            if (this.camera == null) {
                 GD.Print("  [射线检测] 相机为 null");
                 return null;
             }
         }
-        var from = _camera.ProjectRayOrigin(screenPos);
-        var to = from + _camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
+        var from = this.camera.ProjectRayOrigin(screenPos);
+        var to = from + this.camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;

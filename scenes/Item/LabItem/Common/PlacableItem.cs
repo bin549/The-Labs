@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class PlacableItem : Node3D {
 	[ExportGroup("物品属性")]

@@ -5,8 +5,8 @@ public partial class ConnectableNode : Node3D {
     [Export] public Color SelectedColor { get; set; } = Colors.Yellow;
     [Export] public Color ConnectedColor { get; set; } = Colors.Green;
     private bool isSelected = false;
-    private MeshInstance3D _meshInstance;
-    private StandardMaterial3D _material;
+    private MeshInstance3D meshInstance;
+    private StandardMaterial3D material;
 
     public bool IsSelected {
         get => this.isSelected;
@@ -19,29 +19,29 @@ public partial class ConnectableNode : Node3D {
     public override void _Ready() {
         this.EnsurePhysicsBody();
         this.SetupCollisionLayers();
-        _meshInstance = GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
-        if (_meshInstance == null) {
+        this.meshInstance = GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
+        if (this.meshInstance == null) {
             foreach (var child in GetChildren()) {
                 if (child is MeshInstance3D mesh) {
-                    _meshInstance = mesh;
+                    this.meshInstance = mesh;
                     break;
                 }
             }
         }
-        if (_meshInstance == null) {
-            _meshInstance = new MeshInstance3D();
+        if (this.meshInstance == null) {
+            this.meshInstance = new MeshInstance3D();
             var sphereMesh = new SphereMesh();
             sphereMesh.Radius = 0.15f;
             sphereMesh.Height = 0.3f;
-            _meshInstance.Mesh = sphereMesh;
-            AddChild(_meshInstance);
+            this.meshInstance.Mesh = sphereMesh;
+            AddChild(this.meshInstance);
             if (GetTree()?.EditedSceneRoot != null)
-                _meshInstance.Owner = GetTree().EditedSceneRoot;
+                this.meshInstance.Owner = GetTree().EditedSceneRoot;
         }
-        _material = new StandardMaterial3D();
-        _material.AlbedoColor = NormalColor;
-        if (_meshInstance != null) {
-            _meshInstance.MaterialOverride = _material;
+        this.material = new StandardMaterial3D();
+        this.material.AlbedoColor = NormalColor;
+        if (this.meshInstance != null) {
+            this.meshInstance.MaterialOverride = this.material;
         }
         GD.Print($"ConnectableNode {Name} 已初始化");
     }
@@ -115,11 +115,11 @@ public partial class ConnectableNode : Node3D {
     }
 
     public void UpdateColor() {
-        if (_material == null) return;
+        if (this.material == null) return;
         if (this.isSelected) {
-            _material.AlbedoColor = SelectedColor;
+            this.material.AlbedoColor = SelectedColor;
         } else {
-            _material.AlbedoColor = NormalColor;
+            this.material.AlbedoColor = NormalColor;
         }
     }
 
