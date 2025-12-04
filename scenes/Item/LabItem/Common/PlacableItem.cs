@@ -100,7 +100,7 @@ public partial class PlacableItem : Node3D {
 		EmitSignal(SignalName.OnItemDragEnded, this);
 		EmitSignal(SignalName.OnItemPlaced, this, GlobalPosition);
 		GD.Print($"[PlacableItem] 放置物品：{ItemName} at {GlobalPosition}");
-		CheckOverlappingPhenomena();
+		this.CheckOverlappingPhenomena();
 	}
 	
 	private void SetupCollisionArea() {
@@ -126,8 +126,8 @@ public partial class PlacableItem : Node3D {
 	private void OnAreaEntered(Area3D area) {
 		var otherItem = area.GetParent() as PlacableItem;
 		if (otherItem != null && otherItem != this) {
-			if (!overlappingItems.Contains(otherItem)) {
-				overlappingItems.Add(otherItem);
+			if (!this.overlappingItems.Contains(otherItem)) {
+				this.overlappingItems.Add(otherItem);
 				EmitSignal(SignalName.OnItemOverlapStarted, this, otherItem);
 				GD.Print($"[PlacableItem] {ItemName} 与 {otherItem.ItemName} 开始重叠");
 			}
@@ -136,16 +136,16 @@ public partial class PlacableItem : Node3D {
 	
 	private void OnAreaExited(Area3D area) {
 		var otherItem = area.GetParent() as PlacableItem;
-		if (otherItem != null && overlappingItems.Contains(otherItem)) {
-			overlappingItems.Remove(otherItem);
+		if (otherItem != null && this.overlappingItems.Contains(otherItem)) {
+			this.overlappingItems.Remove(otherItem);
 			EmitSignal(SignalName.OnItemOverlapEnded, this, otherItem);
 			GD.Print($"[PlacableItem] {ItemName} 与 {otherItem.ItemName} 结束重叠");
 		}
 	}
 	
 	private void CheckOverlappingPhenomena() {
-		if (overlappingItems.Count > 0) {
-			GD.Print($"[PlacableItem] {ItemName} 检测到 {overlappingItems.Count} 个重叠物品");
+		if (this.overlappingItems.Count > 0) {
+			GD.Print($"[PlacableItem] {ItemName} 检测到 {this.overlappingItems.Count} 个重叠物品");
 		}
 	}
 	
@@ -217,11 +217,11 @@ public partial class PlacableItem : Node3D {
 	}
 	
 	public Godot.Collections.Array<PlacableItem> GetOverlappingItems() {
-		return new Godot.Collections.Array<PlacableItem>(overlappingItems);
+		return new Godot.Collections.Array<PlacableItem>(this.overlappingItems);
 	}
 	
 	public bool IsOverlappingWithType(string itemType) {
-		foreach (var item in overlappingItems) {
+		foreach (var item in this.overlappingItems) {
 			if (item.ItemType == itemType) {
 				return true;
 			}
@@ -230,7 +230,7 @@ public partial class PlacableItem : Node3D {
 	}
 	
 	public PlacableItem GetOverlappingItemByType(string itemType) {
-		foreach (var item in overlappingItems) {
+		foreach (var item in this.overlappingItems) {
 			if (item.ItemType == itemType) {
 				return item;
 			}

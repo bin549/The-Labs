@@ -1,6 +1,5 @@
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class ExperimentManager : Node {
     [Export] public NodePath PlayerPath { get; set; }
@@ -22,7 +21,7 @@ public partial class ExperimentManager : Node {
     }
 
     public override void _PhysicsProcess(double delta) {
-        if (gameManager == null || !GodotObject.IsInstanceValid(gameManager)) {
+        if (this.gameManager == null || !GodotObject.IsInstanceValid(this.gameManager)) {
             this.ResolveGameManager();
         }
     }
@@ -32,7 +31,7 @@ public partial class ExperimentManager : Node {
             this.ToggleExperimentMenu();
             GetViewport().SetInputAsHandled();
         }
-        if (isMenuVisible && (@event.IsActionPressed("ui_cancel") || @event.IsActionPressed("pause"))) {
+        if (this.isMenuVisible && (@event.IsActionPressed("ui_cancel") || @event.IsActionPressed("pause"))) {
             this.HideExperimentMenu();
             GetViewport().SetInputAsHandled();
         }
@@ -40,33 +39,33 @@ public partial class ExperimentManager : Node {
 
     private void ResolvePlayer() {
         if (!string.IsNullOrEmpty(PlayerPath?.ToString())) {
-            player = GetNodeOrNull<Node3D>(PlayerPath);
+            this.player = GetNodeOrNull<Node3D>(PlayerPath);
         }
-        if (player == null) {
-            player = GetTree().Root.FindChild("Player", true, false) as Node3D;
+        if (this.player == null) {
+            this.player = GetTree().Root.FindChild("Player", true, false) as Node3D;
         }
-        if (player == null) {
+        if (this.player == null) {
             GD.PushWarning("ExperimentManager: 未找到Player节点，传送功能将不可用。");
         }
     }
 
     private void ResolveGameManager() {
-        gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
+        this.gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
                       GetTree().Root.FindChild("GameManager", true, false) as GameManager;
-        if (gameManager == null) {
+        if (this.gameManager == null) {
             GD.PushWarning("ExperimentManager: 未找到GameManager节点，菜单显示时摄像头控制可能无法禁用。");
         }
     }
 
     private void CreateExperimentMenu() {
-        experimentMenu = new PanelContainer();
-        experimentMenu.Name = "ExperimentMenu";
-        experimentMenu.Visible = false;
-        experimentMenu.SetAnchorsPreset(Control.LayoutPreset.Center);
-        experimentMenu.CustomMinimumSize = new Vector2(600, 400);
-        experimentMenu.Position = new Vector2(-300, -200);
+        this.experimentMenu = new PanelContainer();
+        this.experimentMenu.Name = "ExperimentMenu";
+        this.experimentMenu.Visible = false;
+        this.experimentMenu.SetAnchorsPreset(Control.LayoutPreset.Center);
+        this.experimentMenu.CustomMinimumSize = new Vector2(600, 400);
+        this.experimentMenu.Position = new Vector2(-300, -200);
         var mainVBox = new VBoxContainer();
-        experimentMenu.AddChild(mainVBox);
+        this.experimentMenu.AddChild(mainVBox);
         var titleLabel = new Label();
         titleLabel.Text = "实验选择菜单";
         titleLabel.HorizontalAlignment = HorizontalAlignment.Center;
@@ -83,14 +82,14 @@ public partial class ExperimentManager : Node {
         var scrollContainer = new ScrollContainer();
         scrollContainer.CustomMinimumSize = new Vector2(0, 300);
         mainVBox.AddChild(scrollContainer);
-        categoryContainer = new VBoxContainer();
-        scrollContainer.AddChild(categoryContainer);
+        this.categoryContainer = new VBoxContainer();
+        scrollContainer.AddChild(this.categoryContainer);
         mainVBox.AddChild(new HSeparator());
         var closeButton = new Button();
         closeButton.Text = "关闭 (ESC)";
         closeButton.Pressed += HideExperimentMenu;
         mainVBox.AddChild(closeButton);
-        AddChild(experimentMenu);
+        AddChild(this.experimentMenu);
     }
 
     private void CategorizeExperiments() {
@@ -106,8 +105,8 @@ public partial class ExperimentManager : Node {
     }
 
     private void UpdateMenuUI() {
-        if (categoryContainer == null) return;
-        foreach (var child in categoryContainer.GetChildren()) {
+        if (this.categoryContainer == null) return;
+        foreach (var child in this.categoryContainer.GetChildren()) {
             child.QueueFree();
         }
         var categoryNames = new Dictionary<ExperimentCategory, string> {
@@ -127,12 +126,12 @@ public partial class ExperimentManager : Node {
             categoryLabel.Text = $"【{categoryNames[category]}】";
             categoryLabel.AddThemeColorOverride("font_color", categoryColors[category]);
             categoryLabel.AddThemeFontSizeOverride("font_size", 24);
-            categoryContainer.AddChild(categoryLabel);
+            this.categoryContainer.AddChild(categoryLabel);
             foreach (var exp in experiments) {
                 var expButton = CreateExperimentButton(exp);
-                categoryContainer.AddChild(expButton);
+                this.categoryContainer.AddChild(expButton);
             }
-            categoryContainer.AddChild(new HSeparator());
+            this.categoryContainer.AddChild(new HSeparator());
         }
     }
 
@@ -157,8 +156,8 @@ public partial class ExperimentManager : Node {
 
     private void OnExperimentSelected(ExperimentInfo exp) {
         GD.Print($"选择实验：{exp.ExperimentName}");
-        if (player != null && exp.Position != Vector3.Zero) {
-            player.GlobalPosition = exp.Position;
+        if (this.player != null && exp.Position != Vector3.Zero) {
+            this.player.GlobalPosition = exp.Position;
             GD.Print($"传送到位置：{exp.Position}");
         }
         HideExperimentMenu();
@@ -166,7 +165,7 @@ public partial class ExperimentManager : Node {
     }
 
     private void ToggleExperimentMenu() {
-        if (isMenuVisible) {
+        if (this.isMenuVisible) {
             this.HideExperimentMenu();
         } else {
             this.ShowExperimentMenu();
@@ -174,22 +173,22 @@ public partial class ExperimentManager : Node {
     }
 
     private void ShowExperimentMenu() {
-        if (experimentMenu == null) return;
-        experimentMenu.Visible = true;
-        isMenuVisible = true;
+        if (this.experimentMenu == null) return;
+        this.experimentMenu.Visible = true;
+        this.isMenuVisible = true;
         Input.MouseMode = Input.MouseModeEnum.Visible;
-        if (gameManager != null) {
-            gameManager.IsMenuOpen = true;
+        if (this.gameManager != null) {
+            this.gameManager.IsMenuOpen = true;
         }
     }
 
     private void HideExperimentMenu() {
-        if (experimentMenu == null) return;
-        experimentMenu.Visible = false;
-        isMenuVisible = false;
+        if (this.experimentMenu == null) return;
+        this.experimentMenu.Visible = false;
+        this.isMenuVisible = false;
         Input.MouseMode = Input.MouseModeEnum.Captured;
-        if (gameManager != null) {
-            gameManager.IsMenuOpen = false;
+        if (this.gameManager != null) {
+            this.gameManager.IsMenuOpen = false;
         }
     }
 

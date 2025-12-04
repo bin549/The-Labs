@@ -81,7 +81,6 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		GD.Print($"[ExampleExperiment] 注册物品：{item.ItemName} (类型: {item.ItemType})");
 	}
 	
-	
 	private void InitializeUI() {
 		if (!string.IsNullOrEmpty(ExperimentUIPanelPath?.ToString())) {
 			experimentUIPanel = GetNodeOrNull<Control>(ExperimentUIPanelPath);

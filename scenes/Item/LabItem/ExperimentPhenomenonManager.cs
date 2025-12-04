@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public partial class ExperimentPhenomenonManager : Node {
     [Export] public Godot.Collections.Array<ExperimentPhenomenon> Phenomena { get; set; } = new();
     [Export] public Node3D EffectsParent { get; set; }
-    [Signal]
-    public delegate void OnPhenomenonTriggeredEventHandler(ExperimentPhenomenon phenomenon, PlacableItem triggerItem);
+    [Signal] public delegate void OnPhenomenonTriggeredEventHandler(ExperimentPhenomenon phenomenon, PlacableItem triggerItem);
     private Dictionary<string, Timer> activeTimers = new();
     private Dictionary<string, Node3D> activeEffects = new();
     private AudioStreamPlayer3D audioPlayer;
@@ -63,21 +62,21 @@ public partial class ExperimentPhenomenonManager : Node {
         }
         GD.Print($"[PhenomenonManager] 触发现象：{phenomenon.PhenomenonName}");
         EmitSignal(SignalName.OnPhenomenonTriggered, phenomenon, triggerItem);
-        if (phenomenon.TriggerDelay > 0) {
-            var timer = new Timer();
-            timer.WaitTime = phenomenon.TriggerDelay;
-            timer.OneShot = true;
-            timer.Timeout += () => {
-                ExecutePhenomenon(phenomenon, triggerItem);
-                activeTimers.Remove(key);
-                timer.QueueFree();
-            };
-            AddChild(timer);
-            activeTimers[key] = timer;
-            timer.Start();
-        } else {
-            ExecutePhenomenon(phenomenon, triggerItem);
-        }
+        if (phenomenon.TriggerDelay <= 0) {
+            this.ExecutePhenomenon(phenomenon, triggerItem);
+            return;
+        } 
+        var timer = new Timer();
+        timer.WaitTime = phenomenon.TriggerDelay;
+        timer.OneShot = true;
+        timer.Timeout += () => {
+            this.ExecutePhenomenon(phenomenon, triggerItem);
+            activeTimers.Remove(key);
+            timer.QueueFree();
+        };
+        AddChild(timer);
+        activeTimers[key] = timer;
+        timer.Start();
     }
 
     private void ExecutePhenomenon(ExperimentPhenomenon phenomenon, PlacableItem triggerItem) {
@@ -90,7 +89,7 @@ public partial class ExperimentPhenomenonManager : Node {
         }
         if (phenomenon.ShowMessage && !string.IsNullOrEmpty(phenomenon.ResultMessage)) {
             ShowMessage(phenomenon.ResultMessage, position);
-        }
+        }   
         if (phenomenon.ProduceNewItem && phenomenon.ProducedItemScene != null) {
             ProduceNewItem(phenomenon.ProducedItemScene, position);
         }

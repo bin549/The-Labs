@@ -63,7 +63,7 @@ public partial class Interactable : Node3D {
 
     public override void _Process(double delta) {
         if (useCurvedArrow) {
-            UpdateCurvedArrow();
+            this.UpdateCurvedArrow();
             if (lineRoot != null) lineRoot.Visible = false;
         } else {
             if (curveRoot != null) curveRoot.Visible = false;
@@ -351,10 +351,10 @@ public partial class Interactable : Node3D {
     }
 
     private void InitDialoguePlayer() {
-        dialogueAudioPlayer = new AudioStreamPlayer();
-        dialogueAudioPlayer.Name = "DialogueAudioPlayer";
-        dialogueAudioPlayer.Bus = "Master";
-        AddChild(dialogueAudioPlayer);
+        this.dialogueAudioPlayer = new AudioStreamPlayer();
+        this.dialogueAudioPlayer.Name = "DialogueAudioPlayer";
+        this.dialogueAudioPlayer.Bus = "Master";
+        AddChild(this.dialogueAudioPlayer);
         dialogueTimer = new Timer();
         dialogueTimer.Name = "DialogueTimer";
         dialogueTimer.OneShot = true;
@@ -363,10 +363,10 @@ public partial class Interactable : Node3D {
     }
 
     private void PlayDialogue(bool isEnterInteraction) {
-        if (Dialogues == null || Dialogues.Count == 0) return;
+        if (this.Dialogues == null || this.Dialogues.Count == 0) return;
         var matchingDialogues = new List<int>();
-        for (int i = 0; i < Dialogues.Count; i++) {
-            var entry = Dialogues[i];
+        for (int i = 0; i < this.Dialogues.Count; i++) {
+            var entry = this.Dialogues[i];
             if (entry != null && entry.PlayBeforeInteraction == isEnterInteraction) {
                 matchingDialogues.Add(i);
             }
@@ -383,15 +383,15 @@ public partial class Interactable : Node3D {
                 this.currentDialogueIndex = matchingDialogues[nextPos];
             }
         }
-        var dialogue = Dialogues[this.currentDialogueIndex];
+        var dialogue = this.Dialogues[this.currentDialogueIndex];
         if (dialogue == null) return;
-        if (dialogue.Audio != null && dialogueAudioPlayer != null) {
-            dialogueAudioPlayer.Stream = dialogue.Audio;
-            dialogueAudioPlayer.Play();
+        if (dialogue.Audio != null && this.dialogueAudioPlayer != null) {
+            this.dialogueAudioPlayer.Stream = dialogue.Audio;
+            this.dialogueAudioPlayer.Play();
         }
         if (!string.IsNullOrEmpty(dialogue.Text)) {
             this.ShowDialogue(dialogue.Text);
-            GD.Print($"[{DisplayName}] 对话 {this.currentDialogueIndex + 1}/{Dialogues.Count}: {dialogue.Text}");
+            GD.Print($"[{DisplayName}] 对话 {this.currentDialogueIndex + 1}/{this.Dialogues.Count}: {dialogue.Text}");
         }
     }
 
@@ -443,16 +443,16 @@ public partial class Interactable : Node3D {
     }
 
     public DialogueEntry GetCurrentDialogue() {
-        if (Dialogues == null || Dialogues.Count == 0 || this.currentDialogueIndex < 0 ||
-            this.currentDialogueIndex >= Dialogues.Count) {
+        if (this.Dialogues == null || this.Dialogues.Count == 0 || this.currentDialogueIndex < 0 ||
+            this.currentDialogueIndex >= this.Dialogues.Count) {
             return null;
         }
-        return Dialogues[this.currentDialogueIndex];
+        return this.Dialogues[this.currentDialogueIndex];
     }
 
     public void StopDialogueAudio() {
-        if (dialogueAudioPlayer != null && dialogueAudioPlayer.Playing) {
-            dialogueAudioPlayer.Stop();
+        if (this.dialogueAudioPlayer != null && this.dialogueAudioPlayer.Playing) {
+            this.dialogueAudioPlayer.Stop();
         }
     }
 }

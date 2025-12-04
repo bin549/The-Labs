@@ -140,7 +140,7 @@ public static class PhenomenonPresets {
         phenomenon.RequiredItemTypes = new Godot.Collections.Array<string> { "iron" };
         phenomenon.RequireAllItems = true;
         phenomenon.TriggerDelay = 0.0f;
-        phenomenon.EffectColor = new Color(0.8f, 0.0f, 0.8f); // 紫色
+        phenomenon.EffectColor = new Color(0.8f, 0.0f, 0.8f);
         phenomenon.EffectDuration = 2.0f;
         phenomenon.ShowMessage = true;
         phenomenon.ResultMessage = "🧲 磁力吸引！\n铁质物品被磁铁吸引\n观察到磁场效应";

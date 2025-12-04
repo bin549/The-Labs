@@ -18,7 +18,7 @@ public partial class GameManager : Node {
 
     public void SetCurrentInteractable(Interactable interactable) {
         this.currentInteractable = interactable;
-    }
+    } 
 
     public bool IsBusy => this.currentInteractable != null || IsMenuOpen;
 
@@ -26,10 +26,10 @@ public partial class GameManager : Node {
         if (Input.IsActionJustPressed("pause")) {
             if (!this.IsBusy) {
                 this.TogglePause();
-            } else {
-                Input.MouseMode = Input.MouseModeEnum.Captured;
-                this.currentInteractable.ExitInteraction();
-            }
+                return;
+            } 
+            Input.MouseMode = Input.MouseModeEnum.Captured;
+            this.currentInteractable.ExitInteraction();
         }
     }
 

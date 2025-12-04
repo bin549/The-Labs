@@ -9,7 +9,6 @@ public partial class OhmsLawExperiment : LabItem {
 }
 
 /*
-// ========== 以下是原欧姆实验的完整代码，暂时注释掉 ==========
 public partial class OhmsLawExperiment_Original : LabItem {
 	[Export] public NodePath ExperimentUIPanelPath { get; set; }
 	[Export] public NodePath CircuitBoardPath { get; set; }

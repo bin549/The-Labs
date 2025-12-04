@@ -55,7 +55,7 @@ public partial class ExperimentSetupHelper : RefCounted {
     public void AddChemistryPresets() {
         var presets = PhenomenonPresets.GetChemistryPresets();
         foreach (var preset in presets) {
-            AddPhenomenon(preset);
+            this.AddPhenomenon(preset);
         }
         GD.Print($"[ExperimentSetupHelper] 添加了 {presets.Count} 个化学现象预设");
     }
@@ -63,7 +63,7 @@ public partial class ExperimentSetupHelper : RefCounted {
     public void AddPhysicsPresets() {
         var presets = PhenomenonPresets.GetPhysicsPresets();
         foreach (var preset in presets) {
-            AddPhenomenon(preset);
+            this.AddPhenomenon(preset);
         }
         GD.Print($"[ExperimentSetupHelper] 添加了 {presets.Count} 个物理现象预设");
     }

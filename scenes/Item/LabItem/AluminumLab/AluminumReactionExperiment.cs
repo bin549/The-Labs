@@ -41,8 +41,8 @@ public partial class AluminumReactionExperiment : LabItem {
 
     public override void _Ready() {
         base._Ready();
-        ResolveComponents();
-        InitializeUI();
+        this.ResolveComponents();
+        this.InitializeUI();
         this.UpdateStepUI();
     }
 
@@ -258,7 +258,7 @@ public partial class AluminumReactionExperiment : LabItem {
         if (isReacting) return;
         isReacting = true;
         reactionProgress = 0.0f;
-        observations.Clear();
+        this.observations.Clear();
         this.AddObservation("加入氢氧化钠溶液...");
         this.AddObservation("溶液开始变热（放热反应）");
         this.AddObservation("铝片表面产生气泡");
@@ -305,14 +305,14 @@ public partial class AluminumReactionExperiment : LabItem {
     }
 
     private void AddObservation(string text) {
-        observations.Add(text);
-        UpdateObservationDisplay();
+        this.observations.Add(text);
+        this.UpdateObservationDisplay();
     }
 
     private void UpdateObservationDisplay() {
         if (observationText == null) return;
         string display = "";
-        foreach (var obs in observations) {
+        foreach (var obs in this.observations) {
             display += $"• {obs}\n";
         }
         observationText.Text = display;
@@ -336,7 +336,7 @@ public partial class AluminumReactionExperiment : LabItem {
         currentStep = ExperimentStep.Introduction;
         isReacting = false;
         reactionProgress = 0.0f;
-        observations.Clear();
+        this.observations.Clear();
         if (bubbleEffect != null) {
             bubbleEffect.Emitting = false;
         }

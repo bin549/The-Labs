@@ -9,7 +9,7 @@ public partial class ExperimentInfo : Resource {
     [Export] public NodePath ExperimentNodePath { get; set; }
 }
 
-public enum ExperimentCategory {
+public enum ExperimentCategory {                                                                                    
     Mechanics,
     Electricity,
     Chemistry

@@ -13,13 +13,13 @@ public partial class ForceMeter : Node3D {
 
     public override void _Ready() {
         ResolveComponents();
-        UpdateDisplay();
+        this.UpdateDisplay();
     }
 
     public override void _Process(double delta) {
         if (!Mathf.IsEqualApprox(currentForce, targetForce)) {
             currentForce = Mathf.Lerp(currentForce, targetForce, smoothSpeed * (float)delta);
-            UpdateDisplay();
+            this.UpdateDisplay();
         }
     }
 

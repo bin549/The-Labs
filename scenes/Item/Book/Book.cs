@@ -69,7 +69,7 @@ public partial class Book : Node3D {
     }
 
     private void TurnLeft() {
-        if (currentPageNumber <= 1) {
+        if (this.currentPageNumber <= 1) {
             GD.Print("已经是第一页了，无法继续往前翻");
             return;
         }
@@ -91,9 +91,9 @@ public partial class Book : Node3D {
     }
 
     private void UpdatePageNumber(int pageOffset = 0) {
-        currentPageNumber = Math.Max(1, currentPageNumber + pageOffset);
+        this.currentPageNumber = Math.Max(1, this.currentPageNumber + pageOffset);
         Viewport[] viewports = { v1, v2, v3, v4, v5, v6 };
-        int startPage = currentPageNumber - 2;
+        int startPage = this.currentPageNumber - 2;
         for (int i = 0; i < viewports.Length; i++) {
             var page = viewports[i].GetNodeOrNull<Page>("Page");
             if (page == null) {
@@ -103,7 +103,7 @@ public partial class Book : Node3D {
             int pageNumber = startPage + i;
             page.SetNumber(Math.Max(1, pageNumber));
         }
-        GD.Print($"当前页码: {currentPageNumber}-{currentPageNumber + 1}");
+        GD.Print($"当前页码: {this.currentPageNumber}-{this.currentPageNumber + 1}");
     }
 
     private void SetTexture(MeshInstance3D page, Viewport viewport) {

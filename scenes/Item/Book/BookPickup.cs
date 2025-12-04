@@ -76,56 +76,56 @@ public partial class BookPickup : Interactable {
 	}
 
 	private void ResolvePlayerAndCamera() {
-		if (playerNode == null || !GodotObject.IsInstanceValid(playerNode)) {
-			playerNode = ResolveNodePath(NodePathIsValid(PlayerPath) ? PlayerPath : default, this) ??
+		if (this.playerNode == null || !GodotObject.IsInstanceValid(this.playerNode)) {
+			this.playerNode = ResolveNodePath(NodePathIsValid(PlayerPath) ? PlayerPath : default, this) ??
 				GetTree().Root.GetNodeOrNull<Node3D>("World/Player") ??
 				GetTree().Root.FindChild("Player", true, false) as Node3D;
-			if (playerNode == null) {
+			if (this.playerNode == null) {
 				GD.PushWarning($"{Name}: 未找到 Player 节点，拾取书籍功能将不可用。");
 			}
 		}
-		if (playerNode != null && (playerBook == null || !GodotObject.IsInstanceValid(playerBook))) {
+		if (this.playerNode != null && (this.playerBook == null || !GodotObject.IsInstanceValid(this.playerBook))) {
 			if (NodePathIsValid(PlayerBookPath)) {
-				playerBook = ResolveNodePath(PlayerBookPath, playerNode);
+				this.playerBook = ResolveNodePath(PlayerBookPath, this.playerNode);
 			}
-			playerBook ??= playerNode.FindChild("Book", true, false) as Node3D;
-			if (playerBook == null) {
+			this.playerBook ??= this.playerNode.FindChild("Book", true, false) as Node3D;
+			if (this.playerBook == null) {
 				GD.PushWarning($"{Name}: 未找到玩家持有的书籍节点。");
 			}
 		}
-		if (playerBook != null && (phantomCamera == null || !GodotObject.IsInstanceValid(phantomCamera.Node3D))) {
+		if (this.playerBook != null && (phantomCamera == null || !GodotObject.IsInstanceValid(phantomCamera.Node3D))) {
 			Node3D phantomNode = null;
 			if (NodePathIsValid(PhantomCameraPath)) {
-				phantomNode = ResolveNodePath(PhantomCameraPath, playerBook) ?? ResolveNodePath(PhantomCameraPath, this);
+				phantomNode = ResolveNodePath(PhantomCameraPath, this.playerBook) ?? ResolveNodePath(PhantomCameraPath, this);
 			}
-			phantomNode ??= playerBook.FindChild("PhantomCamera3D", true, false) as Node3D;
-			if (phantomNode != null) {
-				phantomCamera = phantomNode.AsPhantomCamera3D();
-			} else {
+			phantomNode ??= this.playerBook.FindChild("PhantomCamera3D", true, false) as Node3D;
+			if (phantomNode == null) {
 				phantomCamera = null;
 				GD.PushWarning($"{Name}: 未找到 PhantomCamera3D，拾取后不会切换到书籍摄像机。");
+				return;
 			}
+			phantomCamera = phantomNode.AsPhantomCamera3D();
 		}
 	}
 
 	private void ResolvePickupVisual() {
-		if (pickupVisualRoot != null && GodotObject.IsInstanceValid(pickupVisualRoot)) return;
+		if (this.pickupVisualRoot != null && GodotObject.IsInstanceValid(this.pickupVisualRoot)) return;
 		if (NodePathIsValid(PickupVisualRootPath)) {
-			pickupVisualRoot = ResolveNodePath(PickupVisualRootPath, this);
+			this.pickupVisualRoot = ResolveNodePath(PickupVisualRootPath, this);
 		}
-		pickupVisualRoot ??= this;
+		this.pickupVisualRoot ??= this;
 	}
 
 	private void ShowPlayerBook(bool visible) {
-		if (playerBook == null || !GodotObject.IsInstanceValid(playerBook)) return;
-		playerBook.Visible = visible;
-		playerBook.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
+		if (this.playerBook == null || !GodotObject.IsInstanceValid(this.playerBook)) return;
+		this.playerBook.Visible = visible;
+		this.playerBook.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
 	}
 
 	private void ShowPickupVisual(bool visible) {
-		if (pickupVisualRoot == null || !GodotObject.IsInstanceValid(pickupVisualRoot)) return;
-		pickupVisualRoot.Visible = visible;
-		pickupVisualRoot.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
+		if (this.pickupVisualRoot == null || !GodotObject.IsInstanceValid(this.pickupVisualRoot)) return;
+		this.pickupVisualRoot.Visible = visible;
+		this.pickupVisualRoot.ProcessMode = visible ? Node.ProcessModeEnum.Inherit : Node.ProcessModeEnum.Disabled;
 	}
 
 	private void BoostCameraPriority(bool enable) {

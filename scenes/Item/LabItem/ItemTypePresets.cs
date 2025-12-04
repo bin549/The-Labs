@@ -40,7 +40,7 @@ public static class ItemTypePresets {
             COMBUSTIBLE, SOLUTE, SOLVENT, ENZYME, SUBSTRATE
         };
     }
-
+      
     public static string GetChineseName(string type) {
         return type switch {
             ACID => "酸",

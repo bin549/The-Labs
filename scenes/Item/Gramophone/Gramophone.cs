@@ -109,7 +109,7 @@ public partial class Gramophone : Interactable {
     }
 
     private void RefreshState() {
-        this.isPlaying = IsAudioPlaying();
+        this.isPlaying = this.IsAudioPlaying();
     }
 
     private void UpdateActionLabel() {

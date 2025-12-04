@@ -664,64 +664,9 @@ public partial class FrictionExperiment : LabItem {
     }
 }
 
-
-/*
-[Export] public NodePath ExperimentUIPanelPath { get; set; }
-[Export] public NodePath ForceMeterPath { get; set; }
-[Export] public Godot.Collections.Array<NodePath> BlockPaths { get; set; } = new();
-private Control experimentUIPanel;
-private ForceMeter forceMeter;
-private List<ExperimentBlock> blocks = new();
-private ExperimentBlock currentBlock;
-private SurfaceType currentSurface = SurfaceType.Wood;
-
-private enum ExperimentStep {
-    Introduction,
-    SelectBlock,
-    PlaceBlock,
-    SelectSurface,
-    PullBlock,
-    RecordData,
-    ChangeCondition,
-    Analysis
-}
-
-private ExperimentStep currentStep = ExperimentStep.Introduction;
-private List<ExperimentData> experimentDataList = new();
-private Label stepLabel;
-private Label instructionLabel;
-private Button nextStepButton;
-private Button previousStepButton;
-private Control dataPanel;
-private VBoxContainer dataContainer;
-private Label forceValueLabel;
-private OptionButton surfaceSelector;
-private Button startPullButton;
-private Button recordDataButton;
-private Button analysisButton;
-private RichTextLabel analysisText;
-
-*/
-
 public enum DragPlaneType {
     Horizontal,
     VerticalX,
     VerticalZ,
     Free
 }
-
-/*
-public enum SurfaceType {
-    Wood,
-    Glass,
-    Cloth,
-    Metal
-}
-
-public struct ExperimentData {
-    public string BlockName;
-    public float Mass;
-    public SurfaceType Surface;
-    public float FrictionForce;
-}
-*/

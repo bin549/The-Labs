@@ -14,13 +14,13 @@ public partial class PainterImage : Sprite2D {
     private bool canvasMeshInitialized = false;
     private bool pixelMode = false;
     private Vector2I lastPixelGrid = new Vector2I(-1, -1);
-    private Color _paintColor = Colors.Red;
+    private Color paintColor = Colors.Red;
 
     [Export]
     public Color PaintColor {
-        get => _paintColor;
+        get => this.paintColor;
         set {
-            _paintColor = value;
+            this.paintColor = value;
             if (currentColorRect != null)
                 currentColorRect.Color = value;
         }
@@ -44,9 +44,7 @@ public partial class PainterImage : Sprite2D {
         var pixelModeToggle = GetNodeOrNull<CheckButton>("../Panel/PixelModeToggle");
         if (pixelModeToggle != null) {
             pixelModeToggle.Toggled += _OnPixelModeToggled;
-        } else {
-            GD.PushWarning("PainterImage: 未找到 PixelModeToggle 按钮");
-        }
+        } 
         if (canvasMeshPath != null && !canvasMeshPath.IsEmpty) {
             canvasMesh = GetNodeOrNull<MeshInstance3D>(canvasMeshPath);
             if (canvasMesh != null) {
@@ -61,7 +59,7 @@ public partial class PainterImage : Sprite2D {
     public void SetCanvasMesh(MeshInstance3D mesh) {
         canvasMesh = mesh;
         if (canvasMesh != null && img != null) {
-            InitializeCanvasMesh();
+            this.InitializeCanvasMesh();
         }
     }
 
@@ -77,14 +75,14 @@ public partial class PainterImage : Sprite2D {
 
     private void UpdateCanvasMeshTexture() {
         if (!canvasMeshInitialized && canvasMesh != null && img != null) {
-            InitializeCanvasMesh();
+            this.InitializeCanvasMesh();
         }
         if (canvasMesh != null && canvasMaterial != null && canvasMaterial.AlbedoTexture is ImageTexture imgTex) {
             imgTex.Update(img);
         }
     }
 
-    private void _PaintTex(Vector2I pos, bool forcePixelMode = false) {
+    private void PaintTex(Vector2I pos, bool forcePixelMode = false) {
         if (pixelMode || forcePixelMode) {
             Vector2I gridIndex = new Vector2I(pos.X / pixelGridSize, pos.Y / pixelGridSize);
             Vector2I gridPos = new Vector2I(gridIndex.X * pixelGridSize, gridIndex.Y * pixelGridSize);
@@ -100,7 +98,7 @@ public partial class PainterImage : Sprite2D {
 
     private void _OnPixelModeToggled(bool toggledOn) {
         pixelMode = toggledOn;
-        lastPixelGrid = new Vector2I(-1, -1);
+        this.lastPixelGrid = new Vector2I(-1, -1);
         GD.Print($"像素模式: {(pixelMode ? "开启" : "关闭")} (网格大小: {pixelGridSize})");
     }
 
@@ -115,12 +113,12 @@ public partial class PainterImage : Sprite2D {
                     Vector2 localPos = ToLocal(mb.Position);
                     Vector2 imposF = localPos - Offset + GetRect().Size / 2.0f;
                     Vector2I impos = (Vector2I)imposF;
-                    _PaintTex(impos);
+                    this.PaintTex(impos);
                     if (pixelMode) {
-                        lastPixelGrid = GetPixelGridIndex(impos);
+                        this.lastPixelGrid = GetPixelGridIndex(impos);
                     }
                     ((ImageTexture)Texture).Update(img);
-                    UpdateCanvasMeshTexture();
+                    this.UpdateCanvasMeshTexture();
                 }
                 if (mb.ButtonIndex == MouseButton.Right) {
                     Vector2 localPos = ToLocal(mb.Position);
@@ -128,16 +126,16 @@ public partial class PainterImage : Sprite2D {
                     Vector2I impos = (Vector2I)imposF;
                     Color oldColor = paint_color;
                     paint_color = Colors.White;
-                    _PaintTex(impos);
+                    this.PaintTex(impos);
                     paint_color = oldColor;
                     if (pixelMode) {
-                        lastPixelGrid = GetPixelGridIndex(impos);
+                        this.lastPixelGrid = GetPixelGridIndex(impos);
                     }
                     ((ImageTexture)Texture).Update(img);
-                    UpdateCanvasMeshTexture();
+                    this.UpdateCanvasMeshTexture();
                 }
             } else if (!mb.Pressed) {
-                lastPixelGrid = new Vector2I(-1, -1);
+                this.lastPixelGrid = new Vector2I(-1, -1);
             }
         }
         if (@event is InputEventMouseMotion mm) {
@@ -147,12 +145,12 @@ public partial class PainterImage : Sprite2D {
                 Vector2I impos = (Vector2I)imposF;
                 if (pixelMode) {
                     Vector2I currentGrid = GetPixelGridIndex(impos);
-                    if (currentGrid != lastPixelGrid) {
-                        _PaintTex(impos);
-                        lastPixelGrid = currentGrid;
+                    if (currentGrid != this.lastPixelGrid) {
+                        this.PaintTex(impos);
+                        this.lastPixelGrid = currentGrid;
                     }
                 } else {
-                    _PaintTex(impos);
+                    this.PaintTex(impos);
                     if (mm.Relative.LengthSquared() > 0) {
                         int num = Mathf.CeilToInt(mm.Relative.Length());
                         Vector2I target_pos = (Vector2I)(imposF - mm.Relative);
@@ -162,13 +160,13 @@ public partial class PainterImage : Sprite2D {
                             if (toTarget.LengthSquared() <= 1e-6f)
                                 break;
                             current += toTarget.Normalized();
-                            _PaintTex((Vector2I)current);
+                            this.PaintTex((Vector2I)current);
                         }
                         impos = (Vector2I)current;
                     }
                 }
                 ((ImageTexture)Texture).Update(img);
-                UpdateCanvasMeshTexture();
+                this.UpdateCanvasMeshTexture();
             }
             if ((mm.ButtonMask & MouseButtonMask.Right) != 0) {
                 Vector2 localPos = ToLocal(mm.Position);
@@ -178,12 +176,12 @@ public partial class PainterImage : Sprite2D {
                 paint_color = Colors.White;
                 if (pixelMode) {
                     Vector2I currentGrid = GetPixelGridIndex(impos);
-                    if (currentGrid != lastPixelGrid) {
-                        _PaintTex(impos);
-                        lastPixelGrid = currentGrid;
+                    if (currentGrid != this.lastPixelGrid) {
+                        this.PaintTex(impos);
+                        this.lastPixelGrid = currentGrid;
                     }
                 } else {
-                    _PaintTex(impos);
+                    this.PaintTex(impos);
                     if (mm.Relative.LengthSquared() > 0) {
                         int num = Mathf.CeilToInt(mm.Relative.Length());
                         Vector2I target_pos = (Vector2I)(imposF - mm.Relative);
@@ -193,14 +191,14 @@ public partial class PainterImage : Sprite2D {
                             if (toTarget.LengthSquared() <= 1e-6f)
                                 break;
                             current += toTarget.Normalized();
-                            _PaintTex((Vector2I)current);
+                            this.PaintTex((Vector2I)current);
                         }
                         impos = (Vector2I)current;
                     }
                 }
                 paint_color = oldColor;
                 ((ImageTexture)Texture).Update(img);
-                UpdateCanvasMeshTexture();
+                this.UpdateCanvasMeshTexture();
             }
         }
     }

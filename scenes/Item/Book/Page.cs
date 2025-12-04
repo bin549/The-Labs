@@ -26,14 +26,14 @@ public partial class Page : Control {
 
     public void SetNumber(int value) {
         this.numberLabel.Text = $"- {value} -";
-        this.textLabel.Text = GetPageContent(value);
+        this.textLabel.Text = this.GetPageContent(value);
     }
 
     private string GetPageContent(int pageNumber) {
-        if (pageContents.ContainsKey(pageNumber)) {
-            return pageContents[pageNumber];
+        if (this.pageContents.ContainsKey(pageNumber)) {
+            return this.pageContents[pageNumber];
         }
-        if (pageNumber > pageContents.Count) {
+        if (pageNumber > this.pageContents.Count) {
             return "[center][i]--- 空白页 ---[/i][/center]\n\n此页暂无内容。";
         }
         return "";
