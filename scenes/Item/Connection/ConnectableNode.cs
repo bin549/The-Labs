@@ -39,7 +39,7 @@ public partial class ConnectableNode : Node3D {
                 this.meshInstance.Owner = GetTree().EditedSceneRoot;
         }
         this.material = new StandardMaterial3D();
-        this.material.AlbedoColor = NormalColor;
+        this.material.AlbedoColor = this.NormalColor;
         if (this.meshInstance != null) {
             this.meshInstance.MaterialOverride = this.material;
         }
@@ -116,11 +116,7 @@ public partial class ConnectableNode : Node3D {
 
     public void UpdateColor() {
         if (this.material == null) return;
-        if (this.isSelected) {
-            this.material.AlbedoColor = SelectedColor;
-        } else {
-            this.material.AlbedoColor = NormalColor;
-        }
+        this.material.AlbedoColor = this.isSelected ? this.SelectedColor : this.NormalColor;
     }
 
     public Vector3 GetConnectionPoint() {

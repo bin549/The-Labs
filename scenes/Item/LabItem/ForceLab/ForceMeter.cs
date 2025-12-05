@@ -12,43 +12,43 @@ public partial class ForceMeter : Node3D {
     private float smoothSpeed = 5.0f;
 
     public override void _Ready() {
-        ResolveComponents();
+        this.ResolveComponents();
         this.UpdateDisplay();
     }
 
     public override void _Process(double delta) {
-        if (!Mathf.IsEqualApprox(currentForce, targetForce)) {
-            currentForce = Mathf.Lerp(currentForce, targetForce, smoothSpeed * (float)delta);
+        if (!Mathf.IsEqualApprox(this.currentForce, this.targetForce)) {
+            this.currentForce = Mathf.Lerp(this.currentForce, this.targetForce, smoothSpeed * (float)delta);
             this.UpdateDisplay();
         }
     }
 
     private void ResolveComponents() {
         if (!string.IsNullOrEmpty(PointerPath?.ToString())) {
-            pointer = GetNodeOrNull<Node3D>(PointerPath);
+            this.pointer = GetNodeOrNull<Node3D>(PointerPath);
         }
-        if (pointer == null) {
-            pointer = FindChild("Pointer", true, false) as Node3D;
+        if (this.pointer == null) {
+            this.pointer = FindChild("Pointer", true, false) as Node3D;
         }
-        if (pointer == null) {
+        if (this.pointer == null) {
             GD.PushWarning($"{Name}: 未找到指针节点，将创建默认指针。");
             this.CreateDefaultPointer();
         }
         if (!string.IsNullOrEmpty(DisplayLabelPath?.ToString())) {
-            displayLabel = GetNodeOrNull<Label3D>(DisplayLabelPath);
+            this.displayLabel = GetNodeOrNull<Label3D>(DisplayLabelPath);
         }
-        if (displayLabel == null) {
-            displayLabel = FindChild("DisplayLabel", true, false) as Label3D;
+        if (this.displayLabel == null) {
+            this.displayLabel = FindChild("DisplayLabel", true, false) as Label3D;
         }
-        if (displayLabel == null) {
+        if (this.displayLabel == null) {
             this.CreateDefaultLabel();
         }
     }
 
     private void CreateDefaultPointer() {
-        pointer = new Node3D();
-        pointer.Name = "Pointer";
-        AddChild(pointer);
+        this.pointer = new Node3D();
+        this.pointer.Name = "Pointer";
+        AddChild(this.pointer);
         var mesh = new MeshInstance3D();
         var cylinder = new CylinderMesh();
         cylinder.TopRadius = 0.002f;
@@ -61,43 +61,43 @@ public partial class ForceMeter : Node3D {
         material.Emission = Colors.Red;
         mesh.MaterialOverride = material;
         mesh.Position = new Vector3(0, 0.025f, 0);
-        pointer.AddChild(mesh);
+        this.pointer.AddChild(mesh);
     }
 
     private void CreateDefaultLabel() {
-        displayLabel = new Label3D();
-        displayLabel.Name = "DisplayLabel";
-        displayLabel.Text = "0.00 N";
-        displayLabel.FontSize = 32;
-        displayLabel.Position = new Vector3(0, -0.05f, 0);
-        displayLabel.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
-        AddChild(displayLabel);
+        this.displayLabel = new Label3D();
+        this.displayLabel.Name = "DisplayLabel";
+        this.displayLabel.Text = "0.00 N";
+        this.displayLabel.FontSize = 32;
+        this.displayLabel.Position = new Vector3(0, -0.05f, 0);
+        this.displayLabel.Billboard = BaseMaterial3D.BillboardModeEnum.Enabled;
+        AddChild(this.displayLabel);
     }
 
     public void SetForceValue(float force) {
-        targetForce = Mathf.Clamp(force, 0, MaxForce);
+        this.targetForce = Mathf.Clamp(force, 0, MaxForce);
     }
 
     private void UpdateDisplay() {
-        if (pointer != null) {
-            float angle = (currentForce / MaxForce) * MaxRotation;
-            pointer.RotationDegrees = new Vector3(0, 0, -angle);
+        if (this.pointer != null) {
+            float angle = (this.currentForce / MaxForce) * MaxRotation;
+            this.pointer.RotationDegrees = new Vector3(0, 0, -angle);
         }
-        if (displayLabel != null) {
-            displayLabel.Text = $"{currentForce:F2} N";
-            if (currentForce < MaxForce * 0.3f) {
-                displayLabel.Modulate = Colors.Green;
-            } else if (currentForce < MaxForce * 0.7f) {
-                displayLabel.Modulate = Colors.Yellow;
+        if (this.displayLabel != null) {
+            this.displayLabel.Text = $"{this.currentForce:F2} N";
+            if (this.currentForce < MaxForce * 0.3f) {
+                this.displayLabel.Modulate = Colors.Green;
+            } else if (this.currentForce < MaxForce * 0.7f) {
+                this.displayLabel.Modulate = Colors.Yellow;
             } else {
-                displayLabel.Modulate = Colors.Red;
+                this.displayLabel.Modulate = Colors.Red;
             }
         }
     }
 
     public void Reset() {
-        currentForce = 0.0f;
-        targetForce = 0.0f;
+        this.currentForce = 0.0f;
+        this.targetForce = 0.0f;
         this.UpdateDisplay();
     }
 }

@@ -34,7 +34,7 @@ public partial class PlacableItem : Node3D {
 	private Godot.Collections.Array<PlacableItem> overlappingItems = new();
 	
 	public override void _Ready() {
-		originalPosition = GlobalPosition;
+		this.originalPosition = GlobalPosition;
 		camera = GetViewport().GetCamera3D();
 		ResolveMesh();
 		InitializeMaterial();
@@ -86,11 +86,11 @@ public partial class PlacableItem : Node3D {
 		var mousePos = GetViewport().GetMousePosition();
 		var from = camera.ProjectRayOrigin(mousePos);
 		var normal = camera.ProjectRayNormal(mousePos);
-		float targetY = KeepOriginalHeight ? originalPosition.Y : DragHeight;
+		float targetY = KeepOriginalHeight ? this.originalPosition.Y : DragHeight;
 		float t = (targetY - from.Y) / normal.Y;
 		if (t > 0) {
 			Vector3 newPos = from + normal * t + dragOffset;
-			newPos.Y = KeepOriginalHeight ? originalPosition.Y : DragHeight;
+			newPos.Y = KeepOriginalHeight ? this.originalPosition.Y : DragHeight;
 			GlobalPosition = newPos;
 		}
 	}
@@ -212,7 +212,7 @@ public partial class PlacableItem : Node3D {
 	}
 	
 	public void ResetPosition() {
-		GlobalPosition = originalPosition;
+		GlobalPosition = this.originalPosition;
 		GD.Print($"[PlacableItem] 重置 {ItemName} 位置");
 	}
 	

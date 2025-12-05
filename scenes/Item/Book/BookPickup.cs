@@ -69,8 +69,8 @@ public partial class BookPickup : Interactable {
 		this.isInteractingWithBook = false;
 		this.canExitInteraction = false;
 		base.ExitInteraction();
-		if (gameManager != null) {
-			gameManager.SetCurrentInteractable(null);
+		if (base.gameManager != null) {
+			base.gameManager.SetCurrentInteractable(null);
 		}
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
@@ -80,18 +80,12 @@ public partial class BookPickup : Interactable {
 			this.playerNode = ResolveNodePath(NodePathIsValid(PlayerPath) ? PlayerPath : default, this) ??
 				GetTree().Root.GetNodeOrNull<Node3D>("World/Player") ??
 				GetTree().Root.FindChild("Player", true, false) as Node3D;
-			if (this.playerNode == null) {
-				GD.PushWarning($"{Name}: 未找到 Player 节点，拾取书籍功能将不可用。");
-			}
 		}
 		if (this.playerNode != null && (this.playerBook == null || !GodotObject.IsInstanceValid(this.playerBook))) {
 			if (NodePathIsValid(PlayerBookPath)) {
 				this.playerBook = ResolveNodePath(PlayerBookPath, this.playerNode);
 			}
 			this.playerBook ??= this.playerNode.FindChild("Book", true, false) as Node3D;
-			if (this.playerBook == null) {
-				GD.PushWarning($"{Name}: 未找到玩家持有的书籍节点。");
-			}
 		}
 		if (this.playerBook != null && (phantomCamera == null || !GodotObject.IsInstanceValid(phantomCamera.Node3D))) {
 			Node3D phantomNode = null;
@@ -99,11 +93,6 @@ public partial class BookPickup : Interactable {
 				phantomNode = ResolveNodePath(PhantomCameraPath, this.playerBook) ?? ResolveNodePath(PhantomCameraPath, this);
 			}
 			phantomNode ??= this.playerBook.FindChild("PhantomCamera3D", true, false) as Node3D;
-			if (phantomNode == null) {
-				phantomCamera = null;
-				GD.PushWarning($"{Name}: 未找到 PhantomCamera3D，拾取后不会切换到书籍摄像机。");
-				return;
-			}
 			phantomCamera = phantomNode.AsPhantomCamera3D();
 		}
 	}
@@ -130,8 +119,8 @@ public partial class BookPickup : Interactable {
 
 	private void BoostCameraPriority(bool enable) {
 		if (phantomCamera == null) return;
-		if (!originalCameraPriority.HasValue) {
-			originalCameraPriority = phantomCamera.Priority;
+		if (!this.originalCameraPriority.HasValue) {
+			this.originalCameraPriority = phantomCamera.Priority;
 		}
 		phantomCamera.Priority = enable ? InspectCameraPriority : HiddenCameraPriority;
 	}

@@ -18,7 +18,7 @@ public partial class Page : Control {
         { 7, "[b]实验类型（续）[/b]\n\n[color=lightgreen]化学实验[/color]\n观察铝与氢氧化钠的反应等化学现象。\n\n每个实验都有详细的操作指导。" },
         { 8, "[b]安全提示[/b]\n\n• 仔细阅读实验说明\n• 按照正确步骤操作\n• 观察实验现象\n• 记录实验数据\n\n祝你实验愉快！" }
     };
-
+-
     public override void _Ready() {
         this.numberLabel = GetNode<Label>("Background/Number");
         this.textLabel = GetNode<RichTextLabel>("Background/Text");

@@ -54,7 +54,6 @@ public partial class Gramophone : Interactable {
         }
         this.audioPlayer = resolvedPlayer;
         if (this.audioPlayer == null) {
-            GD.PushWarning($"{Name}: 未找到 AudioStreamPlayer3D 节点 {AudioPlayerPath}。");
             return;
         }
         this.ConnectAudioSignals();

@@ -19,10 +19,10 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	public override void _Ready() {
 		base._Ready();
 		this.InitializePhenomenonManager();
-		CollectPlacableItems();
-		InitializeUI();
+		this.CollectPlacableItems();
+		this.InitializeUI();
 		if (Phenomena.Count == 0) {
-			CreateExamplePhenomena();
+			this.CreateExamplePhenomena();
 		}
 	}
 	
@@ -58,14 +58,14 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 			var item = GetNodeOrNull<PlacableItem>(path);
 			if (item != null) {
 				placableItems.Add(item);
-				RegisterPlacableItem(item);
+				this.RegisterPlacableItem(item);
 			}
 		}
 		var children = GetChildren();
 		foreach (var child in children) {
 			if (child is PlacableItem item && !placableItems.Contains(item)) {
 				placableItems.Add(item);
-				RegisterPlacableItem(item);
+				this.RegisterPlacableItem(item);
 			}
 		}
 		GD.Print($"[ExampleExperiment] 收集到 {placableItems.Count} 个可放置物品");
@@ -150,9 +150,9 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	private void UpdateLogDisplay() {
 		if (logLabel == null) return;
 		string display = "";
-		int startIndex = Mathf.Max(0, experimentLog.Count - 20); 
-		for (int i = startIndex; i < experimentLog.Count; i++) {
-			display += experimentLog[i] + "\n";
+		int startIndex = Mathf.Max(0, this.experimentLog.Count - 20); 
+		for (int i = startIndex; i < this.experimentLog.Count; i++) {
+			display += this.experimentLog[i] + "\n";
 		}
 		logLabel.Text = display;
 	}
@@ -160,8 +160,8 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 	private void LogMessage(string message, string color = "white") {
 		string timestamp = Time.GetTimeStringFromSystem();
 		string formattedMsg = $"[color={color}][{timestamp}][/color] {message}";
-		experimentLog.Add(formattedMsg);
-		UpdateLogDisplay();
+		this.experimentLog.Add(formattedMsg);
+		this.UpdateLogDisplay();
 		GD.Print($"[实验日志] {message}");
 	}
 	
@@ -201,8 +201,8 @@ public partial class ExampleExperimentWithPhenomena : LabItem {
 		if (phenomenonManager != null) {
 			phenomenonManager.ClearAllEffects();
 		}
-		experimentLog.Clear();
-		UpdateLogDisplay();
+		this.experimentLog.Clear();
+		this.UpdateLogDisplay();
 		LogMessage("实验已重置", "yellow");
 		GD.Print("[ExampleExperiment] 实验已重置");
 	}

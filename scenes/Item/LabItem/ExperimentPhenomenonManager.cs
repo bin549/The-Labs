@@ -82,19 +82,19 @@ public partial class ExperimentPhenomenonManager : Node {
     private void ExecutePhenomenon(ExperimentPhenomenon phenomenon, PlacableItem triggerItem) {
         Vector3 position = triggerItem.GlobalPosition;
         if (phenomenon.ParticleEffect != null) {
-            SpawnParticleEffect(phenomenon, position);
+            this.SpawnParticleEffect(phenomenon, position);
         }
         if (phenomenon.PlaySound && phenomenon.SoundEffect != null) {
-            PlaySoundEffect(phenomenon.SoundEffect, position);
+            this.PlaySoundEffect(phenomenon.SoundEffect, position);
         }
         if (phenomenon.ShowMessage && !string.IsNullOrEmpty(phenomenon.ResultMessage)) {
-            ShowMessage(phenomenon.ResultMessage, position);
+            this.ShowMessage(phenomenon.ResultMessage, position);
         }   
         if (phenomenon.ProduceNewItem && phenomenon.ProducedItemScene != null) {
-            ProduceNewItem(phenomenon.ProducedItemScene, position);
+            this.ProduceNewItem(phenomenon.ProducedItemScene, position);
         }
         if (phenomenon.ConsumeItems) {
-            ConsumeItem(triggerItem);
+            this.ConsumeItem(triggerItem);
         }
     }
 

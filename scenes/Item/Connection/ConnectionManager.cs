@@ -45,18 +45,15 @@ public partial class ConnectionManager : Node3D {
     }
     
     private void HandleRightClick(Vector2 mousePos) {
-        GD.Print("=== 右键点击检测 ===");
         var rayResult = PerformRaycastForLines(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
-            GD.Print("右键：射线未击中任何物体（21层）");
             return;
         }
         var collider = rayResult["collider"].As<Node>();
         if (collider == null) {
-            GD.Print("右键：collider 为 null");
             return;
         }
-        var line = FindConnectionLine(collider);
+        var line = this.FindConnectionLine(collider);
         if (line != null) {
             RemoveConnection(line);
         } else {
@@ -79,7 +76,7 @@ public partial class ConnectionManager : Node3D {
         }
         var collider = rayResult["collider"].As<Node>();
         if (collider == null) return;
-        var line = FindConnectionLine(collider);
+        var line = this.FindConnectionLine(collider);
         if (line != null) {
             this.hoveredLine = line;
             this.hoveredLine.OnHoverEnter();
@@ -104,7 +101,6 @@ public partial class ConnectionManager : Node3D {
         foreach (var conn in this.connections) {
             if ((conn.StartNode == startNode && conn.EndNode == endNode) ||
                 (conn.StartNode == endNode && conn.EndNode == startNode)) {
-                GD.Print("连线已存在");
                 return;
             }
         }

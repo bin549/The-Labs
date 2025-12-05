@@ -127,35 +127,23 @@ public partial class FrictionExperiment : LabItem {
     }
 
     public override void EnterInteraction() {
-        GD.Print("[FrictionExperiment] EnterInteraction 被调用");
         base.EnterInteraction();
         base.isInteracting = true;
-        GD.Print("========================================");
-        GD.Print("[FrictionExperiment] ✓✓✓ 已进入交互模式 ✓✓✓");
-        GD.Print($"[FrictionExperiment] 交互状态已设置: isInteracting={base.isInteracting}");
-        GD.Print("========================================");
         foreach (var placableItem in placableItems) {
             if (GodotObject.IsInstanceValid(placableItem)) {
                 placableItem.IsDraggable = false;
-                GD.Print($"[FrictionExperiment] 已禁用 {placableItem.Name} 的 PlacableItem 拖拽系统");
                 FixPlacableItemCollisionArea(placableItem);
             }
         }
         if (Input.MouseMode != Input.MouseModeEnum.Visible) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
-            GD.Print("[FrictionExperiment] 已设置鼠标模式为 Visible");
         }
         if (infoLabel != null) {
             infoLabel.Visible = true;
             string gridStatus = EnableGridSnapping ? "已启用" : "已禁用";
             infoLabel.Text = $"✅ 交互模式已激活\n\n点击并拖拽物体到实验平台上\n按 G 键切换网格吸附（当前: {gridStatus}）\n按ESC退出交互模式";
-            GD.Print("[FrictionExperiment] UI标签已显示");
         }
         CheckBlockingUI();
-        GD.Print($"[FrictionExperiment] 交互状态检查: isInteracting={base.isInteracting}");
-        GD.Print($"[FrictionExperiment] 可拖拽物体数量: {draggableObjects.Count}");
-        GD.Print($"[FrictionExperiment] PlacableItem 数量: {placableItems.Count}");
-        GD.Print($"[FrictionExperiment] 鼠标模式: {Input.MouseMode}");
         var camera = GetViewport().GetCamera3D();
         if (camera != null) {
             GD.Print($"[FrictionExperiment] 当前相机: {camera.Name} (类型: {camera.GetType().Name})");

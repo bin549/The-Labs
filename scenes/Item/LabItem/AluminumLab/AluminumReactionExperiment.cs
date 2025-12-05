@@ -37,7 +37,6 @@ public partial class AluminumReactionExperiment : LabItem {
     private Button startReactionButton;
     private Button testGasButton;
     private ProgressBar reactionProgressBar;
-    private TextureRect equationImage;
 
     public override void _Ready() {
         base._Ready();
@@ -48,11 +47,11 @@ public partial class AluminumReactionExperiment : LabItem {
 
     public override void _Process(double delta) {
         base._Process(delta);
-        if (isReacting) {
-            reactionProgress += (float)delta * 0.2f;
-            if (reactionProgress >= 1.0f) {
-                reactionProgress = 1.0f;
-                isReacting = false;
+        if (this.isReacting) {
+            this.reactionProgress += (float)delta * 0.2f;
+            if (this.reactionProgress >= 1.0f) {
+                this.reactionProgress = 1.0f;
+                this.isReacting = false;
                 OnReactionComplete();
             }
             this.UpdateReactionVisuals();
@@ -138,10 +137,10 @@ public partial class AluminumReactionExperiment : LabItem {
         equationLabel.AddThemeFontSizeOverride("normal_font_size", 20);
         equationPanel.AddChild(equationLabel);
         mainVBox.AddChild(equationPanel);
-        reactionProgressBar = new ProgressBar();
-        reactionProgressBar.CustomMinimumSize = new Vector2(0, 30);
-        reactionProgressBar.ShowPercentage = true;
-        mainVBox.AddChild(reactionProgressBar);
+        this.reactionProgressBar = new ProgressBar();
+        this.reactionProgressBar.CustomMinimumSize = new Vector2(0, 30);
+        this.reactionProgressBar.ShowPercentage = true;
+        mainVBox.AddChild(this.reactionProgressBar);
         var buttonHBox = new HBoxContainer();
         buttonHBox.Alignment = BoxContainer.AlignmentMode.Center;
         startReactionButton = new Button();
@@ -247,7 +246,7 @@ public partial class AluminumReactionExperiment : LabItem {
         if (startReactionButton != null) {
             startReactionButton.Visible =
                 currentStep == ExperimentStep.AddNaOH || currentStep == ExperimentStep.ObserveReaction;
-            startReactionButton.Disabled = isReacting;
+            startReactionButton.Disabled = this.isReacting;
         }
         if (testGasButton != null) {
             testGasButton.Visible = currentStep == ExperimentStep.TestGas;
@@ -255,9 +254,9 @@ public partial class AluminumReactionExperiment : LabItem {
     }
 
     private void OnStartReaction() {
-        if (isReacting) return;
-        isReacting = true;
-        reactionProgress = 0.0f;
+        if (this.isReacting) return;
+        this.isReacting = true;
+        this.reactionProgress = 0.0f;
         this.observations.Clear();
         this.AddObservation("加入氢氧化钠溶液...");
         this.AddObservation("溶液开始变热（放热反应）");
@@ -271,14 +270,14 @@ public partial class AluminumReactionExperiment : LabItem {
     }
 
     private void UpdateReactionVisuals() {
-        if (reactionProgressBar != null) {
-            reactionProgressBar.Value = reactionProgress * 100;
+        if (this.reactionProgressBar != null) {
+            this.reactionProgressBar.Value = this.reactionProgress * 100;
         }
         if (aluminumPiece != null && aluminumPiece is MeshInstance3D mesh) {
             var material = mesh.GetActiveMaterial(0);
             if (material is StandardMaterial3D stdMat) {
                 stdMat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
-                stdMat.AlbedoColor = new Color(1, 1, 1, 1.0f - reactionProgress * 0.5f);
+                stdMat.AlbedoColor = new Color(1, 1, 1, 1.0f - this.reactionProgress * 0.5f);
             }
         }
     }
@@ -334,8 +333,8 @@ public partial class AluminumReactionExperiment : LabItem {
 
     private void ResetExperiment() {
         currentStep = ExperimentStep.Introduction;
-        isReacting = false;
-        reactionProgress = 0.0f;
+        this.isReacting = false;
+        this.reactionProgress = 0.0f;
         this.observations.Clear();
         if (bubbleEffect != null) {
             bubbleEffect.Emitting = false;
@@ -343,8 +342,8 @@ public partial class AluminumReactionExperiment : LabItem {
         if (observationText != null) {
             observationText.Text = "";
         }
-        if (reactionProgressBar != null) {
-            reactionProgressBar.Value = 0;
+        if (this.reactionProgressBar != null) {
+            this.reactionProgressBar.Value = 0;
         }
     }
 }
