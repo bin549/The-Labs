@@ -83,45 +83,6 @@ public partial class FrictionExperiment : LabItem {
         if (Input.MouseMode != Input.MouseModeEnum.Visible) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
-        CheckBlockingUI();
-    }
-
-    private void CheckBlockingUI() {
-        var player = GetTree().Root.FindChild("Player", true, false);
-        if (player != null) {
-            var canvasLayer = player.FindChild("CanvasLayer", false, false);
-            if (canvasLayer != null) {
-                CheckUIChildren(canvasLayer);
-            }
-        }
-    }
-
-    private void CheckUIChildren(Node parent, int depth = 0, bool autoFix = true) {
-        foreach (Node child in parent.GetChildren()) {
-            if (child is Control control) {
-                string indent = new string(' ', depth * 2);
-                if (control.Visible && control.MouseFilter == Control.MouseFilterEnum.Stop) {
-                    var rect = control.GetRect();
-                    var viewport = GetViewport();
-                    bool isLarge = false;
-                    if (viewport != null) {
-                        var viewportSize = viewport.GetVisibleRect().Size;
-                        isLarge = rect.Size.X >= viewportSize.X * 0.5f || rect.Size.Y >= viewportSize.Y * 0.5f;
-                        if (isLarge) {
-                            if (autoFix && !(control is Button)) {
-                                control.MouseFilter = Control.MouseFilterEnum.Pass;
-                            }
-                        }
-                    }
-                    if (autoFix && (control is RichTextLabel || control is Label)) {
-                        control.MouseFilter = Control.MouseFilterEnum.Ignore;
-                    }
-                }
-            }
-            if (depth < 5) {
-                CheckUIChildren(child, depth + 1, autoFix);
-            }
-        }
     }
 
     public override void ExitInteraction() {
