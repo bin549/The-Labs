@@ -2243,7 +2243,6 @@ transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4
 script = ExtResource("21_el0ym")
 SurfacePlatformPath = null
 DraggableObjectPaths = Array[NodePath]([])
-DragPlane = 1
 ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
 TeleportPosition = NodePath("TeleportPos")

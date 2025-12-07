@@ -2,8 +2,6 @@ using Godot;
 using System.Collections.Generic;
 
 public partial class FrictionExperiment : LabItem {
-    [Export] public NodePath SurfacePlatformPath { get; set; }
-    [Export] public Godot.Collections.Array<NodePath> DraggableObjectPaths { get; set; } = new();
     public DragPlaneType DragPlane { get; set; } = DragPlaneType.Horizontal;
     private Node3D draggingObject;
     private Vector3 mousePosition;
@@ -16,7 +14,6 @@ public partial class FrictionExperiment : LabItem {
 
     public override void _Ready() {
         base._Ready();
-        this.ResolveComponents();
     }
 
     public override void _Input(InputEvent @event) {
@@ -30,19 +27,10 @@ public partial class FrictionExperiment : LabItem {
                 var intersect = this.GetMouseIntersect(mouseButton.Position);
                 if (intersect != null && intersect.ContainsKey("position")) {
                     this.mousePosition = (Vector3)intersect["position"];
-                } else {
-                    var camera = GetViewport().GetCamera3D();
-                    if (camera != null) {
-                        var from = camera.ProjectRayOrigin(mouseButton.Position);
-                        var normal = camera.ProjectRayNormal(mouseButton.Position);
-                        this.mousePosition = from + normal * 5.0f;
-                    }
-                }
-                if (leftButtonPressed) {
-                    this.isDragging = true;
-                    this.StartDrag(intersect);
-                    GetViewport().SetInputAsHandled();
                 } 
+                this.isDragging = true;
+                this.StartDrag(intersect);
+                GetViewport().SetInputAsHandled();
             } else if (leftButtonReleased) {
                 this.isDragging = false;
                 this.EndDrag();
@@ -91,46 +79,7 @@ public partial class FrictionExperiment : LabItem {
         this.isDragging = false;
         base.ExitInteraction();
     }
-
-    private void ResolveComponents() {
-        foreach (var path in DraggableObjectPaths) {
-            var obj = GetNodeOrNull<Node3D>(path);
-            if (obj != null) {
-                this.draggableObjects.Add(obj);
-                if (!obj.IsInGroup("moveable")) {
-                    obj.AddToGroup("moveable");
-                }
-                if (obj is PlacableItem placableItem && !this.placableItems.Contains(placableItem)) {
-                    this.placableItems.Add(placableItem);
-                }
-            }
-        }
-        if (this.draggableObjects.Count == 0) {
-            FindDraggableObjects(this);
-        }
-    }
-
-    private void FindDraggableObjects(Node parent) {
-        foreach (Node child in parent.GetChildren()) {
-            if (child is Node3D node3D) {
-                if (child is PlacableItem placableItem) {
-                    if (!this.placableItems.Contains(placableItem)) {
-                        this.placableItems.Add(placableItem);
-                    }
-                    if (!node3D.IsInGroup("moveable")) {
-                        node3D.AddToGroup("moveable");
-                    }
-                }
-                if (child.IsInGroup("moveable")) {
-                    if (!this.draggableObjects.Contains(node3D)) {
-                        this.draggableObjects.Add(node3D);
-                    }
-                }
-            }
-            this.FindDraggableObjects(child);
-        }
-    }
-
+    
     private void StartDrag(Godot.Collections.Dictionary intersect) {
         if (intersect == null || intersect.Count == 0) {
             return;
