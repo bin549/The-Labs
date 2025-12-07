@@ -6,7 +6,6 @@ public partial class FrictionExperiment : LabItem {
     private Node3D draggingObject;
     private Vector3 mousePosition;
     private bool isDragging = false;
-    private List<Node3D> draggableObjects = new();
     private List<PlacableItem> placableItems = new();
     private Node3D surfacePlatform;
     private Vector3 dragOffset;
@@ -50,7 +49,6 @@ public partial class FrictionExperiment : LabItem {
         if (this.draggingObject == null) return;
         Vector3 mousePosInPlane = this.CalculateMousePositionInPlane();
         Vector3 targetPosition = mousePosInPlane;
-        targetPosition = this.ApplyPlaneConstraint(targetPosition, this.initialDragPosition);
         this.draggingObject.GlobalPosition = targetPosition;
     }
 
@@ -89,15 +87,6 @@ public partial class FrictionExperiment : LabItem {
         }
         var colliderVariant = intersect["collider"];
         var collider = colliderVariant.As<Node3D>();
-        if (collider == null) {
-            return;
-        }
-        if (collider.Name == "StaticBody3D") {
-            Node parent = collider.GetParent();
-            if (parent == this || (parent != null && parent.Name == "FrictionLabItem")) {
-                return;
-            }
-        }
         Node3D draggableNode = null;
         Node current = collider;
         int depth = 0;
@@ -105,14 +94,6 @@ public partial class FrictionExperiment : LabItem {
         while (current != null && depth < maxDepth) {
             if (current is Node3D node3D) {
                 if (current is PlacableItem placableItem) {
-                    draggableNode = node3D;
-                    break;
-                }
-                if (current.IsInGroup("moveable")) {
-                    draggableNode = node3D;
-                    break;
-                }
-                if (this.draggableObjects.Contains(node3D)) {
                     draggableNode = node3D;
                     break;
                 }
@@ -126,10 +107,9 @@ public partial class FrictionExperiment : LabItem {
             Vector3 originalPos = this.draggingObject.GlobalPosition;
             this.initialDragPosition = originalPos;
             Vector3 mousePosInPlane = CalculateMousePositionInPlane();
-            Vector3 targetPosition = ApplyPlaneConstraint(mousePosInPlane, originalPos);
-            this.draggingObject.GlobalPosition = targetPosition;
-            this.initialDragPosition = targetPosition;
-            this.mousePosition = targetPosition;
+            this.draggingObject.GlobalPosition = mousePosInPlane;
+            this.initialDragPosition = mousePosInPlane;
+            this.mousePosition = mousePosInPlane;
             this.dragOffset = Vector3.Zero;
         } 
     }
@@ -154,16 +134,6 @@ public partial class FrictionExperiment : LabItem {
         query.CollideWithAreas = true;
         query.CollisionMask = 0xFFFFFFFF;
         var excludeList = new Godot.Collections.Array<Rid>();
-        if (this.draggingObject != null) {
-            if (this.draggingObject is CollisionObject3D collisionObj) {
-                excludeList.Add(collisionObj.GetRid());
-            } else {
-                var collider = this.draggingObject.FindChild("*", true, false) as CollisionObject3D;
-                if (collider != null) {
-                    excludeList.Add(collider.GetRid());
-                }
-            }
-        }
         var staticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
         if (staticBody != null) {
             excludeList.Add(staticBody.GetRid());
@@ -183,54 +153,19 @@ public partial class FrictionExperiment : LabItem {
         var from = camera.ProjectRayOrigin(mousePos);
         var normal = camera.ProjectRayNormal(mousePos);
         Vector3 referencePoint = this.draggingObject != null ? this.draggingObject.GlobalPosition : this.initialDragPosition;
-        var intersect = GetMouseIntersect(mousePos);
-        Vector3 hitPosition = Vector3.Zero;
-        bool hasHit = false;
-        if (intersect != null && intersect.ContainsKey("position")) {
-            hitPosition = (Vector3)intersect["position"];
-            hasHit = true;
-        }
         Vector3 planePoint = referencePoint;
         Vector3 planeNormal = Vector3.Zero;
         switch (this.DragPlane) {
             case DragPlaneType.Horizontal:
                 planeNormal = Vector3.Up;
-                if (hasHit) {
-                    hitPosition.Y = referencePoint.Y;
-                    return hitPosition;
-                }
                 break;
             case DragPlaneType.VerticalX:
                 planeNormal = Vector3.Right;
-                if (hasHit) {
-                    hitPosition.X = referencePoint.X;
-                    return hitPosition;
-                }
                 break;
         }
         float denom = normal.Dot(planeNormal);
-        if (Mathf.Abs(denom) > 0.0001f) {
-            float t = (planePoint - from).Dot(planeNormal) / denom;
-            if (t > 0) {
-                return from + normal * t;
-            } else {
-                return from + normal * 5.0f;
-            }
-        } else {
-            return from + normal * 5.0f;
-        }
-    }
-
-    private Vector3 ApplyPlaneConstraint(Vector3 targetPosition, Vector3 currentPosition) {
-        switch (this.DragPlane) {
-            case DragPlaneType.Horizontal:
-                targetPosition.Y = currentPosition.Y;
-                break;
-            case DragPlaneType.VerticalX:
-                targetPosition.X = currentPosition.X;
-                break;
-        }
-        return targetPosition;
+        float t = (planePoint - from).Dot(planeNormal) / denom;
+        return from + normal * t;
     }
 }
 

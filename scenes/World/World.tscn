@@ -2241,8 +2241,6 @@ skeleton = NodePath("../../..")
 [node name="FrictionLabItem" parent="Labs" node_paths=PackedStringArray("TeleportPosition") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -30.734667, 0.5, -14.818308)
 script = ExtResource("21_el0ym")
-SurfacePlatformPath = null
-DraggableObjectPaths = Array[NodePath]([])
 ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
 TeleportPosition = NodePath("TeleportPos")
