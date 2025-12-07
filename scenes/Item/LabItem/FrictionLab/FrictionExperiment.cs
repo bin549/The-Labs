@@ -58,17 +58,17 @@ public partial class FrictionExperiment : LabItem {
 
     public override void _Process(double delta) {
         base._Process(delta);
-        if (draggingObject != null && isDragging) {
+        if (this.draggingObject != null && isDragging) {
             UpdateDragPosition();
         }
     }
 
     private void UpdateDragPosition() {
-        if (draggingObject == null) return;
+        if (this.draggingObject == null) return;
         Vector3 mousePosInPlane = CalculateMousePositionInPlane();
         Vector3 targetPosition = mousePosInPlane;
-        targetPosition = ApplyPlaneConstraint(targetPosition, initialDragPosition);
-        draggingObject.GlobalPosition = targetPosition;
+        targetPosition = this.ApplyPlaneConstraint(targetPosition, initialDragPosition);
+        this.draggingObject.GlobalPosition = targetPosition;
     }
 
     public override void EnterInteraction() {
@@ -77,7 +77,6 @@ public partial class FrictionExperiment : LabItem {
         foreach (var placableItem in placableItems) {
             if (GodotObject.IsInstanceValid(placableItem)) {
                 placableItem.IsDraggable = false;
-                FixPlacableItemCollisionArea(placableItem);
             }
         }
         if (Input.MouseMode != Input.MouseModeEnum.Visible) {
@@ -91,8 +90,8 @@ public partial class FrictionExperiment : LabItem {
                 placableItem.IsDraggable = true;
             }
         }
-        if (draggingObject != null) {
-            draggingObject = null;
+        if (this.draggingObject != null) {
+            this.draggingObject = null;
         }
         isDragging = false;
         base.ExitInteraction();
@@ -126,7 +125,6 @@ public partial class FrictionExperiment : LabItem {
                     if (!node3D.IsInGroup("moveable")) {
                         node3D.AddToGroup("moveable");
                     }
-                    FixPlacableItemCollisionArea(placableItem);
                 }
                 if (child.IsInGroup("moveable")) {
                     if (!draggableObjects.Contains(node3D)) {
@@ -135,26 +133,6 @@ public partial class FrictionExperiment : LabItem {
                 }
             }
             FindDraggableObjects(child);
-        }
-    }
-
-    private void FixPlacableItemCollisionArea(PlacableItem placableItem) {
-        var collisionArea = placableItem.FindChild("CollisionArea", true, false) as Area3D;
-        if (collisionArea == null) {
-            foreach (Node child in placableItem.GetChildren()) {
-                if (child is Area3D area) {
-                    collisionArea = area;
-                    break;
-                }
-            }
-        }
-        if (collisionArea != null) {
-            collisionArea.InputRayPickable = true;
-            collisionArea.Monitorable = true;
-            collisionArea.Monitoring = true;
-            if (collisionArea.CollisionLayer == 0) {
-                collisionArea.CollisionLayer = 1;
-            }
         }
     }
 
@@ -198,31 +176,23 @@ public partial class FrictionExperiment : LabItem {
             current = current.GetParent();
             depth++;
         }
-
         bool canMove = draggableNode != null;
-        if (canMove && draggingObject == null && draggableNode != null) {
-            draggingObject = draggableNode;
-            Vector3 originalPos = draggingObject.GlobalPosition;
+        if (canMove && this.draggingObject == null && draggableNode != null) {
+            this.draggingObject = draggableNode;
+            Vector3 originalPos = this.draggingObject.GlobalPosition;
             initialDragPosition = originalPos;
             Vector3 mousePosInPlane = CalculateMousePositionInPlane();
             Vector3 targetPosition = ApplyPlaneConstraint(mousePosInPlane, originalPos);
-            draggingObject.GlobalPosition = targetPosition;
+            this.draggingObject.GlobalPosition = targetPosition;
             initialDragPosition = targetPosition;
             mousePosition = targetPosition;
             dragOffset = Vector3.Zero;
-        } else if (!canMove) {
-            Node node = collider;
-            int showDepth = 0;
-            while (node != null && showDepth < 5) {
-                node = node.GetParent();
-                showDepth++;
-            }
-        }
+        } 
     }
 
     private void EndDrag() {
-        if (draggingObject != null) {
-            draggingObject = null;
+        if (this.draggingObject != null) {
+            this.draggingObject = null;
             dragOffset = Vector3.Zero;
             initialDragPosition = Vector3.Zero;
         }
@@ -240,11 +210,11 @@ public partial class FrictionExperiment : LabItem {
         query.CollideWithAreas = true;
         query.CollisionMask = 0xFFFFFFFF;
         var excludeList = new Godot.Collections.Array<Rid>();
-        if (draggingObject != null) {
-            if (draggingObject is CollisionObject3D collisionObj) {
+        if (this.draggingObject != null) {
+            if (this.draggingObject is CollisionObject3D collisionObj) {
                 excludeList.Add(collisionObj.GetRid());
             } else {
-                var collider = draggingObject.FindChild("*", true, false) as CollisionObject3D;
+                var collider = this.draggingObject.FindChild("*", true, false) as CollisionObject3D;
                 if (collider != null) {
                     excludeList.Add(collider.GetRid());
                 }
@@ -305,10 +275,10 @@ public partial class FrictionExperiment : LabItem {
     private Vector3 CalculateMousePositionInPlane() {
         var mousePos = GetViewport().GetMousePosition();
         var camera = GetViewport().GetCamera3D();
-        if (camera == null) return draggingObject != null ? draggingObject.GlobalPosition : Vector3.Zero;
+        if (camera == null) return this.draggingObject != null ? this.draggingObject.GlobalPosition : Vector3.Zero;
         var from = camera.ProjectRayOrigin(mousePos);
         var normal = camera.ProjectRayNormal(mousePos);
-        Vector3 referencePoint = draggingObject != null ? draggingObject.GlobalPosition : initialDragPosition;
+        Vector3 referencePoint = this.draggingObject != null ? this.draggingObject.GlobalPosition : initialDragPosition;
         var intersect = GetMouseIntersect(mousePos);
         Vector3 hitPosition = Vector3.Zero;
         bool hasHit = false;
@@ -333,19 +303,6 @@ public partial class FrictionExperiment : LabItem {
                     return hitPosition;
                 }
                 break;
-            case DragPlaneType.VerticalZ:
-                planeNormal = new Vector3(0, 0, 1);
-                if (hasHit) {
-                    hitPosition.Z = referencePoint.Z;
-                    return hitPosition;
-                }
-                break;
-            case DragPlaneType.Free:
-                if (hasHit) {
-                    return hitPosition;
-                }
-                float defaultDistance = 5.0f;
-                return from + normal * defaultDistance;
         }
         float denom = normal.Dot(planeNormal);
         if (Mathf.Abs(denom) > 0.0001f) {
@@ -368,11 +325,6 @@ public partial class FrictionExperiment : LabItem {
             case DragPlaneType.VerticalX:
                 targetPosition.X = currentPosition.X;
                 break;
-            case DragPlaneType.VerticalZ:
-                targetPosition.Z = currentPosition.Z;
-                break;
-            case DragPlaneType.Free:
-                break;
         }
         return targetPosition;
     }
@@ -381,6 +333,4 @@ public partial class FrictionExperiment : LabItem {
 public enum DragPlaneType {
     Horizontal,
     VerticalX,
-    VerticalZ,
-    Free
 }

@@ -838,10 +838,10 @@ size = Vector3(1.325, 0.38, 0.46)
 material = SubResource("StandardMaterial3D_gyf3s")
 size = Vector3(0.1, 0.1, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_nndnj"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_nndnj"]
 size = Vector3(0.2, 0.2, 0.2)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_nndnj"]
+[sub_resource type="BoxMesh" id="BoxMesh_nndnj"]
 size = Vector3(0.2, 0.2, 0.2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o5rrj"]
@@ -2243,8 +2243,6 @@ transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4
 script = ExtResource("21_el0ym")
 SurfacePlatformPath = null
 DraggableObjectPaths = Array[NodePath]([])
-GridSize = 0.5
-EnableGridSnapping = false
 DragPlane = 1
 ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
@@ -2280,12 +2278,15 @@ transform = Transform3D(0.92718387, 0.37460658, -3.1829082e-09, -0.37460658, 0.9
 mesh = SubResource("BoxMesh_7y02i")
 script = ExtResource("36_nndnj")
 
+[node name="CollisionArea" type="Area3D" parent="Labs/FrictionLabItem/MeshInstance3D2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Labs/FrictionLabItem/MeshInstance3D2/CollisionArea"]
+shape = SubResource("BoxShape3D_nndnj")
+
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Labs/FrictionLabItem"]
 transform = Transform3D(1, 0, -3.5527137e-15, 0, 1, 0, 3.5527137e-15, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_nndnj")
 script = ExtResource("36_nndnj")
-ItemColor = Color(0, 0, 0, 1)
-CollisionAreaPath = NodePath("CollisionArea")
 
 [node name="CollisionArea" type="Area3D" parent="Labs/FrictionLabItem/MeshInstance3D3"]
 
