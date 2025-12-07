@@ -43,7 +43,6 @@ public partial class ConnectableNode : Node3D {
         if (this.meshInstance != null) {
             this.meshInstance.MaterialOverride = this.material;
         }
-        GD.Print($"ConnectableNode {Name} 已初始化");
     }
 
     private void SetupCollisionLayers() {
@@ -51,11 +50,9 @@ public partial class ConnectableNode : Node3D {
         if (staticBody != null) {
             staticBody.CollisionLayer = 1 << 19;
             staticBody.CollisionMask = 0;
-            GD.Print($"{Name} 碰撞层已设置为 Layer 20");
         } else if (GetParent() is StaticBody3D parentBody) {
             parentBody.CollisionLayer = 1 << 19;
             parentBody.CollisionMask = 0;
-            GD.Print($"{Name} 父节点碰撞层已设置为 Layer 20");
         }
     }
 
@@ -88,7 +85,6 @@ public partial class ConnectableNode : Node3D {
                 GetParent().AddChild(collisionShape);
                 if (GetTree()?.EditedSceneRoot != null)
                     collisionShape.Owner = GetTree().EditedSceneRoot;
-                GD.Print($"为 {Name} 的父节点添加了碰撞形状");
             }
         } else {
             staticBody = new StaticBody3D();
@@ -103,7 +99,6 @@ public partial class ConnectableNode : Node3D {
             staticBody.AddChild(collisionShape);
             if (GetTree()?.EditedSceneRoot != null)
                 collisionShape.Owner = GetTree().EditedSceneRoot;
-            GD.Print($"为 {Name} 创建了新的 StaticBody3D 和碰撞体");
         }
     }
 

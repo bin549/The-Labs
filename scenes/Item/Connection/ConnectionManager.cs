@@ -56,12 +56,6 @@ public partial class ConnectionManager : Node3D {
         var line = this.FindConnectionLine(collider);
         if (line != null) {
             RemoveConnection(line);
-        } else {
-            foreach (var conn in this.connections) {
-                if (conn is Node3D node) {
-                    GD.Print($"  - 连线: {node.Name}");
-                }
-            }
         }
     }
 

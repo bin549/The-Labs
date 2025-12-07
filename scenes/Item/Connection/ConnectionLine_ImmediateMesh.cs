@@ -11,43 +11,43 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
     [Export] public float CableSlack { get; set; } = 0.3f;
     public ConnectableNode StartNode { get; private set; }
     public ConnectableNode EndNode { get; private set; }
-    private MeshInstance3D _meshInstance;
-    private ImmediateMesh _mesh;
-    private StandardMaterial3D _material;
-    private Curve3D _curve;
-    private StaticBody3D _staticBody;
-    private CollisionShape3D _collision;
+    private MeshInstance3D meshInstance;
+    private ImmediateMesh mesh;
+    private StandardMaterial3D material;
+    private Curve3D curve;
+    private StaticBody3D staticBody;
+    private CollisionShape3D collision;
 
     public void Initialize(ConnectableNode startNode, ConnectableNode endNode) {
         StartNode = startNode;
         EndNode = endNode;
-        _mesh = new ImmediateMesh();
-        _meshInstance = new MeshInstance3D();
-        _meshInstance.Mesh = _mesh;
-        AddChild(_meshInstance);
+        this.mesh = new ImmediateMesh();
+        this.meshInstance = new MeshInstance3D();
+        this.meshInstance.Mesh = this.mesh;
+        AddChild(this.meshInstance);
         if (GetTree()?.EditedSceneRoot != null)
-            _meshInstance.Owner = GetTree().EditedSceneRoot;
-        _material = new StandardMaterial3D();
-        _material.AlbedoColor = LineColor;
-        _material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-        _meshInstance.MaterialOverride = _material;
-        _curve = new Curve3D();
-        _staticBody = new StaticBody3D();
-        _staticBody.Name = "LineCollisionBody";
-        _meshInstance.AddChild(_staticBody);
+            this.meshInstance.Owner = GetTree().EditedSceneRoot;
+        this.material = new StandardMaterial3D();
+        this.material.AlbedoColor = LineColor;
+        this.material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+        this.meshInstance.MaterialOverride = this.material;
+        this.curve = new Curve3D();
+        this.staticBody = new StaticBody3D();
+        this.staticBody.Name = "LineCollisionBody";
+        this.meshInstance.AddChild(this.staticBody);
         if (GetTree()?.EditedSceneRoot != null)
-            _staticBody.Owner = GetTree().EditedSceneRoot;
-        _staticBody.CollisionLayer = 1 << 20;
-        _staticBody.CollisionMask = 0;
+            this.staticBody.Owner = GetTree().EditedSceneRoot;
+        this.staticBody.CollisionLayer = 1 << 20;
+        this.staticBody.CollisionMask = 0;
         GD.Print($"[连线] 创建碰撞体:");
-        GD.Print($"  - CollisionLayer: {_staticBody.CollisionLayer}");
-        GD.Print($"  - 二进制: {Convert.ToString(_staticBody.CollisionLayer, 2).PadLeft(32, '0')}");
+        GD.Print($"  - CollisionLayer: {this.staticBody.CollisionLayer}");
+        GD.Print($"  - 二进制: {Convert.ToString(this.staticBody.CollisionLayer, 2).PadLeft(32, '0')}");
         GD.Print($"  - 第21层 = {1 << 20}");
-        _collision = new CollisionShape3D();
-        _collision.Name = "LineCollisionShape";
-        _staticBody.AddChild(_collision);
+        this.collision = new CollisionShape3D();
+        this.collision.Name = "LineCollisionShape";
+        this.staticBody.AddChild(this.collision);
         if (GetTree()?.EditedSceneRoot != null)
-            _collision.Owner = GetTree().EditedSceneRoot;
+            this.collision.Owner = GetTree().EditedSceneRoot;
         this.UpdatePath();
     }
 
@@ -58,59 +58,59 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
     }
 
     private void UpdatePath() {
-        if (_curve == null || StartNode == null || EndNode == null) return;
+        if (this.curve == null || StartNode == null || EndNode == null) return;
         Vector3 startPos = StartNode.GetConnectionPoint();
         Vector3 endPos = EndNode.GetConnectionPoint();
-        _curve.ClearPoints();
+        this.curve.ClearPoints();
         Vector3 midPoint = (startPos + endPos) / 2;
         float distance = startPos.DistanceTo(endPos);
         Vector3 sagOffset = Vector3.Left * (distance * CableSlack);
         Vector3 controlPoint = midPoint + sagOffset;
-        _curve.AddPoint(startPos, Vector3.Zero, (controlPoint - startPos).Normalized() * distance * 0.3f);
-        _curve.AddPoint(controlPoint);
-        _curve.AddPoint(endPos, (controlPoint - endPos).Normalized() * distance * 0.3f, Vector3.Zero);
+        this.curve.AddPoint(startPos, Vector3.Zero, (controlPoint - startPos).Normalized() * distance * 0.3f);
+        this.curve.AddPoint(controlPoint);
+        this.curve.AddPoint(endPos, (controlPoint - endPos).Normalized() * distance * 0.3f, Vector3.Zero);
         GenerateCableMesh();
-        if (_collision != null && _staticBody != null) {
+        if (this.collision != null && this.staticBody != null) {
             var capsule = new CapsuleShape3D();
             capsule.Radius = LineRadius * 10;
             capsule.Height = distance;
-            _collision.Shape = capsule;
-            _staticBody.GlobalPosition = midPoint;
+            this.collision.Shape = capsule;
+            this.staticBody.GlobalPosition = midPoint;
             Vector3 direction = (endPos - startPos).Normalized();
             if (direction.Length() > 0.01f) {
-                _staticBody.LookAt(endPos, Vector3.Up);
-                _staticBody.RotateObjectLocal(Vector3.Right, Mathf.Pi / 2);
+                this.staticBody.LookAt(endPos, Vector3.Up);
+                this.staticBody.RotateObjectLocal(Vector3.Right, Mathf.Pi / 2);
             }
             GD.Print($"[连线] 更新碰撞体:");
             GD.Print($"  - 半径: {capsule.Radius}m");
             GD.Print($"  - 高度: {capsule.Height}m");
-            GD.Print($"  - 位置: {_staticBody.GlobalPosition}");
-            GD.Print($"  - StaticBody层: {_staticBody.CollisionLayer}");
+            GD.Print($"  - 位置: {this.staticBody.GlobalPosition}");
+            GD.Print($"  - StaticBody层: {this.staticBody.CollisionLayer}");
         }
     }
 
     private void GenerateCableMesh() {
-        if (_mesh == null || _curve == null) return;
-        _mesh.ClearSurfaces();
-        float pathLength = _curve.GetBakedLength();
+        if (this.mesh == null || this.curve == null) return;
+        this.mesh.ClearSurfaces();
+        float pathLength = this.curve.GetBakedLength();
         if (pathLength < 0.001f) return;
         var vertices = new System.Collections.Generic.List<Vector3>();
         var normals = new System.Collections.Generic.List<Vector3>();
         for (int i = 0; i <= PathSegments; i++) {
             float t = (float)i / PathSegments;
             float offset = t * pathLength;
-            Vector3 pos = _curve.SampleBaked(offset);
+            Vector3 pos = this.curve.SampleBaked(offset);
             Vector3 forward;
             float delta = Mathf.Min(0.001f, pathLength * 0.01f);
             if (i == 0) {
-                Vector3 nextPos = _curve.SampleBaked(offset + delta);
+                Vector3 nextPos = this.curve.SampleBaked(offset + delta);
                 forward = (nextPos - pos).Normalized();
             } else if (i == PathSegments) {
-                Vector3 prevPos = _curve.SampleBaked(offset - delta);
+                Vector3 prevPos = this.curve.SampleBaked(offset - delta);
                 forward = (pos - prevPos).Normalized();
             } else {
-                Vector3 prevPos = _curve.SampleBaked(offset - delta);
-                Vector3 nextPos = _curve.SampleBaked(offset + delta);
+                Vector3 prevPos = this.curve.SampleBaked(offset - delta);
+                Vector3 nextPos = this.curve.SampleBaked(offset + delta);
                 forward = (nextPos - prevPos).Normalized();
             }
             if (forward.Length() < 0.001f) {
@@ -134,37 +134,37 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
                 normals.Add(normal);
             }
         }
-        _mesh.SurfaceBegin(Mesh.PrimitiveType.Triangles);
+        this.mesh.SurfaceBegin(Mesh.PrimitiveType.Triangles);
         for (int i = 0; i < PathSegments; i++) {
             for (int j = 0; j < RadialSegments; j++) {
                 int current = i * (RadialSegments + 1) + j;
                 int next = current + RadialSegments + 1;
-                _mesh.SurfaceSetNormal(normals[current]);
-                _mesh.SurfaceAddVertex(vertices[current]);
-                _mesh.SurfaceSetNormal(normals[next]);
-                _mesh.SurfaceAddVertex(vertices[next]);
-                _mesh.SurfaceSetNormal(normals[current + 1]);
-                _mesh.SurfaceAddVertex(vertices[current + 1]);
-                _mesh.SurfaceSetNormal(normals[current + 1]);
-                _mesh.SurfaceAddVertex(vertices[current + 1]);
-                _mesh.SurfaceSetNormal(normals[next]);
-                _mesh.SurfaceAddVertex(vertices[next]);
-                _mesh.SurfaceSetNormal(normals[next + 1]);
-                _mesh.SurfaceAddVertex(vertices[next + 1]);
+                this.mesh.SurfaceSetNormal(normals[current]);
+                this.mesh.SurfaceAddVertex(vertices[current]);
+                this.mesh.SurfaceSetNormal(normals[next]);
+                this.mesh.SurfaceAddVertex(vertices[next]);
+                this.mesh.SurfaceSetNormal(normals[current + 1]);
+                this.mesh.SurfaceAddVertex(vertices[current + 1]);
+                this.mesh.SurfaceSetNormal(normals[current + 1]);
+                this.mesh.SurfaceAddVertex(vertices[current + 1]);
+                this.mesh.SurfaceSetNormal(normals[next]);
+                this.mesh.SurfaceAddVertex(vertices[next]);
+                this.mesh.SurfaceSetNormal(normals[next + 1]);
+                this.mesh.SurfaceAddVertex(vertices[next + 1]);
             }
         }
-        _mesh.SurfaceEnd();
+        this.mesh.SurfaceEnd();
     }
 
     public void OnHoverEnter() {
-        if (_material != null) {
-            _material.AlbedoColor = HoverColor;
+        if (this.material != null) {
+            this.material.AlbedoColor = HoverColor;
         }
     }
 
     public void OnHoverExit() {
-        if (_material != null) {
-            _material.AlbedoColor = LineColor;
+        if (this.material != null) {
+            this.material.AlbedoColor = LineColor;
         }
     }
 
