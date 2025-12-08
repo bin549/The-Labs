@@ -61,19 +61,16 @@ public partial class ConnectableNode : Node3D {
         if (staticBody != null) {
             var collisionShape = staticBody.GetNodeOrNull<CollisionShape3D>("CollisionShape3D");
             if (collisionShape != null) {
-                GD.Print($"{Name} 已有完整的物理体配置");
                 return;
-            } else {
-                collisionShape = new CollisionShape3D();
-                var shape = new BoxShape3D();
-                shape.Size = new Vector3(0.3f, 0.3f, 0.3f);
-                collisionShape.Shape = shape;
-                staticBody.AddChild(collisionShape);
-                if (GetTree()?.EditedSceneRoot != null)
-                    collisionShape.Owner = GetTree().EditedSceneRoot;
-                GD.Print($"为 {Name} 的 StaticBody3D 添加了碰撞形状");
-                return;
-            }
+            } 
+            collisionShape = new CollisionShape3D();
+            var shape = new BoxShape3D();
+            shape.Size = new Vector3(0.3f, 0.3f, 0.3f);
+            collisionShape.Shape = shape;
+            staticBody.AddChild(collisionShape);
+            if (GetTree()?.EditedSceneRoot != null)
+                collisionShape.Owner = GetTree().EditedSceneRoot;
+            return;
         }
         if (GetParent() is StaticBody3D || GetParent() is Area3D) {
             var collisionShape = GetNodeOrNull<CollisionShape3D>("CollisionShape3D");

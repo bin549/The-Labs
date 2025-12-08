@@ -18,11 +18,11 @@ public partial class PauseMenu : Control {
     private void OnResumePressed() {
         if (this.gameManager != null) {
             this.gameManager.TogglePause(false);
-        } else {
-            Input.MouseMode = Input.MouseModeEnum.Captured;
-            GetTree().Paused = false;
-            Visible = false;
-        }
+            return;
+        } 
+        Input.MouseMode = Input.MouseModeEnum.Captured;
+        GetTree().Paused = false;
+        Visible = false;
     }
 
     private void OnQuitPressed() {

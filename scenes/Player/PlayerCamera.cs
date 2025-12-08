@@ -110,9 +110,6 @@ public partial class PlayerCamera : Node3D {
             this.gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
                                GetTree().Root.FindChild("GameManager", true, false) as GameManager;
         }
-        if (this.gameManager == null) {
-            GD.PushWarning($"{Name}: 未找到 GameManager 节点，无法检测交互状态。");
-        }
     }
 
     private static Interactable FindInteractable(Node node) {

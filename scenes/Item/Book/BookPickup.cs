@@ -30,7 +30,6 @@ public partial class BookPickup : Interactable {
 				this.ExitInteraction();
 			} else {
 				GetViewport().SetInputAsHandled();
-				GD.Print("请稍等片刻再按 Esc 退出");
 			}
 		}
 	}

@@ -10,6 +10,7 @@ public partial class LabItem : Interactable {
     [Export] public string ExperimentDescription { get; set; } = "";
     [Export] public ExperimentCategory ExperimentCategory { get; set; } = ExperimentCategory.Mechanics;
     [Export] public Node3D TeleportPosition { get; set; }
+    public bool IsInteracting => base.isInteracting;
 
     public override void _Ready() {
         base._Ready();
@@ -36,10 +37,9 @@ public partial class LabItem : Interactable {
     }
 
     private void RegisterToExperimentManager() {
-        if (!RegisterToMenu) return;
+        if (!this.RegisterToMenu) return;
         this.experimentManager = GetTree().Root.FindChild("ExperimentManager", true, false) as ExperimentManager;
         if (this.experimentManager == null) {
-            GD.PushWarning($"LabItem [{ExperimentName}]: 未找到 ExperimentManager，无法注册到快速跳转菜单");
             return;
         }
         Vector3 teleportPos;
@@ -59,7 +59,7 @@ public partial class LabItem : Interactable {
     }
 
     private void UnregisterFromExperimentManager() {
-        if (!RegisterToMenu || this.experimentManager == null) return;
+        if (!this.RegisterToMenu || this.experimentManager == null) return;
         string expName = string.IsNullOrEmpty(ExperimentName) ? DisplayName : ExperimentName;
         this.experimentManager.UnregisterExperiment(expName);
     }

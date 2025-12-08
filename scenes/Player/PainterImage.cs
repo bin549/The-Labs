@@ -70,7 +70,6 @@ public partial class PainterImage : Sprite2D {
         canvasMaterial.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
         canvasMesh.MaterialOverride = canvasMaterial;
         canvasMeshInitialized = true;
-        GD.Print($"PainterImage: CanvasMesh 初始化成功");
     }
 
     private void UpdateCanvasMeshTexture() {
@@ -99,7 +98,6 @@ public partial class PainterImage : Sprite2D {
     private void _OnPixelModeToggled(bool toggledOn) {
         pixelMode = toggledOn;
         this.lastPixelGrid = new Vector2I(-1, -1);
-        GD.Print($"像素模式: {(pixelMode ? "开启" : "关闭")} (网格大小: {pixelGridSize})");
     }
 
     public void _OnHSliderValueChanged(double value) {

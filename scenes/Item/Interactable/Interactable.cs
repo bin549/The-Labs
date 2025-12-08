@@ -62,7 +62,7 @@ public partial class Interactable : Node3D {
     }
 
     public override void _Process(double delta) {
-        if (useCurvedArrow) {
+        if (this.useCurvedArrow) {
             this.UpdateCurvedArrow();
             if (lineRoot != null) lineRoot.Visible = false;
         } else {
@@ -78,8 +78,6 @@ public partial class Interactable : Node3D {
     public virtual void EnterInteraction() {
         if (this.gameManager != null && LockPlayerControl) {
             this.gameManager.SetCurrentInteractable(this);
-        } else if (this.gameManager == null) {
-            GD.PushWarning($"{Name}: GameManager 未绑定，交互状态无法同步。");
         }
         if (LockPlayerControl) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
@@ -152,7 +150,6 @@ public partial class Interactable : Node3D {
         this.outlineTargets.Clear();
         this.originalOverlays.Clear();
         if (OutlineTargetPaths == null || OutlineTargetPaths.Count == 0) {
-            GD.PushWarning($"{Name}: 未设置 OutlineTargetPaths，无法应用描边。");
             return;
         }
         foreach (var path in OutlineTargetPaths) {
@@ -161,9 +158,7 @@ public partial class Interactable : Node3D {
             if (instance != null) {
                 this.outlineTargets.Add(instance);
                 this.originalOverlays[instance] = instance.MaterialOverlay;
-            } else {
-                GD.PushWarning($"{Name}: 未找到描边目标节点 {path}");
-            }
+            } 
         }
     }
 
@@ -171,9 +166,6 @@ public partial class Interactable : Node3D {
         if (gameManager != null && GodotObject.IsInstanceValid(gameManager)) return;
         gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
                       GetTree().Root.FindChild("GameManager", true, false) as GameManager;
-        if (gameManager == null) {
-            GD.PushWarning($"{Name}: 未找到 GameManager，某些交互功能可能不可用。");
-        }
     }
 
     private void InitLineSegment() {
@@ -436,9 +428,6 @@ public partial class Interactable : Node3D {
         var player = GetTree().Root.FindChild("Player", true, false);
         if (player != null) {
             dialogueLabel = player.FindChild("DialogueLabel", true, false) as Label;
-        }
-        if (dialogueLabel == null) {
-            GD.PushWarning($"{Name}: 未找到 DialogueLabel，对话文本将无法显示在屏幕上。");
         }
     }
 

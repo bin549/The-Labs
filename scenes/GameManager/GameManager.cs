@@ -8,7 +8,6 @@ public partial class GameManager : Node {
     public override void _Ready() {
         this.ProcessMode = Node.ProcessModeEnum.Always;
         if (this.pauseMenu == null) {
-            GD.PushWarning($"{nameof(GameManager)}: pauseMenu 未绑定，暂停菜单将无法显示。");
             return;
         }
         this.pauseMenu.Visible = false;

@@ -7,7 +7,6 @@ public partial class AluminumReactionExperiment : LabItem {
     [Export] public NodePath NaOHSolutionPath { get; set; }
     [Export] public NodePath TestTubePath { get; set; }
     [Export] public NodePath BubbleEffectPath { get; set; }
-
     private Control experimentUIPanel;
     private Node3D aluminumPiece;
     private Node3D naohSolution;
@@ -52,7 +51,7 @@ public partial class AluminumReactionExperiment : LabItem {
             if (this.reactionProgress >= 1.0f) {
                 this.reactionProgress = 1.0f;
                 this.isReacting = false;
-                OnReactionComplete();
+                this.OnReactionComplete();
             }
             this.UpdateReactionVisuals();
         }
@@ -68,15 +67,15 @@ public partial class AluminumReactionExperiment : LabItem {
 
     public override void EnterInteraction() {
         base.EnterInteraction();
-        if (experimentUIPanel != null) {
-            experimentUIPanel.Visible = true;
+        if (this.experimentUIPanel != null) {
+            this.experimentUIPanel.Visible = true;
         }
         this.UpdateStepUI();
     }
 
     public override void ExitInteraction() {
-        if (experimentUIPanel != null) {
-            experimentUIPanel.Visible = false;
+        if (this.experimentUIPanel != null) {
+            this.experimentUIPanel.Visible = false;
         }
         ResetExperiment();
         base.ExitInteraction();
@@ -98,20 +97,20 @@ public partial class AluminumReactionExperiment : LabItem {
     }
 
     private void InitializeUI() {
-        if (experimentUIPanel == null) {
+        if (this.experimentUIPanel == null) {
             this.CreateRuntimeUI();
         }
-        if (experimentUIPanel != null) {
-            experimentUIPanel.Visible = false;
+        if (this.experimentUIPanel != null) {
+            this.experimentUIPanel.Visible = false;
         }
     }
 
     private void CreateRuntimeUI() {
-        experimentUIPanel = new PanelContainer();
-        experimentUIPanel.Name = "AluminumReactionUI";
-        experimentUIPanel.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        this.experimentUIPanel = new PanelContainer();
+        this.experimentUIPanel.Name = "AluminumReactionUI";
+        this.experimentUIPanel.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         var mainVBox = new VBoxContainer();
-        experimentUIPanel.AddChild(mainVBox);
+        this.experimentUIPanel.AddChild(mainVBox);
         var titleLabel = new Label();
         titleLabel.Text = "铝与氢氧化钠溶液反应实验";
         titleLabel.HorizontalAlignment = HorizontalAlignment.Center;
@@ -177,14 +176,14 @@ public partial class AluminumReactionExperiment : LabItem {
         if (player != null) {
             var canvasLayer = player.FindChild("CanvasLayer", false, false);
             if (canvasLayer != null) {
-                canvasLayer.AddChild(experimentUIPanel);
+                canvasLayer.AddChild(this.experimentUIPanel);
             }
         }
     }
 
     private void UpdateStepUI() {
         if (stepLabel == null || instructionLabel == null) return;
-        switch (currentStep) {
+        switch (this.currentStep) {
             case ExperimentStep.Introduction:
                 stepLabel.Text = "步骤 1: 实验介绍";
                 instructionLabel.Text = @"本实验将演示铝与氢氧化钠溶液的反应。
@@ -241,15 +240,15 @@ public partial class AluminumReactionExperiment : LabItem {
 
     private void UpdateButtonStates() {
         if (previousStepButton != null) {
-            previousStepButton.Disabled = currentStep == ExperimentStep.Introduction;
+            previousStepButton.Disabled = this.currentStep == ExperimentStep.Introduction;
         }
         if (startReactionButton != null) {
             startReactionButton.Visible =
-                currentStep == ExperimentStep.AddNaOH || currentStep == ExperimentStep.ObserveReaction;
+                this.currentStep == ExperimentStep.AddNaOH || this.currentStep == ExperimentStep.ObserveReaction;
             startReactionButton.Disabled = this.isReacting;
         }
         if (testGasButton != null) {
-            testGasButton.Visible = currentStep == ExperimentStep.TestGas;
+            testGasButton.Visible = this.currentStep == ExperimentStep.TestGas;
         }
     }
 
@@ -265,7 +264,7 @@ public partial class AluminumReactionExperiment : LabItem {
         if (bubbleEffect != null) {
             bubbleEffect.Emitting = true;
         }
-        currentStep = ExperimentStep.ObserveReaction;
+        this.currentStep = ExperimentStep.ObserveReaction;
         this.UpdateStepUI();
     }
 
@@ -289,7 +288,7 @@ public partial class AluminumReactionExperiment : LabItem {
         if (testGasButton != null) {
             testGasButton.Disabled = false;
         }
-        currentStep = ExperimentStep.CollectGas;
+        this.currentStep = ExperimentStep.CollectGas;
         this.UpdateStepUI();
     }
 
@@ -299,7 +298,7 @@ public partial class AluminumReactionExperiment : LabItem {
         this.AddObservation("[color=orange]气体被点燃，发出淡蓝色火焰[/color]");
         this.AddObservation("[color=cyan]\"噗\"的一声，产生爆鸣[/color]");
         this.AddObservation("\n[b]结论：生成的气体是氢气（H₂）[/b]");
-        currentStep = ExperimentStep.Conclusion;
+        this.currentStep = ExperimentStep.Conclusion;
         this.UpdateStepUI();
     }
 
@@ -318,21 +317,21 @@ public partial class AluminumReactionExperiment : LabItem {
     }
 
     private void OnNextStep() {
-        if (currentStep < ExperimentStep.Conclusion) {
-            currentStep++;
+        if (this.currentStep < ExperimentStep.Conclusion) {
+            this.currentStep++;
             this.UpdateStepUI();
         }
     }
 
     private void OnPreviousStep() {
-        if (currentStep > ExperimentStep.Introduction) {
-            currentStep--;
+        if (this.currentStep > ExperimentStep.Introduction) {
+            this.currentStep--;
             this.UpdateStepUI();
         }
     }
 
     private void ResetExperiment() {
-        currentStep = ExperimentStep.Introduction;
+        this.currentStep = ExperimentStep.Introduction;
         this.isReacting = false;
         this.reactionProgress = 0.0f;
         this.observations.Clear();

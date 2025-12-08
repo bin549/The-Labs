@@ -10,9 +10,7 @@ public partial class PaintBoard : Interactable {
     public override void _Ready() {
         base._Ready();
         this.paintContrl = GetNodeOrNull<Control>(this.paintContrlPath);
-        if (this.paintContrl == null) {
-            GD.PushWarning($"{Name}: 未找到 PaintContrl 节点，路径: {this.paintContrlPath}");
-        } else {
+        if (this.paintContrl != null) {
             this.paintContrl.Visible = false;
         }
         CallDeferred(MethodName.SetupCanvasMesh);
@@ -23,10 +21,7 @@ public partial class PaintBoard : Interactable {
         var canvasMesh = GetNodeOrNull<MeshInstance3D>("CanvasMesh");
         if (canvasMesh != null) {
             this.painterImage.SetCanvasMesh(canvasMesh);
-            GD.Print($"{Name}: 已将 CanvasMesh 设置到 PainterImage");
-        } else {
-            GD.PushWarning($"{Name}: 未找到 CanvasMesh 子节点");
-        }
+        } 
     }
 
     public override void EnterInteraction() {

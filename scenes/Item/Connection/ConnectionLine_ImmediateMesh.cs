@@ -19,8 +19,8 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
     private CollisionShape3D collision;
 
     public void Initialize(ConnectableNode startNode, ConnectableNode endNode) {
-        StartNode = startNode;
-        EndNode = endNode;
+        this.StartNode = startNode;
+        this.EndNode = endNode;
         this.mesh = new ImmediateMesh();
         this.meshInstance = new MeshInstance3D();
         this.meshInstance.Mesh = this.mesh;
@@ -39,10 +39,6 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
             this.staticBody.Owner = GetTree().EditedSceneRoot;
         this.staticBody.CollisionLayer = 1 << 20;
         this.staticBody.CollisionMask = 0;
-        GD.Print($"[连线] 创建碰撞体:");
-        GD.Print($"  - CollisionLayer: {this.staticBody.CollisionLayer}");
-        GD.Print($"  - 二进制: {Convert.ToString(this.staticBody.CollisionLayer, 2).PadLeft(32, '0')}");
-        GD.Print($"  - 第21层 = {1 << 20}");
         this.collision = new CollisionShape3D();
         this.collision.Name = "LineCollisionShape";
         this.staticBody.AddChild(this.collision);
@@ -52,15 +48,15 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
     }
 
     public override void _Process(double delta) {
-        if (StartNode != null && EndNode != null) {
+        if (this.StartNode != null && this.EndNode != null) {
             this.UpdatePath();
         }
     }
 
     private void UpdatePath() {
-        if (this.curve == null || StartNode == null || EndNode == null) return;
-        Vector3 startPos = StartNode.GetConnectionPoint();
-        Vector3 endPos = EndNode.GetConnectionPoint();
+        if (this.curve == null || this.StartNode == null || this.EndNode == null) return;
+        Vector3 startPos = this.StartNode.GetConnectionPoint();
+        Vector3 endPos = this.EndNode.GetConnectionPoint();
         this.curve.ClearPoints();
         Vector3 midPoint = (startPos + endPos) / 2;
         float distance = startPos.DistanceTo(endPos);
@@ -69,7 +65,7 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
         this.curve.AddPoint(startPos, Vector3.Zero, (controlPoint - startPos).Normalized() * distance * 0.3f);
         this.curve.AddPoint(controlPoint);
         this.curve.AddPoint(endPos, (controlPoint - endPos).Normalized() * distance * 0.3f, Vector3.Zero);
-        GenerateCableMesh();
+        this.GenerateCableMesh();
         if (this.collision != null && this.staticBody != null) {
             var capsule = new CapsuleShape3D();
             capsule.Radius = LineRadius * 10;
@@ -81,11 +77,6 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
                 this.staticBody.LookAt(endPos, Vector3.Up);
                 this.staticBody.RotateObjectLocal(Vector3.Right, Mathf.Pi / 2);
             }
-            GD.Print($"[连线] 更新碰撞体:");
-            GD.Print($"  - 半径: {capsule.Radius}m");
-            GD.Print($"  - 高度: {capsule.Height}m");
-            GD.Print($"  - 位置: {this.staticBody.GlobalPosition}");
-            GD.Print($"  - StaticBody层: {this.staticBody.CollisionLayer}");
         }
     }
 

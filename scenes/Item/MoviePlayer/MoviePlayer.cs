@@ -17,7 +17,7 @@ public partial class MoviePlayer : Interactable {
     private VideoStreamPlayer videoPlayer;
     private bool isPlaying;
     private bool isPaused;
-    private int currentStreamIndex = -1;
+    private int currentStreamIndexh = -1;
     private VideoStream originalStream;
     private Control playlistPanel;
     private Container playlistButtonContainer;
@@ -104,10 +104,9 @@ public partial class MoviePlayer : Interactable {
             }
         }
         if (previousPlayer != null && previousPlayer != this.videoPlayer) {
-            DisconnectVideoSignals(previousPlayer);
+            this.DisconnectVideoSignals(previousPlayer);
         }
         if (this.videoPlayer == null) {
-            GD.PushWarning($"{Name}: 未找到 VideoStreamPlayer 节点 {VideoPlayerPath}。");
             return;
         }
         this.ConnectVideoSignals();
@@ -116,7 +115,7 @@ public partial class MoviePlayer : Interactable {
         if (ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
-        originalStream = this.videoPlayer.Stream;
+        this.originalStream = this.videoPlayer.Stream;
     }
 
     private void TogglePlayback() {
@@ -229,7 +228,7 @@ public partial class MoviePlayer : Interactable {
             this.isPaused = false;
             base.isInteracting = false;
         } else {
-            currentStreamIndex = -1;
+            this.currentStreamIndexh = -1;
         }
         this.UpdatePlaylistSelection();
         this.HidePlaylistUI();
@@ -243,12 +242,12 @@ public partial class MoviePlayer : Interactable {
         this.videoPlayer.Paused = false;
         this.isPaused = false;
         if (this.VideoStreams != null && this.VideoStreams.Count > 0) {
-            var targetIndex = currentStreamIndex >= 0
-                ? currentStreamIndex
+            var targetIndex = this.currentStreamIndexh >= 0
+                ? this.currentStreamIndexh
                 : WrapIndex(DefaultStreamIndex, this.VideoStreams.Count);
             this.AssignStream(targetIndex, true);
-        } else if (this.videoPlayer.Stream == null && originalStream != null) {
-            this.videoPlayer.Stream = originalStream;
+        } else if (this.videoPlayer.Stream == null && this.originalStream != null) {
+            this.videoPlayer.Stream = this.originalStream;
             if (ResetOnStop) {
                 this.videoPlayer.StreamPosition = 0;
             }
@@ -259,8 +258,8 @@ public partial class MoviePlayer : Interactable {
 
     private void SwitchVideo(int direction) {
         if (this.videoPlayer == null || this.VideoStreams == null || this.VideoStreams.Count <= 1) return;
-        var baseIndex = currentStreamIndex >= 0
-            ? currentStreamIndex
+        var baseIndex = this.currentStreamIndexh >= 0
+            ? this.currentStreamIndexh
             : WrapIndex(DefaultStreamIndex, this.VideoStreams.Count);
         var nextIndex = WrapIndex(baseIndex + direction, this.VideoStreams.Count);
         bool wasPlaying = this.videoPlayer.IsPlaying();
@@ -293,11 +292,10 @@ public partial class MoviePlayer : Interactable {
         int wrappedIndex = WrapIndex(index, this.VideoStreams.Count);
         var stream = this.VideoStreams[wrappedIndex];
         if (stream == null) {
-            GD.PushWarning($"{Name}: 播放列表中的 VideoStream（索引 {wrappedIndex}）为空。");
             return false;
         }
         bool wasPlaying = this.videoPlayer.IsPlaying();
-        bool needUpdate = currentStreamIndex != wrappedIndex || this.videoPlayer.Stream != stream;
+        bool needUpdate = this.currentStreamIndexh != wrappedIndex || this.videoPlayer.Stream != stream;
         if (needUpdate && wasPlaying) {
             this.videoPlayer.Stop();
         }
@@ -307,7 +305,7 @@ public partial class MoviePlayer : Interactable {
         if (resetPosition || ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
-        currentStreamIndex = wrappedIndex;
+        this.currentStreamIndexh = wrappedIndex;
         this.UpdatePlaylistSelection();
         return wasPlaying;
     }
@@ -320,7 +318,7 @@ public partial class MoviePlayer : Interactable {
         this.videoPlayer.Paused = false;
         this.isPaused = false;
         if (!this.HideScreenOnStop) return;
-        if ((this.VideoStreams != null && this.VideoStreams.Count > 0) || originalStream != null) {
+        if ((this.VideoStreams != null && this.VideoStreams.Count > 0) || this.originalStream != null) {
             this.videoPlayer.Stream = null;
         }
         this.videoPlayer.Visible = false;
@@ -337,9 +335,8 @@ public partial class MoviePlayer : Interactable {
     }
 
     private void ResolvePlaylistUI() {
-        this.playlistPanel = PlaylistPanelPath.IsEmpty ? null : GetNodeOrNull<Control>(PlaylistPanelPath);
+        this.playlistPanel = this.PlaylistPanelPath.IsEmpty ? null : GetNodeOrNull<Control>(this.PlaylistPanelPath);
         if (this.playlistPanel == null) {
-            GD.PushWarning($"{Name}: 未找到影片選單面板 {PlaylistPanelPath}，將於運行時建立預設面板。");
             CreateRuntimePlaylistUI();
         }
         if (this.playlistPanel == null) return;
@@ -353,7 +350,7 @@ public partial class MoviePlayer : Interactable {
             }
         }
         if (playlistButtonContainer == null) {
-            CreateRuntimePlaylistContainer();
+            this.CreateRuntimePlaylistContainer();
         }
         this.BuildPlaylistButtons();
         this.HidePlaylistUI();
@@ -415,7 +412,7 @@ public partial class MoviePlayer : Interactable {
     }
 
     private void OnPlaylistButtonPressed(int index) {
-        PlayStreamAt(index);
+        this.PlayStreamAt(index);
     }
 
     private void PlayStreamAt(int index) {
@@ -494,7 +491,7 @@ public partial class MoviePlayer : Interactable {
         for (int i = 0; i < this.playlistButtons.Count; i++) {
             var button = this.playlistButtons[i];
             if (button == null || !IsInstanceValid(button)) continue;
-            button.ButtonPressed = (i == currentStreamIndex && currentStreamIndex >= 0);
+            button.ButtonPressed = (i == this.currentStreamIndexh && this.currentStreamIndexh >= 0);
         }
     }
 
@@ -527,7 +524,7 @@ public partial class MoviePlayer : Interactable {
         }
         this.playlistPanel = panel;
         this.CreateRuntimePlaylistContainer();
-        PlaylistPanelPath = this.playlistPanel.GetPath();
+        this.PlaylistPanelPath = this.playlistPanel.GetPath();
         if (playlistButtonContainer != null) {
             PlaylistButtonContainerPath = playlistButtonContainer.GetPath();
         }

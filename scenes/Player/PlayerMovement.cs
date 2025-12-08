@@ -102,8 +102,5 @@ public partial class PlayerMovement : CharacterBody3D {
             gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
                           GetTree().Root.FindChild("GameManager", true, false) as GameManager;
         }
-        if (gameManager == null) {
-            GD.PushWarning($"{Name}: 未找到 GameManager，无法同步交互状态锁定移动。");
-        }
     }
 }

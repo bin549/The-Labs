@@ -31,7 +31,6 @@ public partial class ForceMeter : Node3D {
             this.pointer = FindChild("Pointer", true, false) as Node3D;
         }
         if (this.pointer == null) {
-            GD.PushWarning($"{Name}: 未找到指针节点，将创建默认指针。");
             this.CreateDefaultPointer();
         }
         if (!string.IsNullOrEmpty(DisplayLabelPath?.ToString())) {

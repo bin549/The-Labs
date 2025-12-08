@@ -39,7 +39,6 @@ public partial class Door : Interactable {
 
     private void ToggleDoor() {
         if (this.doorPivot == null) {
-            GD.PushWarning($"{Name}: 未找到门旋转节点，无法开关门。");
             this.FinishInteraction();
             return;
         }
@@ -81,9 +80,6 @@ public partial class Door : Interactable {
             this.doorPivot = GetNodeOrNull<Node3D>("walldoor_0012/Node3D");
         } else {
             this.doorPivot = GetNodeOrNull<Node3D>(DoorPivotPath);
-        }
-        if (this.doorPivot == null) {
-            GD.PushWarning($"{Name}: 未找到 DoorPivotPath 指定的节点 {DoorPivotPath}。");
         }
     }
 

@@ -22,7 +22,7 @@ public partial class ConnectionLine : Node3D, IConnectionLine {
             this.meshInstance.Owner = GetTree().EditedSceneRoot;
         var cylinderMesh = new CylinderMesh();
         cylinderMesh.TopRadius = LineRadius;
-        cylinderMesh.BottomRadius = LineRadius;
+        cylinderMesh.BottomRadius = LineRadius;             
         cylinderMesh.Height = 1.0f;
         cylinderMesh.Rings = 1;
         cylinderMesh.RadialSegments = 16;

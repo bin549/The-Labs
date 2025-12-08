@@ -76,22 +76,14 @@ public partial class Gramophone : Interactable {
         if (this.audioPlayer == null || this.audioPlayer.Stream == null) return;
         var duplicatedStream = this.audioPlayer.Stream.Duplicate() as AudioStream;
         if (duplicatedStream == null) {
-            GD.PushWarning($"{Name}: 无法复制音频流资源，循环设置可能无效。");
             return;
         }
-        bool loopApplied = false;
         if (duplicatedStream is AudioStreamWav wavStream) {
             wavStream.LoopMode = this.Loop ? AudioStreamWav.LoopModeEnum.Forward : AudioStreamWav.LoopModeEnum.Disabled;
-            loopApplied = true;
         } else if (duplicatedStream is AudioStreamOggVorbis oggStream) {
             oggStream.Loop = this.Loop;
-            loopApplied = true;
         } else if (duplicatedStream is AudioStreamMP3 mp3Stream) {
             mp3Stream.Loop = this.Loop;
-            loopApplied = true;
-        }
-        if (!loopApplied) {
-            GD.PushWarning($"{Name}: 当前音频流类型 {duplicatedStream.GetClass()} 不支持自动循环设置。");
         }
         this.audioPlayer.Stream = duplicatedStream;
     }

@@ -38,9 +38,9 @@ public partial class ConnectionManager : Node3D {
         if (collider == null) {
             return;
         }
-        var clickedNode = FindConnectableNode(collider);
+        var clickedNode = this.FindConnectableNode(collider);
         if (clickedNode != null) {
-            OnNodeClicked(clickedNode);
+            this.OnNodeClicked(clickedNode);
         } 
     }
     
@@ -55,7 +55,7 @@ public partial class ConnectionManager : Node3D {
         }
         var line = this.FindConnectionLine(collider);
         if (line != null) {
-            RemoveConnection(line);
+            this.RemoveConnection(line);
         }
     }
 
@@ -176,7 +176,6 @@ public partial class ConnectionManager : Node3D {
             current = current.GetParent();
             depth++;
         }
-        GD.Print($"    ✗ 未找到连线（遍历了 {depth} 层）");
         return null;
     }
 }

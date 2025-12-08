@@ -66,9 +66,6 @@ public partial class Picture : Interactable {
         if (candidate == null) {
             candidate = GetTree().Root.GetNodeOrNull<TextureRect>(TextureRectPath);
         }
-        if (candidate == null) {
-            GD.PushWarning($"{Name}: 未找到 TextureRect 节点 {TextureRectPath}，无法显示照片。");
-        }
         this.textureRect = candidate;
     }
 }

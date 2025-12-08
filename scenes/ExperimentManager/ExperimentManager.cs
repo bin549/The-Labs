@@ -44,17 +44,11 @@ public partial class ExperimentManager : Node {
         if (this.player == null) {
             this.player = GetTree().Root.FindChild("Player", true, false) as Node3D;
         }
-        if (this.player == null) {
-            GD.PushWarning("ExperimentManager: 未找到Player节点，传送功能将不可用。");
-        }
     }
 
     private void ResolveGameManager() {
         this.gameManager = GetTree().Root.GetNodeOrNull<GameManager>("GameManager") ??
                       GetTree().Root.FindChild("GameManager", true, false) as GameManager;
-        if (this.gameManager == null) {
-            GD.PushWarning("ExperimentManager: 未找到GameManager节点，菜单显示时摄像头控制可能无法禁用。");
-        }
     }
 
     private void CreateExperimentMenu() {
@@ -155,12 +149,10 @@ public partial class ExperimentManager : Node {
     }
 
     private void OnExperimentSelected(ExperimentInfo exp) {
-        GD.Print($"选择实验：{exp.ExperimentName}");
         if (this.player != null && exp.Position != Vector3.Zero) {
             this.player.GlobalPosition = exp.Position;
-            GD.Print($"传送到位置：{exp.Position}");
         }
-        HideExperimentMenu();
+        this.HideExperimentMenu();
         Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 
