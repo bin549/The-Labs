@@ -4,7 +4,7 @@ public partial class PlacableItem : Node3D {
 	[Export] public bool IsDraggable { get; set; } = true;
 	
 	private bool isDragging = false;
-	private DragPlaneType dragPlane = DragPlaneType.Horizontal;
+	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
 
 	public DragPlaneType DragPlane {
@@ -18,6 +18,14 @@ public partial class PlacableItem : Node3D {
 		}
 		if (!IsParentLabItemInteracting()) {
 			return;
+		}
+		if (@event is InputEventKey keyEvent) {
+			if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
+				this.DragPlane = DragPlaneType.Horizontal;
+			}
+			if (keyEvent.Keycode == Key.Shift && !keyEvent.Pressed) {
+				this.DragPlane = DragPlaneType.VerticalX;
+			}
 		}
 		if (@event is InputEventMouseButton mouseButton) {
 			bool leftButtonPressed = mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed;
@@ -37,6 +45,7 @@ public partial class PlacableItem : Node3D {
 		}
 	}
 
+	
 	public override void _Process(double delta) {
 		if (this.isDragging && IsDraggable) {
 			this.UpdateDragPosition();

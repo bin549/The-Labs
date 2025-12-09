@@ -2,26 +2,20 @@ using Godot;
 using System.Collections.Generic;
 
 public partial class FrictionExperiment : LabItem {
-    public DragPlaneType DragPlane { get; set; } = DragPlaneType.Horizontal;
-    [Export] private List<PlacableItem> placableItems = new();
+    [Export]  public Godot.Collections.Array<NodePath> PlacableItemPaths { get; set; } = new();
+    private List<PlacableItem> placableItems = new();
 
     public override void _Ready() {
         base._Ready();
+        foreach (var path in PlacableItemPaths) {
+            var node = GetNode<PlacableItem>(path);
+            this.placableItems.Add(node);
+        }
     }
 
     public override void _Input(InputEvent @event) {
         if (!base.isInteracting) {
             return;
-        }
-        if (@event is InputEventKey keyEvent) {
-            if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
-                this.DragPlane = DragPlaneType.VerticalX;
-                this.UpdateAllPlacableItemsDragPlane();
-            }
-            if (keyEvent.Keycode == Key.Shift && !keyEvent.Pressed) {
-                this.DragPlane = DragPlaneType.Horizontal;
-                this.UpdateAllPlacableItemsDragPlane();
-            }
         }
     }
 
@@ -31,7 +25,6 @@ public partial class FrictionExperiment : LabItem {
         foreach (var placableItem in this.placableItems) {
             if (GodotObject.IsInstanceValid(placableItem)) {
                 placableItem.IsDraggable = true;
-                placableItem.DragPlane = this.DragPlane;
             }
         }
         if (Input.MouseMode != Input.MouseModeEnum.Visible) {
@@ -46,13 +39,5 @@ public partial class FrictionExperiment : LabItem {
             }
         }
         base.ExitInteraction();
-    }
-
-    private void UpdateAllPlacableItemsDragPlane() {
-        foreach (var placableItem in this.placableItems) {
-            if (GodotObject.IsInstanceValid(placableItem)) {
-                placableItem.DragPlane = this.DragPlane;
-            }
-        }
     }
 }
