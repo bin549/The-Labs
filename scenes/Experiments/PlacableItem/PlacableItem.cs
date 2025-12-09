@@ -55,11 +55,9 @@ public partial class PlacableItem : Node3D {
 		if (!this.IsDraggable) return;
 		if (@event is InputEventKey keyEvent) {
 			if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
-				// 切换到另一个配置的DragPlane
 				this.DragPlane = this.dragPlane == this.dragPlane1 ? this.dragPlane2 : this.dragPlane1;
 			}
 			if (keyEvent.Keycode == Key.Shift && !keyEvent.Pressed) {
-				// 恢复为第一个配置的DragPlane
 				this.DragPlane = this.dragPlane1;
 			}
 		}

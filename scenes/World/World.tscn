@@ -46,7 +46,6 @@
 [ext_resource type="PackedScene" uid="uid://cklfa3h0xah3h" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/floorpattern.glb" id="34_usbto"]
 [ext_resource type="Shader" uid="uid://bi3o8elbtqoni" path="res://addons/simplegrasstextured/shaders/grass.gdshader" id="35_iege6"]
 [ext_resource type="Texture2D" uid="uid://cggex14siiuu6" path="res://assets/images/Grass.png" id="36_iege6"]
-[ext_resource type="Script" uid="uid://djd13x6sqncx0" path="res://scenes/Item/LabItem/Common/PlacableItem.cs" id="36_nndnj"]
 [ext_resource type="Script" uid="uid://2juaclm8gc1n" path="res://addons/simplegrasstextured/grass.gd" id="37_3i1j7"]
 [ext_resource type="Texture2D" uid="uid://cvp2qkrixdnnc" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/wall_001_Wall1t_color.png" id="37_5qnt6"]
 [ext_resource type="Texture2D" uid="uid://c43nyydt5ki6f" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/wall_001_Wall1t_metallic-Wall1t_roughness.png" id="38_fbdsj"]
@@ -58,6 +57,7 @@
 [ext_resource type="Shader" path="res://shaders/stylized_liquid.gdshader" id="42_1m4v3"]
 [ext_resource type="PackedScene" uid="uid://ba3pyobte13gt" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/chair.glb" id="43_5qnt6"]
 [ext_resource type="Script" uid="uid://cxd872c88wb4d" path="res://scenes/Experiments/InclinedPlaneExperiment/InclinedPlaneExperiment.cs" id="43_85ror"]
+[ext_resource type="Script" uid="uid://bjsqw8wsethu5" path="res://scenes/Experiments/InclinedPlaneExperiment/SliderObject.cs" id="44_1m4v3"]
 [ext_resource type="VideoStream" uid="uid://cf17p7hyndjxi" path="res://assets/videos/高中物理必修一牛顿运动定律 3.实验探究加速度与力、质量的关系.ogv" id="53_85ror"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqijp"]
@@ -3186,7 +3186,7 @@ ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
 TeleportPosition = NodePath("TeleportPos")
 DisplayName = "摩檫力实验"
-outlineMeshs = [NodePath(""), NodePath(""), NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
+outlineMeshs = [null, null, NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
 
 [node name="NameLabel" parent="Rooms/Room01/Labs/FrictionExperiment" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4011903, 0)
@@ -3213,9 +3213,12 @@ transform = Transform3D(-0.63419086, 0, 0.77317655, 0, 1, 0, -0.77317655, 0, -0.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("BoxShape3D_xyyef")
 
-[node name="InclinedPlaneExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="InclinedPlaneExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("HintLabel", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(0.49999994, 0, 0, 0, 0.5, 0, 0, 0, 0.49999994, -13.901301, -0.75, -6.314387)
 script = ExtResource("43_85ror")
+PlacableItemPaths = []
+CurrentStep = 0
+HintLabel = NodePath("Hint")
 ExperimentName = "斜坡实验"
 TeleportPosition = NodePath("TeleportPos")
 outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/MeshInstance3D3/outline")]
@@ -3223,7 +3226,12 @@ outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("La
 [node name="NameLabel" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0353298, 2.0611017, 0)
 
-[node name="PhantomCamera3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="1"]
+[node name="Hint" type="Label3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.074380875, 1.6076238, 0)
+pixel_size = 0.01
+text = "Text"
+
+[node name="PhantomCamera3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="2"]
 transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
 
 [node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/CHEMESTRYtable2/CHEMESTRYtable" index="0" groups=["outline"]]
@@ -3232,7 +3240,7 @@ mesh = SubResource("ArrayMesh_3qaqg")
 metadata/_edit_lock_ = true
 metadata/outline = 0
 
-[node name="lineNode" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="3"]
+[node name="lineNode" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0815601, 0, 0)
 
 [node name="linePointAPath" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/lineNode" index="0"]
@@ -3241,7 +3249,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11833, 1.9378605, 0)
 [node name="linePointBPath" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/lineNode" index="1"]
 transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, 0.6453152, 0.6854284, 0)
 
-[node name="TeleportPos" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="4"]
+[node name="TeleportPos" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3268166)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment"]
@@ -3260,7 +3268,7 @@ mesh = SubResource("PrismMesh_1m4v3")
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects" node_paths=PackedStringArray("outlineMesh", "collisionArea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42760658, 0, 0)
 mesh = SubResource("BoxMesh_u0op8")
-script = ExtResource("36_nndnj")
+script = ExtResource("44_1m4v3")
 dragPlane1 = 2
 dragPlane2 = 1
 outlineMesh = NodePath("outline")
