@@ -66,14 +66,12 @@ public partial class LabItem : Interactable {
 
     public override void EnterInteraction() {
         base.EnterInteraction();
-        base.ApplyOutline(true);
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 999;
         }
     }
 
     public override void ExitInteraction() {
-        base.ApplyOutline(false);
         base.ExitInteraction();
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 1;

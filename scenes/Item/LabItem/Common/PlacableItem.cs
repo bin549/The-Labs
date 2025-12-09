@@ -6,21 +6,50 @@ public partial class PlacableItem : Node3D {
 	private bool isDragging = false;
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
-	[Export] private MeshInstance3D draggableOutlineMesh;
+	[Export] private MeshInstance3D outlineMesh;
+	[Export] private Area3D collisionArea;
+	private bool isHovered = false;
 
 	public DragPlaneType DragPlane {
 		get => dragPlane;
 		set => dragPlane = value;
 	}
 
+	public override void _Ready() {
+		base._Ready();
+		if (this.outlineMesh != null) {
+			this.outlineMesh.Visible = false;
+		}
+	}
+
+	private void OnMouseEntered() {
+		if (this.isHovered) return;
+		this.isHovered = true;
+		if (this.outlineMesh != null) {
+			this.outlineMesh.Visible = true;
+		}
+	}
+
+	private void OnMouseExited() {
+		if (!this.isHovered) return;
+		this.isHovered = false;
+		if (this.outlineMesh != null) {
+			this.outlineMesh.Visible = false;
+		}
+	}
+
 	public override void _Input(InputEvent @event) {
-		if (!this.IsDraggable) {
-			return;
+		if (!this.IsParentLabItemInteracting()) return;
+		if (@event is InputEventMouseMotion motionEvent) {
+			var intersect = this.GetMouseIntersect(motionEvent.Position);
+			if (intersect != null && this.IsClickOnSelf(intersect)) {
+				this.OnMouseEntered();
+			} else {
+				this.OnMouseExited();
+			}
 		}
-		this.ToggleDragabledOutline(@event);
-		if (!this.IsParentLabItemInteracting()) {
-			return;
-		}
+		
+		if (!this.IsDraggable) return;
 		if (@event is InputEventKey keyEvent) {
 			if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
 				this.DragPlane = DragPlaneType.Horizontal;
@@ -50,12 +79,6 @@ public partial class PlacableItem : Node3D {
 	public override void _Process(double delta) {
 		if (this.isDragging && this.IsDraggable) {
 			this.UpdateDragPosition();
-		}
-	}
-
-	public void ToggleDragabledOutline(InputEvent @event) {
-		if (@event is InputEventMouseMotion mouseMotion) {
-			
 		}
 	}
 

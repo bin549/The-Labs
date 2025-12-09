@@ -84,12 +84,14 @@ public partial class Interactable : Node3D {
         if (this.lineNode != null) {
             this.lineNode.Visible = false;
         }
+        this.ApplyOutline(false);
         this.PlayDialogue(true);
     }
 
     public virtual void ExitInteraction() {
         this.PlayDialogue(false);
         this.HideDialogue();
+        this.ApplyOutline(true);
         if (this.gameManager != null && this.lockPlayerControl) {
             this.gameManager.SetCurrentInteractable(null);
         }

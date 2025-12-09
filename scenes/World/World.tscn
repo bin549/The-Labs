@@ -1103,7 +1103,7 @@ shader_parameter/_textureOffset = Vector2(0, 0)
 render_priority = 10
 next_pass = SubResource("ShaderMaterial_kkp5u")
 shader = ExtResource("14_vn2rd")
-shader_parameter/_thickness = 0.035
+shader_parameter/_thickness = 0.015
 shader_parameter/_color = Color(1, 1, 1, 1)
 shader_parameter/_useEmission = false
 shader_parameter/_emissionStrength = 1.0
@@ -2004,6 +2004,8 @@ gi_mode = 0
 mesh = SubResource("ArrayMesh_sfg4c")
 skeleton = NodePath("")
 script = ExtResource("19_5qnt6")
+paintContrlPath = NodePath("../../Player/CanvasLayer/Control/PaintContrl")
+painterImagePath = NodePath("../../Player/CanvasLayer/Control/PaintContrl/PainterImage")
 DisplayName = "画板"
 nameLabel = NodePath("NameLabel")
 lineNode = NodePath("lineNode")
@@ -3179,6 +3181,7 @@ metadata/outline = 0
 transform = Transform3D(0.92718387, 0.37460658, -3.1829082e-09, -0.37460658, 0.92718387, -1.637457e-08, -3.1828833e-09, 1.6374573e-08, 1, -0.6999998, 0.79999995, 0)
 mesh = SubResource("BoxMesh_7y02i")
 script = ExtResource("36_nndnj")
+IsDraggable = false
 
 [node name="CollisionArea" type="Area3D" parent="Rooms/Room01/Labs/FrictionLabItem/LabCube3"]
 
@@ -3186,19 +3189,23 @@ script = ExtResource("36_nndnj")
 shape = SubResource("BoxShape3D_nndnj")
 
 [node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/FrictionLabItem/LabCube3" groups=["outline"]]
+visible = false
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_wbrgl")
 metadata/_edit_lock_ = true
 metadata/outline = 0
 
-[node name="LabCube2" type="MeshInstance3D" parent="Rooms/Room01/Labs/FrictionLabItem"]
+[node name="LabCube2" type="MeshInstance3D" parent="Rooms/Room01/Labs/FrictionLabItem" node_paths=PackedStringArray("outlineMesh", "collisionArea")]
 transform = Transform3D(1, 0, -3.5527137e-15, 0, 1, 0, 3.5527137e-15, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_nndnj")
 script = ExtResource("36_nndnj")
+outlineMesh = NodePath("outline")
+collisionArea = NodePath("CollisionArea")
 
 [node name="CollisionArea" type="Area3D" parent="Rooms/Room01/Labs/FrictionLabItem/LabCube2"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room01/Labs/FrictionLabItem/LabCube2/CollisionArea"]
+transform = Transform3D(1, 0, -1.10134124e-13, 0, 1, 0, 1.10134124e-13, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_nndnj")
 
 [node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/FrictionLabItem/LabCube2" groups=["outline"]]
