@@ -1,9 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-public partial class FrictionExperiment : LabItem {
-    [Export]  public Godot.Collections.Array<NodePath> PlacableItemPaths { get; set; } = new();
-    
+public partial class InclinedPlaneExperiment : LabItem {
     public override void _Ready() {
         base._Ready();
     }

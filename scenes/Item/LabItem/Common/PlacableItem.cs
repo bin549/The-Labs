@@ -4,6 +4,8 @@ using Godot.Collections;
 public partial class PlacableItem : Node3D {
 	[Export] public bool IsDraggable { get; set; } = true;
 	private bool isDragging = false;
+	[Export] private DragPlaneType dragPlane1 = DragPlaneType.VerticalX;
+	[Export] private DragPlaneType dragPlane2 = DragPlaneType.Horizontal;
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
 	[Export] private MeshInstance3D outlineMesh;
@@ -17,6 +19,7 @@ public partial class PlacableItem : Node3D {
 
 	public override void _Ready() {
 		base._Ready();
+		this.dragPlane = this.dragPlane1;
 		if (this.outlineMesh != null) {
 			this.outlineMesh.Visible = false;
 		}
@@ -52,10 +55,12 @@ public partial class PlacableItem : Node3D {
 		if (!this.IsDraggable) return;
 		if (@event is InputEventKey keyEvent) {
 			if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
-				this.DragPlane = DragPlaneType.Horizontal;
+				// 切换到另一个配置的DragPlane
+				this.DragPlane = this.dragPlane == this.dragPlane1 ? this.dragPlane2 : this.dragPlane1;
 			}
 			if (keyEvent.Keycode == Key.Shift && !keyEvent.Pressed) {
-				this.DragPlane = DragPlaneType.VerticalX;
+				// 恢复为第一个配置的DragPlane
+				this.DragPlane = this.dragPlane1;
 			}
 		}
 		if (@event is InputEventMouseButton mouseButton) {
@@ -154,6 +159,9 @@ public partial class PlacableItem : Node3D {
 			case DragPlaneType.VerticalX:
 				planeNormal = Vector3.Right;
 				break;
+			case DragPlaneType.VerticalY:
+				planeNormal = Vector3.Forward;
+				break;
 		}
 		float denom = normal.Dot(planeNormal);
 		if (Mathf.Abs(denom) < 0.0001f) {
@@ -201,4 +209,5 @@ public partial class PlacableItem : Node3D {
 public enum DragPlaneType {
 	Horizontal,
 	VerticalX,
+	VerticalY,
 }
