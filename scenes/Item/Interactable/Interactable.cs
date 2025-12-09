@@ -1,14 +1,12 @@
 using Godot;
 using PhantomCamera;
 using System.Collections.Generic;
+using Godot.Collections;
 
 public partial class Interactable : Node3D {
     [Export] protected string DisplayName { get; set; } = "物体";
     [Export] protected string ActionName { get; set; } = "交互";
     [Export] public bool lockPlayerControl { get; set; } = true;
-    [Export] protected ShaderMaterial outlineMat;
-    [Export] protected float outlineSize = 1.05f;
-    [Export] public Godot.Collections.Array<NodePath> OutlineTargetPaths { get; set; } = new();
     [Export] protected Label3D nameLabel;
     [Export] protected Node3D lineNode;
     [Export] public NodePath linePointAPath { get; set; } = new();
@@ -23,7 +21,7 @@ public partial class Interactable : Node3D {
     [Export] public float curveThicknessMultiplier { get; set; } = 3.0f;
     [Export] public float arrowThicknessMultiplier { get; set; } = 0.5f;
     [Export] public float arrowLengthMultiplier { get; set; } = 4.0f;
-    [Export] public Godot.Collections.Array<DialogueEntry> Dialogues { get; set; } = new();
+    [Export] public Array<DialogueEntry> Dialogues { get; set; } = new();
     protected bool isFocus = false;
     protected bool isInteracting = false;
     [Export] protected GameManager gameManager;
@@ -31,8 +29,6 @@ public partial class Interactable : Node3D {
     private int currentDialogueIndex = 0;
     private static Label dialogueLabel;
     private Timer dialogueTimer;
-    private readonly List<GeometryInstance3D> outlineTargets = new();
-    private readonly Dictionary<GeometryInstance3D, Material> originalOverlays = new();
     private Node3D lineRoot;
     private MeshInstance3D lineMeshInstance;
     private BoxMesh lineBoxMesh;
@@ -44,9 +40,9 @@ public partial class Interactable : Node3D {
     private MeshInstance3D arrowHeadInstance;
     private CylinderMesh arrowConeMesh;
     private StandardMaterial3D curveMaterial;
+    [Export] private Array<MeshInstance3D> outlineMeshs;
 
     public override void _Ready() {
-        this.CacheOutlineTargets();
         this.InitLineSegment();
         this.InitCurvedArrow();
         this.ResolveGameManager();
@@ -127,38 +123,9 @@ public partial class Interactable : Node3D {
     protected virtual void Interact(Node3D interactor) {
     }
 
-    private void ApplyOutline(bool enable) {
-        if (this.outlineMat == null) return;
-        this.SetOutlineActive(enable);
-    }
-
-    protected void SetOutlineActive(bool enable) {
-        if (this.outlineMat == null || this.outlineTargets.Count == 0) return;
-        foreach (var instance in this.outlineTargets) {
-            if (!GodotObject.IsInstanceValid(instance)) continue;
-            if (!this.originalOverlays.ContainsKey(instance)) {
-                this.originalOverlays[instance] = instance.MaterialOverlay;
-            }
-            instance.MaterialOverlay = enable ? this.outlineMat : this.originalOverlays[instance];
-        }
-        if (this.outlineMat != null) {
-            this.outlineMat.SetShaderParameter("size", enable ? outlineSize : 0.0f);
-        }
-    }
-
-    private void CacheOutlineTargets() {
-        this.outlineTargets.Clear();
-        this.originalOverlays.Clear();
-        if (OutlineTargetPaths == null || OutlineTargetPaths.Count == 0) {
-            return;
-        }
-        foreach (var path in OutlineTargetPaths) {
-            if (path.ToString() == string.Empty) continue;
-            var instance = GetNodeOrNull<GeometryInstance3D>(path);
-            if (instance != null) {
-                this.outlineTargets.Add(instance);
-                this.originalOverlays[instance] = instance.MaterialOverlay;
-            } 
+    protected void ApplyOutline(bool enable) {
+        foreach (var mesh in this.outlineMeshs) {
+            mesh.Visible = enable;
         }
     }
 

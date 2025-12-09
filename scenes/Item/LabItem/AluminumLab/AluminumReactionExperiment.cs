@@ -5,9 +5,6 @@ public partial class AluminumReactionExperiment : LabItem {
     public override void _Ready() {
         base._Ready();
     }
-
-    public override void _Process(double delta) {
-    }
     
     public override void _Input(InputEvent @event) {
         if (!base.isInteracting) {

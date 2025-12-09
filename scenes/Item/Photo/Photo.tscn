@@ -1,15 +1,10 @@
-[gd_scene load_steps=12 format=4 uid="uid://cp8rcnljv3duj"]
+[gd_scene load_steps=16 format=4 uid="uid://cp8rcnljv3duj"]
 
 [ext_resource type="Script" uid="uid://dbd6j7bad4so0" path="res://scenes/Item/Photo/Picture.cs" id="1_d6gik"]
-[ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="2_qcm41"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="3_ex4i4"]
 [ext_resource type="Texture2D" uid="uid://1fchufgmnu5d" path="res://assets/images/bafkreigavk5b64vkhjknydgg6tohwhp3p4s45ocorwyew4hipcff2pkgai.jpg" id="4_d6gik"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2fmw"]
-render_priority = 0
-shader = ExtResource("2_qcm41")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/size = 0.0
+[ext_resource type="Shader" uid="uid://2tg3u22xqk6e" path="res://addons/EasyOutlineForGodot/Shaders/3DMeshOutline/Mask.gdshader" id="4_qcm41"]
+[ext_resource type="Shader" uid="uid://0165jki8qcwc" path="res://addons/EasyOutlineForGodot/Shaders/3DMeshOutline/VisibleStencil.gdshader" id="5_ex4i4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6gik"]
 size = Vector3(0.5078125, 1.0686035, 1.0585938)
@@ -56,17 +51,77 @@ albedo_texture = ExtResource("4_d6gik")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ef1mk"]
 
-[node name="Photo" type="Node3D" node_paths=PackedStringArray("nameLabel", "lineNode")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5f6g6"]
+render_priority = 5
+shader = ExtResource("4_qcm41")
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oues2"]
+render_priority = 10
+next_pass = SubResource("ShaderMaterial_5f6g6")
+shader = ExtResource("5_ex4i4")
+shader_parameter/_thickness = 0.025
+shader_parameter/_color = Color(1, 1, 1, 1)
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1s4yg"]
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, 0, 1, 1, 1e-05),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAAAA="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAQADAAIA"),
+"material": SubResource("ShaderMaterial_oues2"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAAL8AAAAAAAAAvwAAAL8AAAAAAAAAPwAAAD8AAAAAAAAAvwAAAD8AAAAA/3//f////7//f/9/////v/9//3////+//3//f////78=")
+}]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_v60cx"]
+_surfaces = [{
+"aabb": AABB(-0.18750024, 0, -0.014510989, 0.375, 0.48000008, 0.037500024),
+"attribute_data": PackedByteArray("roctP/Sscz+uhy0/9Q51P67QLT/1DnU/rtAtP/Sscz+u0C0/9KxzP67QLT/1DnU/rtAtP/UOdT+u0C0/9KxzP67QLT/0rHM/rtAtP/UOdT+uhy0/9Q51P66HLT/0rHM/roctP/XidD+uhy0/9eJ0P66kLT/14nQ/rqQtP/XidD+u0C0/9Q51P67QLT/1DnU/roctP/UOdT+uhy0/9Q51P67QLT/0rHM/rtAtP/Sscz+uhy0/9KxzP66HLT/0rHM/roctP/TZcz+uhy0/9eJ0P66HLT/1DnU/roctP/Sscz+uhy0/9Q51P66HLT/02XM/roctP/XidD+uhy0/9KxzP66+LT/lzGQ/rr4tP+ZXZj+uvi0/5ldmP66+LT/lzGQ/roctP/XidD+uhy0/9NlzP66kLT/02XM/rqQtP/XidD+uhy0/9NlzP66HLT/02XM/rqQtP/TZcz+upC0/9NlzP66HLT/02XM/roctP/XidD+upC0/9eJ0P66kLT/02XM/"),
+"format": 34359742487,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAGQAcABoAHQAYABsAGQAeABwAHQAcAB4AHQAfABwAHQAbAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8A"),
+"material": SubResource("ShaderMaterial_oues2"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("EABAvpLC9T6AU7w8EABAvgAAAACAU7w8EABAvgAAAACAv228EABAvpLC9T6Av228EABAvpLC9T6Av228EABAvgAAAACAv2288P8/PgAAAACAv2288P8/PpLC9T6Av2288P8/PpLC9T6Av2288P8/PgAAAACAv2288P8/PgAAAACAU7w88P8/PpLC9T6AU7w8WvQoPkpDuDyAU7w8+fUovkpDuDyAU7w8+fUovkpDuDxo5AI8WvQoPkpDuDxo5AI88P8/PgAAAACAv228EABAvgAAAACAv228EABAvgAAAACAU7w88P8/PgAAAACAU7w8EABAvpLC9T6Av2288P8/PpLC9T6Av2288P8/PpLC9T6AU7w8EABAvpLC9T6AU7w8+fUovmg96j6AU7w8+fUovkpDuDyAU7w8EABAvgAAAACAU7w8EABAvpLC9T6AU7w88P8/PgAAAACAU7w8WvQoPmg96j6AU7w8WvQoPkpDuDyAU7w88P8/PpLC9T6AU7w8WvQoPmg96j5o5AI8WvQoPkpDuDxo5AI8+fUovkpDuDxo5AI8+fUovmg96j5o5AI8+fUovkpDuDyAU7w8+fUovmg96j6AU7w8+fUovmg96j5o5AI8+fUovkpDuDxo5AI8+fUovmg96j6AU7w8WvQoPmg96j6AU7w8WvQoPmg96j5o5AI8+fUovmg96j5o5AI8WvQoPmg96j6AU7w8WvQoPkpDuDyAU7w8WvQoPkpDuDxo5AI8WvQoPmg96j5o5AI8VFVUlf7/AQCqalRV/v8BAP8f/z/+/wEAMjNl5v7/AQAyM2Xm///+v/8f/z////6/zMyZGf///r//3/+////+v//f/7/+//7/zMyZGf7//v+RpLZt/v/+/5mZMrP+//7/ZmYys/7//7+qqlSV/v//v5mZMrP+//+//z//n/7//7/MzJkZ/v//v/8f/z/+//+/qmpUVf7//7+RpLZt/v//vzIzZeb+//+//9//v/7//7+ZmTKz/v//v1RVVJX+//+/VJVUVfr//z+qqlSV+v//P6pqVFX6//8/VFVUlfr//z+RpLZt+v//P21btm36//8/ZmYys/r//z+ZmTKz+v//P2ZmzEz6//8//z//n/r//z+ZmTKz+v//P/+//1/6//8/qqpUlf7//v9UlVRV/v/+//+//1/+//7/mZkys/7//v9UlVRV/v//v21btm3+//+/ZmbMTP7//7//v/9f/v//v21btm3+/wEAZmYys/7/AQD/P/+f/v8BAGZmzEz+/wEA")
+}]
+
+[node name="Photo" type="Node3D" node_paths=PackedStringArray("nameLabel", "lineNode", "outlineMeshs")]
 transform = Transform3D(1, 0, 0, 0, 0.19531286, 0.980741, 0, -0.980741, 0.19531286, 0, 0, 0)
 script = ExtResource("1_d6gik")
 TextureRectPath = NodePath("../../Player/CanvasLayer/Control/TextureRect")
-outlineMat = SubResource("ShaderMaterial_x2fmw")
-OutlineTargetPaths = Array[NodePath]([NodePath("Mesh")])
 nameLabel = NodePath("NameLabel")
 lineNode = NodePath("lineNode")
 linePointAPath = NodePath("lineNode/lineNode")
 linePointBPath = NodePath("lineNode/lineNode2")
 lineColor = Color(1, 1, 1, 1)
+outlineMeshs = [NodePath("Mesh/MeshInstance3D/outline"), NodePath("Mesh/outline")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(-4.371139e-08, -1, 0, 0.99999994, -4.3711385e-08, -1.4901161e-08, 1.4901161e-08, -8.881784e-16, 0.99999994, 0.29999995, 0, 0)
@@ -80,10 +135,25 @@ transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.29
 mesh = SubResource("ArrayMesh_w2gn4")
 skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4580984, 0, 0, 0, 0.3646426, 0, 0, 0, 1, 0.065228224, -0.0046334267, 0.00980413)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(-2.0024117e-08, 0.36464256, -1.4901161e-08, -0.4580984, -1.5939033e-08, 0, -4.0687307e-16, 0, 0.99999994, -0.004633416, 0.23477173, 0.009804129)
 material_override = SubResource("StandardMaterial3D_qcm41")
 mesh = SubResource("QuadMesh_ef1mk")
+skeleton = NodePath("../..")
+
+[node name="outline" type="MeshInstance3D" parent="Mesh/MeshInstance3D" groups=["outline"]]
+visible = false
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_1s4yg")
+metadata/_edit_lock_ = true
+metadata/outline = 0
+
+[node name="outline" type="MeshInstance3D" parent="Mesh" groups=["outline"]]
+visible = false
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_v60cx")
+metadata/_edit_lock_ = true
+metadata/outline = 0
 
 [node name="NameLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.7459524, -0.6659987, 0, 0.6659987, 0.7459524, -0.17390323, 0.08713505, 0.43753874)

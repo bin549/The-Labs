@@ -1,9 +1,6 @@
 using Godot;
 
 public partial class OhmsLawExperiment : LabItem {
-	public override void _Process(double delta) {
-	}
-    
 	public override void _Input(InputEvent @event) {
 		if (!base.isInteracting) {
 			return;
