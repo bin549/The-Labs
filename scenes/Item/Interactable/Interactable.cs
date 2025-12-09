@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class Interactable : Node3D {
     [Export] protected string DisplayName { get; set; } = "物体";
     [Export] protected string ActionName { get; set; } = "交互";
-    [Export] public bool LockPlayerControl { get; set; } = true;
+    [Export] public bool lockPlayerControl { get; set; } = true;
     [Export] protected ShaderMaterial outlineMat;
     [Export] protected float outlineSize = 1.05f;
     [Export] public Godot.Collections.Array<NodePath> OutlineTargetPaths { get; set; } = new();
@@ -76,10 +76,10 @@ public partial class Interactable : Node3D {
     }
 
     public virtual void EnterInteraction() {
-        if (this.gameManager != null && LockPlayerControl) {
+        if (this.gameManager != null && this.lockPlayerControl) {
             this.gameManager.SetCurrentInteractable(this);
         }
-        if (LockPlayerControl) {
+        if (this.lockPlayerControl) {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
         if (this.nameLabel != null) {
@@ -94,10 +94,10 @@ public partial class Interactable : Node3D {
     public virtual void ExitInteraction() {
         this.PlayDialogue(false);
         this.HideDialogue();
-        if (this.gameManager != null && LockPlayerControl) {
+        if (this.gameManager != null && this.lockPlayerControl) {
             this.gameManager.SetCurrentInteractable(null);
         }
-        if (LockPlayerControl) {
+        if (this.lockPlayerControl) {
             Input.MouseMode = Input.MouseModeEnum.Captured;
         }
         if (this.nameLabel != null) {
@@ -176,7 +176,7 @@ public partial class Interactable : Node3D {
         lineMeshInstance = new MeshInstance3D();
         lineMeshInstance.Name = "AutoLineMesh";
         lineBoxMesh = new BoxMesh();
-        lineBoxMesh.Size = new Vector3(lineThickness * 2.0f, lineThickness * 2.0f, 1.0f);
+        lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
         lineMeshInstance.Mesh = lineBoxMesh;
         lineMaterial = new StandardMaterial3D();
         lineMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
@@ -184,7 +184,7 @@ public partial class Interactable : Node3D {
         lineMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
         lineMaterial.EmissionEnabled = true;
         lineMaterial.Emission = lineColor;
-        lineMaterial.EmissionEnergyMultiplier = lineGlowStrength;
+        lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
         lineMeshInstance.MaterialOverride = lineMaterial;
         lineMeshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
         lineRoot.AddChild(lineMeshInstance);
@@ -212,12 +212,12 @@ public partial class Interactable : Node3D {
         lineRoot.LookAt(mid + dir, Vector3.Up);
         lineMeshInstance.Scale = new Vector3(1.0f, 1.0f, len);
         if (lineBoxMesh != null) {
-            lineBoxMesh.Size = new Vector3(lineThickness * 2.0f, lineThickness * 2.0f, 1.0f);
+            lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
         }
         if (lineMaterial != null) {
             lineMaterial.AlbedoColor = lineColor;
             lineMaterial.Emission = lineColor;
-            lineMaterial.EmissionEnergyMultiplier = lineGlowStrength;
+            lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
         }
     }
 
@@ -228,40 +228,40 @@ public partial class Interactable : Node3D {
         parent.AddChild(curveRoot);
         curveBodyInstance = new MultiMeshInstance3D();
         curveBody = new MultiMesh();
-        curveSegmentMesh = new BoxMesh();
-        curveSegmentMesh.Size = new Vector3(lineThickness * curveThicknessMultiplier, 1.0f,
-            lineThickness * curveThicknessMultiplier);
-        curveBody.Mesh = curveSegmentMesh;
+        this.curveSegmentMesh = new BoxMesh();
+        this.curveSegmentMesh.Size = new Vector3(this.lineThickness * curveThicknessMultiplier, 1.0f,
+            this.lineThickness * curveThicknessMultiplier);
+        curveBody.Mesh = this.curveSegmentMesh;
         curveBody.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
         curveBodyInstance.Multimesh = curveBody;
-        curveMaterial = new StandardMaterial3D();
-        curveMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-        curveMaterial.AlbedoColor = lineColor;
-        curveMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
-        curveMaterial.EmissionEnabled = true;
-        curveMaterial.Emission = lineColor;
-        curveMaterial.EmissionEnergyMultiplier = lineGlowStrength;
-        curveBodyInstance.MaterialOverride = curveMaterial;
+        this.curveMaterial = new StandardMaterial3D();
+        this.curveMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+        this.curveMaterial.AlbedoColor = lineColor;
+        this.curveMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+        this.curveMaterial.EmissionEnabled = true;
+        this.curveMaterial.Emission = lineColor;
+        this.curveMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
+        curveBodyInstance.MaterialOverride = this.curveMaterial;
         curveBodyInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
         curveRoot.AddChild(curveBodyInstance);
-        arrowHeadInstance = new MeshInstance3D();
-        arrowConeMesh = new CylinderMesh();
-        var arrowRadius = Mathf.Max(lineThickness * arrowThicknessMultiplier, 0.002f);
-        var arrowHeight = Mathf.Max(lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
-        arrowConeMesh.TopRadius = 0.0f;
-        arrowConeMesh.BottomRadius = arrowRadius;
-        arrowConeMesh.Height = arrowHeight;
-        arrowHeadInstance.Mesh = arrowConeMesh;
-        arrowHeadInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+        this.arrowHeadInstance = new MeshInstance3D();
+        this.arrowConeMesh = new CylinderMesh();
+        var arrowRadius = Mathf.Max(this.lineThickness * arrowThicknessMultiplier, 0.002f);
+        var arrowHeight = Mathf.Max(this.lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
+        this.arrowConeMesh.TopRadius = 0.0f;
+        this.arrowConeMesh.BottomRadius = arrowRadius;
+        this.arrowConeMesh.Height = arrowHeight;
+        this.arrowHeadInstance.Mesh = this.arrowConeMesh;
+        this.arrowHeadInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
         var headMat = new StandardMaterial3D();
         headMat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
         headMat.AlbedoColor = lineColor;
         headMat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
         headMat.EmissionEnabled = true;
         headMat.Emission = lineColor;
-        headMat.EmissionEnergyMultiplier = lineGlowStrength;
-        arrowHeadInstance.MaterialOverride = headMat;
-        curveRoot.AddChild(arrowHeadInstance);
+        headMat.EmissionEnergyMultiplier = this.lineGlowStrength;
+        this.arrowHeadInstance.MaterialOverride = headMat;
+        curveRoot.AddChild(this.arrowHeadInstance);
     }
 
     private static Vector3 BezierQuadratic(Vector3 a, Vector3 c, Vector3 b, float t) {
@@ -315,30 +315,30 @@ public partial class Interactable : Node3D {
             }
             Vector3 segMid = (p0 + p1) * 0.5f;
             var basis = len < 0.0001f ? Basis.Identity : BuildBasisYAligned(segDir, up);
-            var scaled = basis.Scaled(new Vector3(lineThickness, Mathf.Max(len, 0.0001f), lineThickness));
+            var scaled = basis.Scaled(new Vector3(this.lineThickness, Mathf.Max(len, 0.0001f), this.lineThickness));
             var globalXform = new Transform3D(scaled, segMid);
             curveBody.SetInstanceTransform(i, invRoot * globalXform);
         }
-        if (curveSegmentMesh != null) {
-            curveSegmentMesh.Size = new Vector3(lineThickness * curveThicknessMultiplier, 1.0f,
-                lineThickness * curveThicknessMultiplier);
+        if (this.curveSegmentMesh != null) {
+            this.curveSegmentMesh.Size = new Vector3(this.lineThickness * curveThicknessMultiplier, 1.0f,
+                this.lineThickness * curveThicknessMultiplier);
         }
-        if (curveMaterial != null) {
-            curveMaterial.AlbedoColor = lineColor;
-            curveMaterial.Emission = lineColor;
-            curveMaterial.EmissionEnergyMultiplier = lineGlowStrength;
+        if (this.curveMaterial != null) {
+            this.curveMaterial.AlbedoColor = lineColor;
+            this.curveMaterial.Emission = lineColor;
+            this.curveMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
         }
         var tangent = BezierQuadraticTangent(start, control, end, 0.95f);
         if (tangent.Length() < 0.0001f) tangent = end - start;
         var headBasis = BuildBasisYAligned(tangent, up);
         var globalHead = new Transform3D(headBasis, end);
-        arrowHeadInstance.GlobalTransform = globalHead;
-        if (arrowConeMesh != null) {
-            var arrowRadius = Mathf.Max(lineThickness * arrowThicknessMultiplier, 0.002f);
-            var arrowHeight = Mathf.Max(lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
-            arrowConeMesh.TopRadius = 0.0f;
-            arrowConeMesh.BottomRadius = arrowRadius;
-            arrowConeMesh.Height = arrowHeight;
+        this.arrowHeadInstance.GlobalTransform = globalHead;
+        if (this.arrowConeMesh != null) {
+            var arrowRadius = Mathf.Max(this.lineThickness * arrowThicknessMultiplier, 0.002f);
+            var arrowHeight = Mathf.Max(this.lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
+            this.arrowConeMesh.TopRadius = 0.0f;
+            this.arrowConeMesh.BottomRadius = arrowRadius;
+            this.arrowConeMesh.Height = arrowHeight;
         }
     }
 
@@ -347,11 +347,11 @@ public partial class Interactable : Node3D {
         this.dialogueAudioPlayer.Name = "DialogueAudioPlayer";
         this.dialogueAudioPlayer.Bus = "Master";
         AddChild(this.dialogueAudioPlayer);
-        dialogueTimer = new Timer();
-        dialogueTimer.Name = "DialogueTimer";
-        dialogueTimer.OneShot = true;
-        dialogueTimer.Timeout += OnDialogueTimeout;
-        AddChild(dialogueTimer);
+        this.dialogueTimer = new Timer();
+        this.dialogueTimer.Name = "DialogueTimer";
+        this.dialogueTimer.OneShot = true;
+        this.dialogueTimer.Timeout += OnDialogueTimeout;
+        AddChild(this.dialogueTimer);
     }
 
     private void PlayDialogue(bool isEnterInteraction) {
@@ -383,7 +383,6 @@ public partial class Interactable : Node3D {
         }
         if (!string.IsNullOrEmpty(dialogue.Text)) {
             this.ShowDialogue(dialogue.Text);
-            GD.Print($"[{DisplayName}] 对话 {this.currentDialogueIndex + 1}/{this.Dialogues.Count}: {dialogue.Text}");
         }
     }
 
@@ -397,14 +396,14 @@ public partial class Interactable : Node3D {
             }
         }
         var dialogue = GetCurrentDialogue();
-        if (dialogue != null && dialogue.Duration > 0 && dialogueTimer != null) {
-            dialogueTimer.Start(dialogue.Duration);
+        if (dialogue != null && dialogue.Duration > 0 && this.dialogueTimer != null) {
+            this.dialogueTimer.Start(dialogue.Duration);
         }
     }
 
     private void HideDialogue() {
-        if (dialogueTimer != null && !dialogueTimer.IsStopped()) {
-            dialogueTimer.Stop();
+        if (this.dialogueTimer != null && !this.dialogueTimer.IsStopped()) {
+            this.dialogueTimer.Stop();
         }
         if (dialogueLabel != null) {
             dialogueLabel.Visible = false;

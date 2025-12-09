@@ -12,7 +12,7 @@ public partial class ConnectableNode : Node3D {
         get => this.isSelected;
         set {
             this.isSelected = value;
-            UpdateColor();
+            this.UpdateColor();
         }
     }
 

@@ -1,11 +1,12 @@
 using Godot;
+using Godot.Collections;
 
 public partial class PlacableItem : Node3D {
 	[Export] public bool IsDraggable { get; set; } = true;
-	
 	private bool isDragging = false;
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
+	[Export] private MeshInstance3D draggableOutlineMesh;
 
 	public DragPlaneType DragPlane {
 		get => dragPlane;
@@ -13,10 +14,11 @@ public partial class PlacableItem : Node3D {
 	}
 
 	public override void _Input(InputEvent @event) {
-		if (!IsDraggable) {
+		if (!this.IsDraggable) {
 			return;
 		}
-		if (!IsParentLabItemInteracting()) {
+		this.ToggleDragabledOutline(@event);
+		if (!this.IsParentLabItemInteracting()) {
 			return;
 		}
 		if (@event is InputEventKey keyEvent) {
@@ -31,8 +33,8 @@ public partial class PlacableItem : Node3D {
 			bool leftButtonPressed = mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed;
 			bool leftButtonReleased = mouseButton.ButtonIndex == MouseButton.Left && !mouseButton.Pressed;
 			if (leftButtonPressed) {
-				var intersect = GetMouseIntersect(mouseButton.Position);
-				if (intersect != null && IsClickOnSelf(intersect)) {
+				var intersect = this.GetMouseIntersect(mouseButton.Position);
+				if (intersect != null && this.IsClickOnSelf(intersect)) {
 					this.isDragging = true;
 					this.StartDrag(intersect);
 					GetViewport().SetInputAsHandled();
@@ -44,11 +46,16 @@ public partial class PlacableItem : Node3D {
 			}
 		}
 	}
-
 	
 	public override void _Process(double delta) {
-		if (this.isDragging && IsDraggable) {
+		if (this.isDragging && this.IsDraggable) {
 			this.UpdateDragPosition();
+		}
+	}
+
+	public void ToggleDragabledOutline(InputEvent @event) {
+		if (@event is InputEventMouseMotion mouseMotion) {
+			
 		}
 	}
 
@@ -66,7 +73,7 @@ public partial class PlacableItem : Node3D {
 		return false;
 	}
 
-	private bool IsClickOnSelf(Godot.Collections.Dictionary intersect) {
+	private bool IsClickOnSelf(Dictionary intersect) {
 		if (intersect == null || !intersect.ContainsKey("collider")) {
 			return false;
 		}
@@ -88,7 +95,7 @@ public partial class PlacableItem : Node3D {
 		return false;
 	}
 
-	private void StartDrag(Godot.Collections.Dictionary intersect) {
+	private void StartDrag(Dictionary intersect) {
 		if (intersect == null || !intersect.ContainsKey("position")) {
 			return;
 		}
@@ -133,7 +140,7 @@ public partial class PlacableItem : Node3D {
 		return from + normal * t;
 	}
 
-	private Godot.Collections.Dictionary GetMouseIntersect(Vector2 mousePos) {
+	private Dictionary GetMouseIntersect(Vector2 mousePos) {
 		var currentCamera = GetViewport().GetCamera3D();
 		if (currentCamera == null) {
 			return null;

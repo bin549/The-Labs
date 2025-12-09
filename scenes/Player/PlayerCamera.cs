@@ -37,14 +37,14 @@ public partial class PlayerCamera : Node3D {
         if (this.gameManager == null || !GodotObject.IsInstanceValid(this.gameManager)) {
             this.ResolveGameManager();
         }
-        if (IsInteracting) {
+        if (this.IsInteracting) {
             return;
         }
         this.CheckInteraction();
     }
 
     public override void _Input(InputEvent @event) {
-        if (IsInteracting) return;
+        if (this.IsInteracting) return;
         if (@event is InputEventMouseMotion mouseEvent) {
             RotateY(-Mathf.DegToRad(mouseEvent.Relative.X * MOUSE_SENSITIVITY_HORIZONTAL));
             pitch -= mouseEvent.Relative.Y * MOUSE_SENSITIVITY_VERTICLE;
@@ -55,13 +55,13 @@ public partial class PlayerCamera : Node3D {
     }
 
     public override void _Process(double delta) {
-        if (IsInteracting) return;
+        if (this.IsInteracting) return;
         this.ToggleView();
     }
 
     private void ToggleView() {
         if (Input.IsActionJustPressed("toggle_view")) {
-            this.isFirstPerson = !isFirstPerson;
+            this.isFirstPerson = !this.isFirstPerson;
             this.phantomFirst.Priority = this.isFirstPerson ? 15 : 5;
         }
     }

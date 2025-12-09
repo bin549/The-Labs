@@ -128,7 +128,7 @@ public partial class MoviePlayer : Interactable {
             this.StopPlayback();
             return;
         }
-        PrepareStreamForPlayback();
+        this.PrepareStreamForPlayback();
         this.videoPlayer.Play();
         this.isPlaying = true;
         this.isPaused = false;

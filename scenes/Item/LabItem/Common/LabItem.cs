@@ -43,8 +43,8 @@ public partial class LabItem : Interactable {
             return;
         }
         Vector3 teleportPos;
-        if (TeleportPosition != null && GodotObject.IsInstanceValid(TeleportPosition)) {
-            teleportPos = TeleportPosition.GlobalPosition;
+        if (this.TeleportPosition != null && GodotObject.IsInstanceValid(this.TeleportPosition)) {
+            teleportPos = this.TeleportPosition.GlobalPosition;
         } else {
             teleportPos = GlobalPosition;
         }
