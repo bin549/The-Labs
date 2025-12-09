@@ -1,16 +1,9 @@
-[gd_scene load_steps=13 format=4 uid="uid://jtliji0ma1xl"]
+[gd_scene load_steps=11 format=4 uid="uid://jtliji0ma1xl"]
 
-[ext_resource type="Shader" uid="uid://bb6fmwpmpcax4" path="res://shaders/Outline.gdshader" id="2_mmtqw"]
 [ext_resource type="Script" uid="uid://j7bsa52rwqyo" path="res://scenes/Item/LabItem/Common/LabItem.cs" id="3_3kkyo"]
 [ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="4_1ytjw"]
 [ext_resource type="Texture2D" uid="uid://870rkgbu525j" path="res://assets/StylooClassroomAssetPack GLTF & FBX/chemestry lab/GLTF/CHEMESTRYtable_ImphenziaPalette01-256-Gradient.png" id="5_3kkyo"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_6e1ab"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3kkyo"]
-render_priority = 0
-shader = ExtResource("2_mmtqw")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/size = 0.0
 
 [sub_resource type="Resource" id="Resource_ee7l0"]
 script = ExtResource("5_6e1ab")
@@ -89,16 +82,15 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kgi83")
 
-[node name="LabItem" type="Node3D" node_paths=PackedStringArray("nameLabel", "lineNode")]
+[node name="LabItem" type="Node3D" node_paths=PackedStringArray("nameLabel", "lineNode", "outlineMeshs")]
 transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, 0, 0, 0)
 script = ExtResource("3_3kkyo")
-outlineMat = SubResource("ShaderMaterial_3kkyo")
-OutlineTargetPaths = Array[NodePath]([NodePath("CHEMESTRYtable2/CHEMESTRYtable")])
 nameLabel = NodePath("NameLabel")
 lineNode = NodePath("lineNode")
 linePointAPath = NodePath("lineNode/linePointAPath")
 linePointBPath = NodePath("lineNode/linePointBPath")
 lineColor = Color(1, 1, 1, 1)
+outlineMeshs = []
 
 [node name="NameLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)

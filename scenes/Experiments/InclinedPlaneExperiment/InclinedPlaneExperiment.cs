@@ -29,17 +29,30 @@ public partial class InclinedPlaneExperiment : LabItem {
     
     [Export] public Label3D HintLabel { get; set; }
     
+    [Export] public Button NextStepButton { get; set; }
+    
+    [Export] public Button PlayVoiceButton { get; set; }
+    
+    [Export] public AudioStreamPlayer VoicePlayer { get; set; }
+    
+    [Export] public Godot.Collections.Array<AudioStream> StepVoiceResources { get; set; } = new();
+    
     private Dictionary<InclinedPlaneExperimentItem, Node3D> experimentItems = new Dictionary<InclinedPlaneExperimentItem, Node3D>();
     
     private Dictionary<InclinedPlaneExperimentStep, bool> stepCompletionStatus = new Dictionary<InclinedPlaneExperimentStep, bool>();
     
     private Dictionary<InclinedPlaneExperimentStep, string> stepHints = new Dictionary<InclinedPlaneExperimentStep, string>();
+    
+    private Dictionary<InclinedPlaneExperimentStep, AudioStream> stepVoices = new Dictionary<InclinedPlaneExperimentStep, AudioStream>();
 
     public override void _Ready() {
         base._Ready();
         InitializeStepHints();
         InitializeExperimentItems();
         InitializeStepStatus();
+        InitializeButton();
+        InitializeVoiceButton();
+        InitializeVoiceResources();
         UpdateHintLabel();
     }
 
@@ -146,6 +159,66 @@ public partial class InclinedPlaneExperiment : LabItem {
         }
     }
 
+    private void InitializeButton() {
+        if (NextStepButton != null) {
+            NextStepButton.Pressed += OnNextStepButtonPressed;
+            UpdateButtonState();
+        }
+    }
+
+    private void InitializeVoiceButton() {
+        if (PlayVoiceButton != null) {
+            PlayVoiceButton.Pressed += OnPlayVoiceButtonPressed;
+        }
+    }
+
+    private void InitializeVoiceResources() {
+        var steps = System.Enum.GetValues(typeof(InclinedPlaneExperimentStep));
+        for (int i = 0; i < steps.Length && i < StepVoiceResources.Count; i++) {
+            var step = (InclinedPlaneExperimentStep)steps.GetValue(i);
+            if (StepVoiceResources[i] != null) {
+                stepVoices[step] = StepVoiceResources[i];
+            }
+        }
+    }
+
+    private void OnPlayVoiceButtonPressed() {
+        PlayCurrentStepVoice();
+    }
+
+    private void PlayCurrentStepVoice() {
+        if (VoicePlayer == null) {
+            GD.PrintErr("VoicePlayer 未设置，无法播放语音");
+            return;
+        }
+
+        if (stepVoices.ContainsKey(CurrentStep) && stepVoices[CurrentStep] != null) {
+            VoicePlayer.Stream = stepVoices[CurrentStep];
+            VoicePlayer.Play();
+            GD.Print($"播放步骤语音: {GetStepName(CurrentStep)}");
+        } else {
+            GD.Print($"步骤 {GetStepName(CurrentStep)} 没有对应的语音资源");
+        }
+    }
+
+    private void OnNextStepButtonPressed() {
+        if (CanGoToNextStep()) {
+            GoToNextStep();
+            UpdateButtonState();
+        }
+    }
+
+    private void UpdateButtonState() {
+        if (NextStepButton != null) {
+            NextStepButton.Disabled = !CanGoToNextStep();
+            if (CurrentStep >= InclinedPlaneExperimentStep.Completed) {
+                NextStepButton.Text = "实验完成";
+            } else {
+                NextStepButton.Text = "下一步";
+            }
+        }
+    }
+
     public void SetCurrentStep(InclinedPlaneExperimentStep step) {
         CurrentStep = step;
     }
@@ -161,12 +234,9 @@ public partial class InclinedPlaneExperiment : LabItem {
         if (CurrentStep >= InclinedPlaneExperimentStep.Completed) {
             return false;
         }
-
         var previousStep = CurrentStep;
         CurrentStep++;
-        
         OnStepChanged(previousStep, CurrentStep);
-        
         return true;
     }
 
@@ -193,7 +263,15 @@ public partial class InclinedPlaneExperiment : LabItem {
 
     private void OnStepChanged(InclinedPlaneExperimentStep previousStep, InclinedPlaneExperimentStep newStep) {
         GD.Print($"步骤变更: {GetStepName(previousStep)} -> {GetStepName(newStep)}");
+        StopCurrentVoice();
         UpdateHintLabel();
+        UpdateButtonState();
+    }
+
+    private void StopCurrentVoice() {
+        if (VoicePlayer != null && VoicePlayer.Playing) {
+            VoicePlayer.Stop();
+        }
     }
 
     private void UpdateHintLabel() {
