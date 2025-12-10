@@ -24,25 +24,15 @@ public enum InclinedPlaneExperimentItem {
 
 public partial class InclinedPlaneExperiment : LabItem {
     [Export] public Godot.Collections.Array<NodePath> PlacableItemPaths { get; set; } = new();
-    
     [Export] public InclinedPlaneExperimentStep CurrentStep { get; set; } = InclinedPlaneExperimentStep.Setup;
-    
     [Export] public Label3D HintLabel { get; set; }
-    
     [Export] public Button NextStepButton { get; set; }
-    
     [Export] public Button PlayVoiceButton { get; set; }
-    
     [Export] public AudioStreamPlayer VoicePlayer { get; set; }
-    
     [Export] public Godot.Collections.Array<AudioStream> StepVoiceResources { get; set; } = new();
-    
     private Dictionary<InclinedPlaneExperimentItem, Node3D> experimentItems = new Dictionary<InclinedPlaneExperimentItem, Node3D>();
-    
     private Dictionary<InclinedPlaneExperimentStep, bool> stepCompletionStatus = new Dictionary<InclinedPlaneExperimentStep, bool>();
-    
     private Dictionary<InclinedPlaneExperimentStep, string> stepHints = new Dictionary<InclinedPlaneExperimentStep, string>();
-    
     private Dictionary<InclinedPlaneExperimentStep, AudioStream> stepVoices = new Dictionary<InclinedPlaneExperimentStep, AudioStream>();
 
     public override void _Ready() {
@@ -191,7 +181,6 @@ public partial class InclinedPlaneExperiment : LabItem {
             GD.PrintErr("VoicePlayer 未设置，无法播放语音");
             return;
         }
-
         if (stepVoices.ContainsKey(CurrentStep) && stepVoices[CurrentStep] != null) {
             VoicePlayer.Stream = stepVoices[CurrentStep];
             VoicePlayer.Play();
@@ -244,12 +233,9 @@ public partial class InclinedPlaneExperiment : LabItem {
         if (CurrentStep <= InclinedPlaneExperimentStep.Setup) {
             return false;
         }
-
         var previousStep = CurrentStep;
         CurrentStep--;
-        
         OnStepChanged(previousStep, CurrentStep);
-        
         return true;
     }
 

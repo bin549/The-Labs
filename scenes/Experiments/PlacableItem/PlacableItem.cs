@@ -13,8 +13,8 @@ public partial class PlacableItem : Node3D {
 	private bool isHovered = false;
 
 	public DragPlaneType DragPlane {
-		get => dragPlane;
-		set => dragPlane = value;
+		get => this.dragPlane;
+		set => this.dragPlane = value;
 	}
 
 	public override void _Ready() {
