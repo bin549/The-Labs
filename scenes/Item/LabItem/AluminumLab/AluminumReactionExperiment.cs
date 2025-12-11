@@ -23,44 +23,13 @@ public enum AluminumReactionExperimentItem {
     Thermometer
 }
 
-public partial class AluminumReactionExperiment : LabItem {
-    [Export] public Godot.Collections.Array<NodePath> PlacableItemPaths { get; set; } = new();
-    
-    [Export] public AluminumReactionExperimentStep CurrentStep { get; set; } = AluminumReactionExperimentStep.Setup;
-    
-    [Export] public Label3D HintLabel { get; set; }
-    
-    [Export] public Button NextStepButton { get; set; }
-    
-    [Export] public Button PlayVoiceButton { get; set; }
-    
-    [Export] public AudioStreamPlayer VoicePlayer { get; set; }
-    
-    [Export] public Godot.Collections.Array<AudioStream> StepVoiceResources { get; set; } = new();
-    
-    private Dictionary<AluminumReactionExperimentItem, Node3D> experimentItems = new Dictionary<AluminumReactionExperimentItem, Node3D>();
-    
-    private Dictionary<AluminumReactionExperimentStep, bool> stepCompletionStatus = new Dictionary<AluminumReactionExperimentStep, bool>();
-    
-    private Dictionary<AluminumReactionExperimentStep, string> stepHints = new Dictionary<AluminumReactionExperimentStep, string>();
-    
-    private Dictionary<AluminumReactionExperimentStep, AudioStream> stepVoices = new Dictionary<AluminumReactionExperimentStep, AudioStream>();
+public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
+    [Export] protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Setup;
 
     public override void _Ready() {
         base._Ready();
         InitializeStepHints();
-        InitializeExperimentItems();
-        InitializeStepStatus();
-        InitializeButton();
-        InitializeVoiceButton();
-        InitializeVoiceResources();
-        UpdateHintLabel();
-    }
-
-    public override void _Input(InputEvent @event) {
-        if (!base.isInteracting) {
-            return;
-        }
+        InitializeStepExperiment();
     }
 
     public override void EnterInteraction() {
@@ -73,16 +42,6 @@ public partial class AluminumReactionExperiment : LabItem {
 
     public override void ExitInteraction() {
         base.ExitInteraction();
-    }
-
-    private void InitializeExperimentItems() {
-        foreach (var path in PlacableItemPaths) {
-            if (path != null && !path.IsEmpty) {
-                var item = GetNodeOrNull<Node3D>(path);
-                if (item != null) {
-                }
-            }
-        }
     }
 
     private void InitializeStepHints() {
@@ -155,158 +114,7 @@ public partial class AluminumReactionExperiment : LabItem {
             "可以重新开始实验，尝试不同的条件，探索更多有趣的化学现象！";
     }
 
-    private void InitializeStepStatus() {
-        foreach (AluminumReactionExperimentStep step in System.Enum.GetValues(typeof(AluminumReactionExperimentStep))) {
-            stepCompletionStatus[step] = false;
-        }
-    }
-
-    private void InitializeButton() {
-        if (NextStepButton != null) {
-            NextStepButton.Pressed += OnNextStepButtonPressed;
-            UpdateButtonState();
-        }
-    }
-
-    private void InitializeVoiceButton() {
-        if (PlayVoiceButton != null) {
-            PlayVoiceButton.Pressed += OnPlayVoiceButtonPressed;
-        }
-    }
-
-    private void InitializeVoiceResources() {
-        var steps = System.Enum.GetValues(typeof(AluminumReactionExperimentStep));
-        for (int i = 0; i < steps.Length && i < StepVoiceResources.Count; i++) {
-            var step = (AluminumReactionExperimentStep)steps.GetValue(i);
-            if (StepVoiceResources[i] != null) {
-                stepVoices[step] = StepVoiceResources[i];
-            }
-        }
-    }
-
-    private void OnPlayVoiceButtonPressed() {
-        PlayCurrentStepVoice();
-    }
-
-    private void PlayCurrentStepVoice() {
-        if (VoicePlayer == null) {
-            GD.PrintErr("VoicePlayer 未设置，无法播放语音");
-            return;
-        }
-
-        if (stepVoices.ContainsKey(CurrentStep) && stepVoices[CurrentStep] != null) {
-            VoicePlayer.Stream = stepVoices[CurrentStep];
-            VoicePlayer.Play();
-            GD.Print($"播放步骤语音: {GetStepName(CurrentStep)}");
-        } else {
-            GD.Print($"步骤 {GetStepName(CurrentStep)} 没有对应的语音资源");
-        }
-    }
-
-    private void OnNextStepButtonPressed() {
-        if (CanGoToNextStep()) {
-            GoToNextStep();
-            UpdateButtonState();
-        }
-    }
-
-    private void UpdateButtonState() {
-        if (NextStepButton != null) {
-            NextStepButton.Disabled = !CanGoToNextStep();
-            if (CurrentStep >= AluminumReactionExperimentStep.Completed) {
-                NextStepButton.Text = "实验完成";
-            } else {
-                NextStepButton.Text = "下一步";
-            }
-        }
-    }
-
-    public void SetCurrentStep(AluminumReactionExperimentStep step) {
-        CurrentStep = step;
-    }
-
-    public void CompleteCurrentStep() {
-        if (stepCompletionStatus.ContainsKey(CurrentStep)) {
-            stepCompletionStatus[CurrentStep] = true;
-        }
-        GoToNextStep();
-    }
-
-    public bool GoToNextStep() {
-        if (CurrentStep >= AluminumReactionExperimentStep.Completed) {
-            return false;
-        }
-        var previousStep = CurrentStep;
-        CurrentStep++;
-        OnStepChanged(previousStep, CurrentStep);
-        return true;
-    }
-
-    public bool GoToPreviousStep() {
-        if (CurrentStep <= AluminumReactionExperimentStep.Setup) {
-            return false;
-        }
-
-        var previousStep = CurrentStep;
-        CurrentStep--;
-        
-        OnStepChanged(previousStep, CurrentStep);
-        
-        return true;
-    }
-
-    public bool CanGoToNextStep() {
-        return CurrentStep < AluminumReactionExperimentStep.Completed;
-    }
-
-    public bool CanGoToPreviousStep() {
-        return CurrentStep > AluminumReactionExperimentStep.Setup;
-    }
-
-    private void OnStepChanged(AluminumReactionExperimentStep previousStep, AluminumReactionExperimentStep newStep) {
-        GD.Print($"步骤变更: {GetStepName(previousStep)} -> {GetStepName(newStep)}");
-        StopCurrentVoice();
-        UpdateHintLabel();
-        UpdateButtonState();
-    }
-
-    private void StopCurrentVoice() {
-        if (VoicePlayer != null && VoicePlayer.Playing) {
-            VoicePlayer.Stop();
-        }
-    }
-
-    private void UpdateHintLabel() {
-        if (HintLabel != null) {
-            HintLabel.Text = GetCurrentStepHint();
-        }
-    }
-
-    public bool IsStepCompleted(AluminumReactionExperimentStep step) {
-        return stepCompletionStatus.ContainsKey(step) && stepCompletionStatus[step];
-    }
-
-    public Node3D GetExperimentItem(AluminumReactionExperimentItem itemType) {
-        return experimentItems.ContainsKey(itemType) ? experimentItems[itemType] : null;
-    }
-
-    public void RegisterExperimentItem(AluminumReactionExperimentItem itemType, Node3D itemNode) {
-        experimentItems[itemType] = itemNode;
-    }
-
-    public string GetCurrentStepHint() {
-        return GetStepHint(CurrentStep);
-    }
-
-    public string GetStepHint(AluminumReactionExperimentStep step) {
-        return stepHints.ContainsKey(step) ? stepHints[step] : "";
-    }
-
-    public Dictionary<AluminumReactionExperimentStep, string> GetAllStepHints() {
-        return new Dictionary<AluminumReactionExperimentStep, string>(stepHints);
-    }
-
-    public string GetStepName(AluminumReactionExperimentStep step) {
+    protected override string GetStepName(AluminumReactionExperimentStep step) {
         switch (step) {
             case AluminumReactionExperimentStep.Setup:
                 return "准备阶段";
@@ -329,7 +137,7 @@ public partial class AluminumReactionExperiment : LabItem {
         }
     }
 
-    public string GetCurrentStepName() {
-        return GetStepName(CurrentStep);
-    }
+    protected override AluminumReactionExperimentStep SetupStep => AluminumReactionExperimentStep.Setup;
+    
+    protected override AluminumReactionExperimentStep CompletedStep => AluminumReactionExperimentStep.Completed;
 }

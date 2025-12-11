@@ -9,7 +9,7 @@ public partial class PlacableItem : Node3D {
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
 	[Export] private MeshInstance3D outlineMesh;
-	[Export] private Area3D collisionArea;
+	[Export] protected Area3D collisionArea;
 	private bool isHovered = false;
 
 	public DragPlaneType DragPlane {
@@ -51,7 +51,6 @@ public partial class PlacableItem : Node3D {
 				this.OnMouseExited();
 			}
 		}
-		
 		if (!this.IsDraggable) return;
 		if (@event is InputEventKey keyEvent) {
 			if (keyEvent.Keycode == Key.Shift && keyEvent.Pressed && !keyEvent.IsEcho()) {
@@ -126,7 +125,7 @@ public partial class PlacableItem : Node3D {
 			return;
 		}
 		this.initialDragPosition = this.GlobalPosition;
-		Vector3 mousePosInPlane = CalculateMousePositionInPlane();
+		Vector3 mousePosInPlane = this.CalculateMousePositionInPlane();
 		this.GlobalPosition = mousePosInPlane;
 		this.initialDragPosition = mousePosInPlane;
 	}
@@ -136,7 +135,7 @@ public partial class PlacableItem : Node3D {
 	}
 
 	private void UpdateDragPosition() {
-		Vector3 mousePosInPlane = CalculateMousePositionInPlane();
+		Vector3 mousePosInPlane = this.CalculateMousePositionInPlane();
 		this.GlobalPosition = mousePosInPlane;
 	}
 

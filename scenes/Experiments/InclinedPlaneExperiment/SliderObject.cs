@@ -8,7 +8,7 @@ public partial class SliderObject : PlacableItem {
 
     public override void _Ready() {
         base._Ready();
-        InitializeRigidBody();
+        this.InitializeRigidBody();
     }
 
     private void InitializeRigidBody() {

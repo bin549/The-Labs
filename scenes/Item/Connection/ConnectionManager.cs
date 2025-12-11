@@ -45,7 +45,7 @@ public partial class ConnectionManager : Node3D {
     }
     
     private void HandleRightClick(Vector2 mousePos) {
-        var rayResult = PerformRaycastForLines(mousePos);
+        var rayResult = this.PerformRaycastForLines(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             return;
         }
@@ -60,7 +60,7 @@ public partial class ConnectionManager : Node3D {
     }
 
     private void HandleMouseMotion(Vector2 mousePos) {
-        var rayResult = PerformRaycastForLines(mousePos);
+        var rayResult = this.PerformRaycastForLines(mousePos);
         if (this.hoveredLine != null) {
             this.hoveredLine.OnHoverExit();
             this.hoveredLine = null;
