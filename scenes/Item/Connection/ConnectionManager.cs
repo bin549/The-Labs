@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public partial class ConnectionManager : Node3D {
     [Export] public float MaxRaycastDistance { get; set; } = 100f;
+    [Export] public bool IsEnabled { get; set; } = false;
     private ConnectableNode selectedNode = null;
     private List<IConnectionLine> connections = new List<IConnectionLine>();
     private IConnectionLine hoveredLine = null;
@@ -13,6 +14,7 @@ public partial class ConnectionManager : Node3D {
     }
 
     public override void _Input(InputEvent @event) {
+        if (!this.IsEnabled) return;
         if (@event is InputEventMouseButton mouseEvent) {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed) {
                 this.HandleLeftClick(mouseEvent.Position);

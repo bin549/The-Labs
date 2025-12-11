@@ -39,6 +39,7 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     }
 
     public override void ExitInteraction() {
+        base.isInteracting = false;
         base.ExitInteraction();
     }
 

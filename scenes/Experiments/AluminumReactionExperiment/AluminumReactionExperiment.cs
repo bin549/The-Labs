@@ -41,6 +41,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     public override void ExitInteraction() {
+        base.isInteracting = false;
         base.ExitInteraction();
     }
 

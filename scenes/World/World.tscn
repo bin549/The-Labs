@@ -31,14 +31,11 @@
 [ext_resource type="Shader" uid="uid://0165jki8qcwc" path="res://addons/EasyOutlineForGodot/Shaders/3DMeshOutline/VisibleStencil.gdshader" id="14_vn2rd"]
 [ext_resource type="AudioStream" uid="uid://ba1xpm3bq7stn" path="res://assets/sounds/dialog/ElevenLabs_2024-11-28T11_49_08_ftm_ivc_s50_sb75_se0_b_m2.mp3" id="15_d3guo"]
 [ext_resource type="Texture2D" uid="uid://dg3p6it62761x" path="res://assets/photos/G3Yzlk0awAANWSi.jpg" id="15_gmpns"]
-[ext_resource type="Texture2D" uid="uid://haggon2yrlr6" path="res://assets/WoodObjects/Gltf/WoodenObjects_Base Color2_MoldWall2.png" id="16_5s418"]
 [ext_resource type="AudioStream" uid="uid://4tintrqmuyjo" path="res://assets/sounds/dialog/ElevenLabs_2024-11-28T12_06_21_ftm_ivc_s100_sb95_se62_m2.mp3" id="17_4h21d"]
-[ext_resource type="Texture2D" uid="uid://dusv0g1mrun1h" path="res://assets/WoodObjects/Gltf/WoodenObjects_AORM_MoldWall2.png" id="17_5qnt6"]
-[ext_resource type="Texture2D" uid="uid://pnffpe52hqmt" path="res://assets/WoodObjects/Gltf/WoodenObjects_NORMAL_MoldWall2.png" id="18_fbdsj"]
 [ext_resource type="Script" uid="uid://coc2gkp7w1pxi" path="res://scenes/Item/PaintBoard/PaintBoard.cs" id="19_5qnt6"]
-[ext_resource type="Script" uid="uid://te5tvbm5k7pl" path="res://scenes/Item/LabItem/OhmsLawLab/OhmsLawExperiment.cs" id="19_88vt2"]
-[ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Item/LabItem/FrictionLab/FrictionExperiment.cs" id="21_el0ym"]
-[ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Item/LabItem/AluminumLab/AluminumReactionExperiment.cs" id="22_g7bw1"]
+[ext_resource type="Script" uid="uid://te5tvbm5k7pl" path="res://scenes/Experiments/OhmsLawExperiment/OhmsLawExperiment.cs" id="19_88vt2"]
+[ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Experiments/FrictionExperiment/FrictionExperiment.cs" id="21_el0ym"]
+[ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Experiments/AluminumReactionExperiment/AluminumReactionExperiment.cs" id="22_g7bw1"]
 [ext_resource type="Script" uid="uid://dvl0x4l10i824" path="res://scenes/ExperimentManager/ExperimentManager.cs" id="23_expman"]
 [ext_resource type="Script" uid="uid://cchf1w2k483wh" path="res://scenes/Item/Connection/ConnectableNode.cs" id="24_connnode"]
 [ext_resource type="Script" uid="uid://dvumky18el73i" path="res://scenes/Item/Connection/ConnectionManager.cs" id="25_connmgr"]
@@ -52,13 +49,16 @@
 [ext_resource type="Texture2D" uid="uid://21yebqbv2wj7" path="res://assets/CaveTextures/Cliff (10).png" id="38_rlmkw"]
 [ext_resource type="PackedScene" uid="uid://c5ahrhleqqm5t" path="res://assets/StylooClassroomAssetPack GLTF & FBX/ArtRoom/glb/brush.glb" id="39_7y02i"]
 [ext_resource type="Texture2D" uid="uid://bdsyxj5vmr18" path="res://assets/StylooClassroomAssetPack GLTF & FBX/walls/GLB/wall_001_Wall1t_normal.png" id="39_d3guo"]
-[ext_resource type="PackedScene" path="res://assets/WoodObjects/Scenes/objects/Stick_1.tscn" id="40_bcgcp"]
 [ext_resource type="PackedScene" uid="uid://bdsxhxrkko8uc" path="res://scenes/Fire.tscn" id="41_vh7pw"]
 [ext_resource type="Shader" path="res://shaders/stylized_liquid.gdshader" id="42_1m4v3"]
+[ext_resource type="AudioStream" uid="uid://bb7r8tnvqu8so" path="res://assets/sounds/sfx/Door_Close.wav" id="43_1m4v3"]
 [ext_resource type="PackedScene" uid="uid://ba3pyobte13gt" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/chair.glb" id="43_5qnt6"]
 [ext_resource type="Script" uid="uid://cxd872c88wb4d" path="res://scenes/Experiments/InclinedPlaneExperiment/InclinedPlaneExperiment.cs" id="43_85ror"]
 [ext_resource type="Script" uid="uid://bjsqw8wsethu5" path="res://scenes/Experiments/InclinedPlaneExperiment/SliderObject.cs" id="44_1m4v3"]
+[ext_resource type="AudioStream" uid="uid://d1t3mise0xonp" path="res://assets/sounds/sfx/page.ogg" id="45_u0op8"]
 [ext_resource type="AudioStream" uid="uid://djuoopc50si8w" path="res://assets/sounds/music/1-09 风の憧憬.mp3" id="46_u0op8"]
+[ext_resource type="AudioStream" uid="uid://7f1vtms5ao8g" path="res://assets/sounds/music/splash.ogg" id="51_1m4v3"]
+[ext_resource type="AudioStream" uid="uid://clidgmvrnnhqg" path="res://assets/sounds/sfx/Door_Open.wav" id="52_u0op8"]
 [ext_resource type="VideoStream" uid="uid://cf17p7hyndjxi" path="res://assets/videos/高中物理必修一牛顿运动定律 3.实验探究加速度与力、质量的关系.ogv" id="53_85ror"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqijp"]
@@ -503,13 +503,7 @@ _surfaces = [{
 resource_name = "WoodMaterial"
 cull_mode = 2
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("16_5s418")
-metallic_texture = ExtResource("17_5qnt6")
-metallic_texture_channel = 2
-roughness_texture = ExtResource("17_5qnt6")
-roughness_texture_channel = 1
 normal_enabled = true
-normal_texture = ExtResource("18_fbdsj")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_71ln7"]
 _surfaces = [{
@@ -2995,10 +2989,12 @@ offset_right = 313.0
 offset_bottom = -194.0
 
 [node name="NextButton" type="Button" parent="Player/CanvasLayer/Control/ExperimentUI/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Next"
 
-[node name="TipSoundButton" type="Button" parent="Player/CanvasLayer/Control/ExperimentUI/VBoxContainer"]
+[node name="PlayVoiceButton" type="Button" parent="Player/CanvasLayer/Control/ExperimentUI/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Sound"
 
@@ -3203,15 +3199,21 @@ shape = SubResource("BoxShape3D_fbdsj")
 
 [node name="Labs" type="Node3D" parent="Rooms/Room01"]
 
-[node name="FrictionExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="FrictionExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-2.1855692e-08, 0, 0.49999994, 0, 0.5, 0, -0.49999994, 0, -2.1855692e-08, -16.469402, -0.75, -3.0561938)
 script = ExtResource("21_el0ym")
-PlacableItemPaths = Array[NodePath]([NodePath(""), NodePath("")])
+currentStep = 0
+placableItemPaths = []
+hintLabel = NodePath("HintLabel")
+nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
+playVoiceButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
+voicePlayer = NodePath("AudioStreamPlayer")
+stepVoiceResources = Array[AudioStream]([ExtResource("43_1m4v3"), ExtResource("52_u0op8")])
 ExperimentName = "摩檫力实验"
 ExperimentDescription = "~！"
 TeleportPosition = NodePath("TeleportPos")
 DisplayName = "摩檫力实验"
-outlineMeshs = [null, null, NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
+outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("../InclinedPlaneExperiment/LabObjects/CB/outline")]
 
 [node name="NameLabel" parent="Rooms/Room01/Labs/FrictionExperiment" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4011903, 0)
@@ -3232,25 +3234,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.1530786, 1.4901
 [node name="TeleportPos" parent="Rooms/Room01/Labs/FrictionExperiment" index="4"]
 transform = Transform3D(-0.63419086, 0, 0.77317655, 0, 1, 0, -0.77317655, 0, -0.63419086, 0, 0, 2.570427)
 
+[node name="HintLabel" type="Label3D" parent="Rooms/Room01/Labs/FrictionExperiment"]
+transform = Transform3D(1, 0, -3.5527137e-15, 0, 1, 0, 3.5527137e-15, 0, 1, 0, 1.4166605, 0)
+pixel_size = 0.01
+text = "Text"
+font_size = 10
+
 [node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room01/Labs/FrictionExperiment"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room01/Labs/FrictionExperiment/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("BoxShape3D_xyyef")
 
-[node name="InclinedPlaneExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("HintLabel", "NextStepButton", "PlayVoiceButton", "VoicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Rooms/Room01/Labs/FrictionExperiment"]
+
+[node name="InclinedPlaneExperiment" parent="Rooms/Room01/Labs" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(0.49999994, 0, 0, 0, 0.5, 0, 0, 0, 0.49999994, -13.901301, -0.75, -6.314387)
 script = ExtResource("43_85ror")
-PlacableItemPaths = []
-CurrentStep = 0
-HintLabel = NodePath("Hint")
-NextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
-PlayVoiceButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/TipSoundButton")
-VoicePlayer = NodePath("AudioStreamPlayer3D")
-StepVoiceResources = Array[AudioStream]([ExtResource("14_fbdsj"), ExtResource("17_4h21d"), ExtResource("15_d3guo")])
+currentStep = 0
+placableItemPaths = Array[NodePath]([NodePath("LabObjects/CB")])
+hintLabel = NodePath("Hint")
+nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
+playVoiceButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
+voicePlayer = NodePath("AudioStreamPlayer3D")
+stepVoiceResources = Array[AudioStream]([ExtResource("15_d3guo"), ExtResource("17_4h21d"), ExtResource("14_fbdsj"), ExtResource("17_4h21d"), ExtResource("14_fbdsj"), ExtResource("15_d3guo"), ExtResource("14_fbdsj"), ExtResource("17_4h21d")])
 ExperimentName = "斜坡实验"
 TeleportPosition = NodePath("TeleportPos")
-outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/MeshInstance3D3/outline")]
+outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/CB/outline")]
 
 [node name="NameLabel" parent="Rooms/Room01/Labs/InclinedPlaneExperiment" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0353298, 2.0611017, 0)
@@ -3259,6 +3269,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0353298, 2.0611017, 0)
 transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
 
 [node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/CHEMESTRYtable2/CHEMESTRYtable" index="0" groups=["outline"]]
+visible = false
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_3qaqg")
 metadata/_edit_lock_ = true
@@ -3277,10 +3288,10 @@ transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3268166)
 
 [node name="Hint" type="Label3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07113838, 1.779253, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07113838, 1.579253, 0)
 pixel_size = 0.01
 text = "Text"
-font_size = 12
+font_size = 8
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment"]
 
@@ -3295,7 +3306,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0197308, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.44848824, -0.32169104, 0)
 mesh = SubResource("PrismMesh_1m4v3")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects" node_paths=PackedStringArray("outlineMesh", "collisionArea")]
+[node name="CB" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects" node_paths=PackedStringArray("outlineMesh", "collisionArea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42760658, 0, 0)
 mesh = SubResource("BoxMesh_u0op8")
 script = ExtResource("44_1m4v3")
@@ -3304,12 +3315,12 @@ dragPlane2 = 1
 outlineMesh = NodePath("outline")
 collisionArea = NodePath("CollisionArea")
 
-[node name="CollisionArea" type="Area3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/MeshInstance3D3"]
+[node name="CollisionArea" type="Area3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/CB"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/MeshInstance3D3/CollisionArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/CB/CollisionArea"]
 shape = SubResource("ConcavePolygonShape3D_vn2rd")
 
-[node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/MeshInstance3D3" groups=["outline"]]
+[node name="outline" type="MeshInstance3D" parent="Rooms/Room01/Labs/InclinedPlaneExperiment/LabObjects/CB" groups=["outline"]]
 visible = false
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_hhevs")
@@ -3627,16 +3638,16 @@ skeleton = NodePath("")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/Room02/wall_026/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_fieaw")
 
-[node name="AluminumLabItem" parent="Rooms/Room02" node_paths=PackedStringArray("HintLabel", "NextStepButton", "PlayVoiceButton", "VoicePlayer", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="AluminumLabItem" parent="Rooms/Room02" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-2.1855692e-08, 0, 0.49999994, 0, 0.5, 0, -0.49999994, 0, -2.1855692e-08, -15.98513, -0.75, -4.8643875)
 script = ExtResource("22_g7bw1")
-PlacableItemPaths = []
-CurrentStep = 0
-HintLabel = NodePath("Hint")
-NextStepButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
-PlayVoiceButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/TipSoundButton")
-VoicePlayer = NodePath("AudioStreamPlayer")
-StepVoiceResources = Array[AudioStream]([ExtResource("46_u0op8"), ExtResource("6_x2fmw")])
+currentStep = 0
+placableItemPaths = []
+hintLabel = NodePath("HintLabel")
+nextStepButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
+playVoiceButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
+voicePlayer = NodePath("AudioStreamPlayer")
+stepVoiceResources = Array[AudioStream]([ExtResource("43_1m4v3"), ExtResource("14_fbdsj"), ExtResource("46_u0op8"), ExtResource("45_u0op8"), ExtResource("43_1m4v3")])
 ExperimentName = "铝和氢氧化钠反应实验"
 ExperimentCategory = 2
 DisplayName = "铝和氢氧化钠反应实验"
@@ -3645,13 +3656,7 @@ outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
 [node name="NameLabel" parent="Rooms/Room02/AluminumLabItem" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5611017, 0)
 
-[node name="Hint" type="Label3D" parent="Rooms/Room02/AluminumLabItem"]
-transform = Transform3D(1, 0, -1.4210855e-14, 0, 1, 0, 1.4210855e-14, 0, 1, -0.7700615, 1.5189493, 0)
-pixel_size = 0.01
-text = "Text"
-font_size = 12
-
-[node name="PhantomCamera3D" parent="Rooms/Room02/AluminumLabItem" index="2"]
+[node name="PhantomCamera3D" parent="Rooms/Room02/AluminumLabItem" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0.85904926, 0.5118929, 0, -0.5118929, 0.85904926, -1.1920929e-07, 1.5659313, 1.7823577)
 
 [node name="outline" type="MeshInstance3D" parent="Rooms/Room02/AluminumLabItem/CHEMESTRYtable2/CHEMESTRYtable" index="0" groups=["outline"]]
@@ -3664,8 +3669,14 @@ metadata/outline = 0
 [node name="linePointAPath" parent="Rooms/Room02/AluminumLabItem/lineNode" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5218554, 1.4901161e-08)
 
-[node name="TeleportPos" parent="Rooms/Room02/AluminumLabItem" index="5"]
+[node name="TeleportPos" parent="Rooms/Room02/AluminumLabItem" index="4"]
 transform = Transform3D(1, 0, -3.5527137e-15, 0, 1, 0, 3.5527137e-15, 0, 1, 0, 0, 2.4326382)
+
+[node name="HintLabel" type="Label3D" parent="Rooms/Room02/AluminumLabItem"]
+transform = Transform3D(1, 0, -1.7763568e-14, 0, 1, 0, 1.7763568e-14, 0, 1, -0.7700615, 1.5189493, 0)
+pixel_size = 0.01
+text = "Text"
+font_size = 12
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Rooms/Room02/AluminumLabItem"]
 
@@ -3678,9 +3689,6 @@ transform = Transform3D(0.050000012, 0, 1.8626454e-09, 0, 0.05, 0, -1.8626454e-0
 
 [node name="brush2" parent="Rooms/Room02/AluminumLabItem" instance=ExtResource("39_7y02i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0, -0.4)
-
-[node name="RigidBody" parent="Rooms/Room02/AluminumLabItem" instance=ExtResource("40_bcgcp")]
-transform = Transform3D(-1.0927847e-08, 0, -0.25, 0, 0.25, 0, 0.25, 0, -1.0927847e-08, 0, 0.7, 0)
 
 [node name="PotionGreen" type="Node3D" parent="Rooms/Room02/AluminumLabItem"]
 transform = Transform3D(-2.6226836e-08, -0.45282573, -0.39363536, 1.7763568e-15, 0.39363536, -0.45282573, 0.6, -1.9793644e-08, -1.7206348e-08, -1.2000008, 0.4000001, 0)
@@ -3716,9 +3724,17 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -4.7
 [node name="Lab-OhmsLaw" type="Node3D" parent="Rooms/ElectricRoom"]
 transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, -3.697932, -1, -16.285683)
 
-[node name="OhmsLawLabItem" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="OhmsLawLabItem" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-4.3711385e-08, 0, -0.9999999, 0, 1, 0, 0.9999999, 0, -4.3711385e-08, 23.381353, 0.5, -22.703466)
 script = ExtResource("19_88vt2")
+currentStep = 0
+ConnectionManagerPath = NodePath("/root/World/ConnectionManager")
+placableItemPaths = []
+hintLabel = NodePath("HintLabel")
+nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
+playVoiceButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
+voicePlayer = NodePath("AudioStreamPlayer")
+stepVoiceResources = Array[AudioStream]([ExtResource("51_1m4v3"), ExtResource("52_u0op8"), ExtResource("45_u0op8")])
 ExperimentName = "欧姆实验"
 ExperimentDescription = "欧姆~~~"
 ExperimentCategory = 1
@@ -3744,6 +3760,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45987496, 2.5324762, 1.4901
 
 [node name="TeleportPos" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem" index="4"]
 transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, 3.8146973e-06, 0, 2.1992912)
+
+[node name="HintLabel" type="Label3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, 1, 0, -3.5527137e-15, 0, 1, 0, 2.047191, 0)
+pixel_size = 0.01
+text = "Text"
+font_size = 10
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
 
@@ -3818,6 +3840,8 @@ path_joined = false
 
 [node name="Path3D" type="Path3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
 curve = SubResource("Curve3D_4h21d")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Rooms/ElectricRoom/Lab-OhmsLaw/OhmsLawLabItem"]
 
 [node name="MoviePlayer" type="Node3D" parent="Rooms/ElectricRoom/Lab-OhmsLaw" node_paths=PackedStringArray("nameLabel", "lineNode", "outlineMeshs")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 34.566837, 4.463881, -29.746881)

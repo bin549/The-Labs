@@ -20,7 +20,17 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     protected abstract TStep SetupStep { get; }
     protected abstract TStep CompletedStep { get; }
     protected abstract string GetStepName(TStep step);
+    
+    public override void EnterInteraction() {
+        base.EnterInteraction();
+        this.ShowExperimentButtons(true);
+    }
 
+    public override void ExitInteraction() {
+        this.ShowExperimentButtons(false);
+        base.ExitInteraction();
+    }
+    
     protected void InitializeStepExperiment() {
         this.InitializeExperimentItems();
         this.InitializeStepStatus();
@@ -29,6 +39,7 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         this.InitializeVoiceResources();
         this.InitializeHintTimer();
         this.HideHintLabel();
+        this.ShowExperimentButtons(false);
     }
 
     protected virtual void InitializeExperimentItems() {
@@ -244,5 +255,14 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
 
     public string GetCurrentStepName() {
         return this.GetStepName(this.currentStep);
+    }
+
+    protected virtual void ShowExperimentButtons(bool visible) {
+        if (this.nextStepButton != null) {
+            this.nextStepButton.Visible = visible;
+        }
+        if (this.playVoiceButton != null) {
+            this.playVoiceButton.Visible = visible;
+        }
     }
 }

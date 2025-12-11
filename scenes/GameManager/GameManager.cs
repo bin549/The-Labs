@@ -22,13 +22,18 @@ public partial class GameManager : Node {
     public bool IsBusy => this.currentInteractable != null || IsMenuOpen;
 
     public override void _Process(double delta) {
-        if (Input.IsActionJustPressed("pause")) {
+    }
+
+    public override void _UnhandledInput(InputEvent @event) {
+        if (@event.IsActionPressed("pause")) {
             if (!this.IsBusy) {
                 this.TogglePause();
-                return;
-            } 
-            Input.MouseMode = Input.MouseModeEnum.Captured;
-            this.currentInteractable.ExitInteraction();
+                GetViewport().SetInputAsHandled();
+            } else if (this.currentInteractable != null) {
+                Input.MouseMode = Input.MouseModeEnum.Captured;
+                this.currentInteractable.ExitInteraction();
+                GetViewport().SetInputAsHandled();
+            }
         }
     }
 

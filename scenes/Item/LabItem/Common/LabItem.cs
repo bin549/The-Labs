@@ -10,16 +10,12 @@ public partial class LabItem : Interactable {
     [Export] public string ExperimentDescription { get; set; } = "";
     [Export] public ExperimentCategory ExperimentCategory { get; set; } = ExperimentCategory.Mechanics;
     [Export] public Node3D TeleportPosition { get; set; }
-    [Export] public Control controlUI { get; set; }
     public bool IsInteracting => base.isInteracting;
 
     public override void _Ready() {
         base._Ready();
         this.InitPhantomCamera();
         this.RegisterToExperimentManager();
-        if (this.controlUI != null) {
-            this.controlUI.Visible = false;
-        }
     }
 
     public override void _ExitTree() {
@@ -73,18 +69,12 @@ public partial class LabItem : Interactable {
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 999;
         }
-        if (this.controlUI != null) {
-            this.controlUI.Visible = true;
-        }
     }
 
     public override void ExitInteraction() {
         base.ExitInteraction();
         if (this.phantomCam != null) {
             this.phantomCam.Priority = 1;
-        }
-        if (this.controlUI != null) {
-            this.controlUI.Visible = false;
         }
         if (base.gameManager != null) {
             base.gameManager.SetCurrentInteractable(null);
