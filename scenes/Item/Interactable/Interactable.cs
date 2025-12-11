@@ -215,8 +215,8 @@ public partial class Interactable : Node3D {
         curveRoot.AddChild(curveBodyInstance);
         this.arrowHeadInstance = new MeshInstance3D();
         this.arrowConeMesh = new CylinderMesh();
-        var arrowRadius = Mathf.Max(this.lineThickness * arrowThicknessMultiplier, 0.002f);
-        var arrowHeight = Mathf.Max(this.lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
+        var arrowRadius = Mathf.Max(this.lineThickness * this.arrowThicknessMultiplier, 0.002f);
+        var arrowHeight = Mathf.Max(this.lineThickness * this.arrowLengthMultiplier, arrowRadius * 2.0f);
         this.arrowConeMesh.TopRadius = 0.0f;
         this.arrowConeMesh.BottomRadius = arrowRadius;
         this.arrowConeMesh.Height = arrowHeight;
@@ -303,8 +303,8 @@ public partial class Interactable : Node3D {
         var globalHead = new Transform3D(headBasis, end);
         this.arrowHeadInstance.GlobalTransform = globalHead;
         if (this.arrowConeMesh != null) {
-            var arrowRadius = Mathf.Max(this.lineThickness * arrowThicknessMultiplier, 0.002f);
-            var arrowHeight = Mathf.Max(this.lineThickness * arrowLengthMultiplier, arrowRadius * 2.0f);
+            var arrowRadius = Mathf.Max(this.lineThickness * this.arrowThicknessMultiplier, 0.002f);
+            var arrowHeight = Mathf.Max(this.lineThickness * this.arrowLengthMultiplier, arrowRadius * 2.0f);
             this.arrowConeMesh.TopRadius = 0.0f;
             this.arrowConeMesh.BottomRadius = arrowRadius;
             this.arrowConeMesh.Height = arrowHeight;

@@ -45,47 +45,42 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void InitializeStepHints() {
-        stepHints[AluminumReactionExperimentStep.Setup] = 
+        base.stepHints[AluminumReactionExperimentStep.Setup] = 
             "[b]步骤 1：准备阶段[/b]\n\n" +
             "• 将实验台放置在平稳的表面上\n" +
             "• 从实验物品中选择烧杯（Beaker）\n" +
             "• 将烧杯放置在实验台上\n" +
             "• 确保实验环境安全，准备好防护用品\n\n" +
             "[color=yellow]提示：[/color] 可以使用鼠标拖拽来移动和放置物品";
-        
-        stepHints[AluminumReactionExperimentStep.PrepareReagents] = 
+        base.stepHints[AluminumReactionExperimentStep.PrepareReagents] = 
             "[b]步骤 2：准备试剂[/b]\n\n" +
             "• 准备铝片（AluminumStrip），确保表面清洁\n" +
             "• 准备氢氧化钠溶液（SodiumHydroxideSolution）\n" +
             "• 检查试剂的浓度和纯度\n" +
             "• 将氢氧化钠溶液倒入烧杯中（适量即可）\n\n" +
             "[color=yellow]提示：[/color] 氢氧化钠具有腐蚀性，操作时需小心";
-        
-        stepHints[AluminumReactionExperimentStep.AddReagents] = 
+        base.stepHints[AluminumReactionExperimentStep.AddReagents] = 
             "[b]步骤 3：添加试剂[/b]\n\n" +
             "• 将准备好的铝片轻轻放入装有氢氧化钠溶液的烧杯中\n" +
             "• 确保铝片完全浸入溶液中\n" +
             "• 观察铝片与溶液接触后的变化\n" +
             "• 注意观察反应是否立即开始\n\n" +
             "[color=yellow]提示：[/color] 铝片与氢氧化钠反应会产生氢气";
-        
-        stepHints[AluminumReactionExperimentStep.ObserveReaction] = 
+        base.stepHints[AluminumReactionExperimentStep.ObserveReaction] = 
             "[b]步骤 4：观察反应[/b]\n\n" +
             "• 仔细观察反应现象：铝片表面产生气泡\n" +
             "• 观察气泡产生的速度和数量\n" +
             "• 注意溶液温度的变化（可使用温度计）\n" +
             "• 观察铝片是否逐渐溶解\n\n" +
             "[color=yellow]提示：[/color] 反应方程式：2Al + 2NaOH + 6H₂O → 2NaAlO₂ + 3H₂↑";
-        
-        stepHints[AluminumReactionExperimentStep.CollectGas] = 
+        base.stepHints[AluminumReactionExperimentStep.CollectGas] = 
             "[b]步骤 5：收集气体[/b]\n\n" +
             "• 使用导管（GasTube）连接烧杯和试管（TestTube）\n" +
             "• 将试管倒置在水槽（WaterTank）中收集氢气\n" +
             "• 观察试管中气体的收集情况\n" +
             "• 确认收集到的是氢气（可以后续进行验证实验）\n\n" +
             "[color=yellow]提示：[/color] 氢气比空气轻，适合用排水法收集";
-        
-        stepHints[AluminumReactionExperimentStep.RecordData] = 
+        base.stepHints[AluminumReactionExperimentStep.RecordData] = 
             "[b]步骤 6：记录数据[/b]\n\n" +
             "• 记录反应开始的时间\n" +
             "• 记录反应过程中的温度变化\n" +
@@ -93,8 +88,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             "• 将测量数据记录到数据记录板（DataBoard）上\n" +
             "• 记录反应现象和观察结果\n\n" +
             "[color=yellow]提示：[/color] 详细记录有助于后续分析反应规律";
-        
-        stepHints[AluminumReactionExperimentStep.AnalyzeResult] = 
+        base.stepHints[AluminumReactionExperimentStep.AnalyzeResult] = 
             "[b]步骤 7：分析结果[/b]\n\n" +
             "• 查看数据记录板上的所有实验数据\n" +
             "• 分析反应速率与温度的关系\n" +
@@ -102,8 +96,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             "• 思考：为什么铝能与强碱反应？\n" +
             "• 总结实验现象和结论\n\n" +
             "[color=yellow]提示：[/color] 铝是两性金属，既能与酸反应，也能与强碱反应";
-        
-        stepHints[AluminumReactionExperimentStep.Completed] = 
+        base.stepHints[AluminumReactionExperimentStep.Completed] = 
             "[b]实验完成！[/b]\n\n" +
             "恭喜你完成了铝和氢氧化钠反应实验！\n\n" +
             "[color=lightgreen]实验总结：[/color]\n" +
