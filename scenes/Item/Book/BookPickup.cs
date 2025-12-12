@@ -86,13 +86,13 @@ public partial class BookPickup : Interactable {
 			}
 			this.playerBook ??= this.playerNode.FindChild("Book", true, false) as Node3D;
 		}
-		if (this.playerBook != null && (phantomCamera == null || !GodotObject.IsInstanceValid(phantomCamera.Node3D))) {
+		if (this.playerBook != null && (this.phantomCamera == null || !GodotObject.IsInstanceValid(this.phantomCamera.Node3D))) {
 			Node3D phantomNode = null;
 			if (NodePathIsValid(PhantomCameraPath)) {
 				phantomNode = ResolveNodePath(PhantomCameraPath, this.playerBook) ?? ResolveNodePath(PhantomCameraPath, this);
 			}
 			phantomNode ??= this.playerBook.FindChild("PhantomCamera3D", true, false) as Node3D;
-			phantomCamera = phantomNode.AsPhantomCamera3D();
+			this.phantomCamera = phantomNode.AsPhantomCamera3D();
 		}
 	}
 
@@ -117,11 +117,11 @@ public partial class BookPickup : Interactable {
 	}
 
 	private void BoostCameraPriority(bool enable) {
-		if (phantomCamera == null) return;
+		if (this.phantomCamera == null) return;
 		if (!this.originalCameraPriority.HasValue) {
-			this.originalCameraPriority = phantomCamera.Priority;
+			this.originalCameraPriority = this.phantomCamera.Priority;
 		}
-		phantomCamera.Priority = enable ? InspectCameraPriority : HiddenCameraPriority;
+		this.phantomCamera.Priority = enable ? InspectCameraPriority : HiddenCameraPriority;
 	}
 
 	private static bool NodePathIsValid(NodePath path) {

@@ -23,7 +23,29 @@ public enum InclinedPlaneExperimentItem {
 
 public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPlaneExperimentStep, InclinedPlaneExperimentItem> {
     [Export] protected override InclinedPlaneExperimentStep currentStep { get; set; } = InclinedPlaneExperimentStep.Setup;
+    [Export] private PlacableItem cube;
+    private Node3D tipObject;
+    private Node3D alarmObject;
+    private Node3D indicateEffect;
+    // drag result -> tip object 
+    // -> 放置 -> release result
+    
+    // push the cube
+    // -> trigger the animation
+    
+    // record the result
+    
+    // update the slope angle
+    
+     // polish -> add audio
 
+     // finish ui
+     
+     // ui management 
+     
+     
+     
+     
     public override void _Ready() {
         base._Ready();
         this.InitializeStepHints();

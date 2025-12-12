@@ -30,7 +30,7 @@ public partial class InclinedPlanePlacableItem : PlacableItem {
 			base.collisionArea.AreaEntered += OnAreaEntered;
 		}
 	}
-
+																					
 	private void OnBodyEntered(Node3D body) {
 		this.HandleCollision(body);
 	}

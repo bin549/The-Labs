@@ -28,8 +28,8 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     public override void _Ready() {
         base._Ready();
-        InitializeStepHints();
-        InitializeStepExperiment();
+        this.InitializeStepHints();
+        base.InitializeStepExperiment();
     }
 
     public override void EnterInteraction() {
