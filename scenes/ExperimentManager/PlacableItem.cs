@@ -4,6 +4,7 @@ using Godot.Collections;
 public partial class PlacableItem : Node3D {
 	[Export] public bool IsDraggable { get; set; } = true;
 	private bool isDragging = false;
+	public bool IsDragging => this.isDragging;
 	[Export] private DragPlaneType dragPlane1 = DragPlaneType.VerticalX;
 	[Export] private DragPlaneType dragPlane2 = DragPlaneType.Horizontal;
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
