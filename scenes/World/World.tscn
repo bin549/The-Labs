@@ -1285,7 +1285,7 @@ _surfaces = [{
 
 [sub_resource type="Curve3D" id="Curve3D_h7niu"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.98726463, 0.97047794, 0.038475037, 0, 0, 0, 0, 0, 0, 0.20503426, 0.58859384, 0.0033092499, 0, 0, 0, 0, 0, 0, 1.475, 0.589, 0),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.86, -0.02, 0, 0, 0, 0, 0, 0, 0, -0.005, -0.475, 0, 0, 0, 0, 0, 0, 0, 1.5, -0.475, 0),
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
@@ -1404,7 +1404,7 @@ material = SubResource("StandardMaterial3D_belwg")
 size = Vector2(0.4, 0.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h7niu"]
-size = Vector3(0.6, 0.6, 0.6)
+size = Vector3(0.6, 1.0930908, 0.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ifas"]
 resource_name = "Material"
@@ -3547,7 +3547,7 @@ shape = SubResource("BoxShape3D_xyyef")
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Rooms/MechanicsRoom/Labs/FrictionExperiment"]
 
 [node name="InclinedPlaneExperiment" parent="Rooms/MechanicsRoom/Labs" node_paths=PackedStringArray("cube", "indicateEffect", "triggerArea", "collisionLabel", "placedObject", "arrowObject", "pathFollow", "hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
-transform = Transform3D(0.49999994, 0, 0, 0, 0.5, 0, 0, 0, 0.49999994, -13.901301, -0.75, -6.314387)
+transform = Transform3D(0.49999994, 0, 0, 0, 0.5, 0, 0, 0, 0.49999994, -13.901301, -0.75, -6.515754)
 script = ExtResource("43_85ror")
 currentStep = 0
 cube = NodePath("LabObjects/CB")
@@ -3555,9 +3555,9 @@ indicateEffect = NodePath("DownArrow")
 triggerArea = NodePath("Area3D")
 collisionLabel = NodePath("PutLabel")
 placedObject = NodePath("LabObjects/Path3D/PathFollow3D/CB2")
-arrowObject = NodePath("Arrow")
+arrowObject = NodePath("indicateArrow")
 pathFollow = NodePath("LabObjects/Path3D/PathFollow3D")
-moveDuration = 0.5
+moveDuration = 0.34
 placableItemPaths = Array[NodePath]([NodePath("LabObjects/CB")])
 hintLabel = NodePath("Hint")
 nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
@@ -3641,11 +3641,11 @@ metadata/_edit_lock_ = true
 metadata/outline = 0
 
 [node name="Path3D" type="Path3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0197308, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08516979, 0.86846507)
 curve = SubResource("Curve3D_h7niu")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D"]
-transform = Transform3D(0.029480986, 0.30477294, -0.95195526, -2.9802042e-08, 0.95237404, 0.30490395, 0.99955606, -0.008988968, 0.028077051, -0.98726463, 0.97047794, 0.038475037)
+transform = Transform3D(6.756685e-08, 0.46977696, -0.8827608, -1.4900898e-08, 0.88276786, 0.46977323, 0.99998236, -1.8587645e-08, 6.6646585e-08, -0.86, -0.02, 0)
 
 [node name="CB2" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8607424, -0.06990366, 0)
@@ -3672,7 +3672,7 @@ libraries = {
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
 
 [node name="DownArrow" type="Node3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
-transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.7872753, 1.6399839, 0)
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.7872753, 1.6399839, 0.3818093)
 
 [node name="GroundEffect_1" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/DownArrow"]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, -0.5, 0)
@@ -3696,16 +3696,17 @@ font_size = 8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.80179405, 1.18236, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24654543, 0)
 shape = SubResource("BoxShape3D_h7niu")
 
-[node name="Arrow" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
+[node name="indicateArrow" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
 transform = Transform3D(-4.371139e-07, 10, 0, -10, -4.371139e-07, 0, 0, 0, 10, -0.61105156, 0.9168432, 0)
 mesh = SubResource("ArrayMesh_2ygkf")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/Arrow"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/indicateArrow"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/Arrow/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/indicateArrow/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_h7niu")
 
 [node name="Carpet_002" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]

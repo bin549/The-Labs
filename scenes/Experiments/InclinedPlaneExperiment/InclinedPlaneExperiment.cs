@@ -76,7 +76,6 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     private void InitializePlacedObject() {
         if (this.placedObject != null) {
             this.placedObject.Visible = false;
-            this.pathFollow.ProgressRatio = 0f;
         }
     }
 
@@ -113,7 +112,8 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
             if (@event is InputEventMouseButton mouseButton) {
                 if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed && !mouseButton.IsEcho()) {
                     var intersect = this.GetMouseIntersect(mouseButton.Position);
-                    if (intersect != null) {                        if (this.IsClickOnArrow(intersect)) {
+                    if (intersect != null) {                        
+                        if (this.IsClickOnArrow(intersect)) {
                             this.OnArrowClicked();
                             GetViewport().SetInputAsHandled();
                         }
@@ -138,7 +138,7 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
                 this.OnCubePlaced();
             }
         }
-    }
+    }    
 
     private void ShowIndicateEffect() {
         if (this.indicateEffect == null || this.cube == null) {
@@ -307,25 +307,13 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         }
         this.moveTween = CreateTween();
         this.moveTween.TweenProperty(this.pathFollow, "progress_ratio", 1.0f, this.moveDuration);
-        if (this.arrowObject != null) {
-            this.arrowObject.Visible = false;
-        }
     }
 
     private void InitializeStepHints() {
         base.stepHints[InclinedPlaneExperimentStep.Setup] = 
-            "[b]步骤 1：准备阶段[/b]\n\n" +
-            "• 将实验台放置在平稳的表面上\n" +
-            "• 从实验物品中选择斜坡板（InclinedPlane）\n" +
-            "• 将斜坡板放置在实验台上\n" +
-            "• 确保斜坡板稳固，不会滑动\n\n" +
-            "[color=yellow]提示：[/color] 可以使用鼠标拖拽来移动和放置物品";
+            "[b]步骤 1：拖拽和放置物品";
         base.stepHints[InclinedPlaneExperimentStep.PlaceObject] = 
             "[b]步骤 2：放置物体[/b]\n\n" +
-            "• 选择实验物体（滑块/SliderObject）\n" +
-            "• 将物体轻轻放置在斜坡的顶部位置\n" +
-            "• 确保物体放置在斜坡表面，而不是悬空\n" +
-            "• 物体应该能够沿着斜坡滑动\n\n" +
             "[color=yellow]提示：[/color] 物体应该放在斜坡顶部，准备进行实验";
         base.stepHints[InclinedPlaneExperimentStep.AdjustAngle] = 
             "[b]步骤 3：调整角度[/b]\n\n" +
