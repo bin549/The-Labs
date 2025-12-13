@@ -37,6 +37,13 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     private bool isCubeInTriggerArea = false;
     private bool isCubePlaced = false;
     private Tween moveTween;
+    
+    [ExportGroup("Arrow Hover")]
+    [Export] private float arrowNormalAlpha = 0.35f;
+    [Export] private float arrowHoverAlpha = 1.0f;
+    private MeshInstance3D arrowMesh;
+    private BaseMaterial3D arrowHoverMaterial;
+    private bool isArrowHovered = false;
      
     public override void _Ready() {
         base._Ready();
@@ -83,6 +90,9 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         if (this.arrowObject != null) {
             this.arrowObject.Visible = false;
         }
+        this.arrowMesh = this.arrowObject as MeshInstance3D;
+        this.EnsureArrowMaterial();
+        this.SetArrowHover(false);
     }
 
     public override void EnterInteraction() {
@@ -97,6 +107,7 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         base.isInteracting = false;
         base.ExitInteraction();
         this.HideIndicateEffect();
+        this.SetArrowHover(false);
     }
 
     public override void _Process(double delta) {
@@ -107,6 +118,11 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     public override void _Input(InputEvent @event) {
         if (!base.isInteracting) {
             return;
+        }
+        if (this.isCubePlaced && this.arrowObject != null && this.arrowObject.Visible) {
+            if (@event is InputEventMouseMotion motionEvent) {
+                this.UpdateArrowHover(motionEvent.Position);
+            }
         }
         if (this.isCubePlaced && this.arrowObject != null && this.arrowObject.Visible) {
             if (@event is InputEventMouseButton mouseButton) {
@@ -121,6 +137,44 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
                 }
             }
         }
+    }
+    
+    private void UpdateArrowHover(Vector2 mousePos) {
+        var intersect = this.GetMouseIntersect(mousePos);
+        bool isHovering = intersect != null && this.IsClickOnArrow(intersect);
+        this.SetArrowHover(isHovering);
+    }
+
+    private void SetArrowHover(bool hovered) {
+        if (this.isArrowHovered == hovered) return;
+        this.isArrowHovered = hovered;
+        float alpha = hovered ? this.arrowNormalAlpha : this.arrowHoverAlpha;
+        this.SetArrowAlpha(alpha);
+    }
+
+    private void EnsureArrowMaterial() {
+        if (this.arrowMesh == null) return;
+        if (this.arrowHoverMaterial != null) return;
+        Material baseMaterial = this.arrowMesh.MaterialOverride;
+        if (baseMaterial == null && this.arrowMesh.Mesh != null && this.arrowMesh.Mesh.GetSurfaceCount() > 0) {
+            baseMaterial = this.arrowMesh.Mesh.SurfaceGetMaterial(0);
+        }
+        if (baseMaterial is BaseMaterial3D bm) {
+            this.arrowHoverMaterial = (BaseMaterial3D)bm.Duplicate();
+        } else {
+            this.arrowHoverMaterial = new StandardMaterial3D();
+        }
+        this.arrowHoverMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+        this.arrowMesh.MaterialOverride = this.arrowHoverMaterial;
+    }
+
+    private void SetArrowAlpha(float alpha) {
+        if (this.arrowMesh == null) return;
+        this.EnsureArrowMaterial();
+        if (this.arrowHoverMaterial == null) return;
+        alpha = Mathf.Clamp(alpha, 0f, 1f);
+        var c = this.arrowHoverMaterial.AlbedoColor;
+        this.arrowHoverMaterial.AlbedoColor = new Color(c.R, c.G, c.B, alpha);
     }
 
     private void UpdateIndicateEffect() {
@@ -238,6 +292,7 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         }
         if (this.arrowObject != null) {
             this.arrowObject.Visible = true;
+            this.SetArrowHover(false);
         }
         this.HideIndicateEffect();
         this.HideCollisionLabel();
@@ -307,6 +362,10 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         }
         this.moveTween = CreateTween();
         this.moveTween.TweenProperty(this.pathFollow, "progress_ratio", 1.0f, this.moveDuration);
+        if (this.arrowObject != null) {
+            this.arrowObject.Visible = false;
+            this.SetArrowHover(false);
+        }
     }
 
     private void InitializeStepHints() {
