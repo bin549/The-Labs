@@ -1,4 +1,4 @@
-[gd_scene load_steps=225 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=234 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -54,7 +54,7 @@
 [ext_resource type="AudioStream" uid="uid://bb7r8tnvqu8so" path="res://assets/sounds/sfx/Door_Close.wav" id="43_1m4v3"]
 [ext_resource type="PackedScene" uid="uid://ba3pyobte13gt" path="res://assets/StylooClassroomAssetPack GLTF & FBX/classroom/GLTF/chair.glb" id="43_5qnt6"]
 [ext_resource type="Script" uid="uid://cxd872c88wb4d" path="res://scenes/Experiments/InclinedPlaneExperiment/InclinedPlaneExperiment.cs" id="43_85ror"]
-[ext_resource type="Script" uid="uid://bjsqw8wsethu5" path="res://scenes/Experiments/InclinedPlaneExperiment/SliderObject.cs" id="44_1m4v3"]
+[ext_resource type="Script" uid="uid://djd13x6sqncx0" path="res://scenes/ExperimentManager/PlacableItem.cs" id="43_h7niu"]
 [ext_resource type="Shader" uid="uid://d2yva4fknjh5v" path="res://assets/EffectBlocks/source_files/shaders/gradient_scroll.gdshader" id="44_h7niu"]
 [ext_resource type="Texture2D" uid="uid://be5acis1q4v56" path="res://assets/EffectBlocks/source_files/textures/icons/down_arrow.png" id="45_fu1ug"]
 [ext_resource type="AudioStream" uid="uid://d1t3mise0xonp" path="res://assets/sounds/sfx/page.ogg" id="45_u0op8"]
@@ -1183,6 +1183,53 @@ _surfaces = [{
 left_to_right = 0.0
 size = Vector3(1.375, 0.515, 0.735)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ibb4t"]
+render_priority = 5
+shader = ExtResource("13_u0op8")
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sc6ye"]
+render_priority = 10
+next_pass = SubResource("ShaderMaterial_ibb4t")
+shader = ExtResource("14_vn2rd")
+shader_parameter/_thickness = 0.03
+shader_parameter/_color = Color(1, 1, 1, 1)
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_l0r83"]
+_surfaces = [{
+"aabb": AABB(-0.6875, -0.2575, -0.3675, 1.375, 0.515, 0.735),
+"attribute_data": PackedByteArray("AAAAAAAAAACrqqo+AAAAPwAAAAAAAAA/AACAPwAAAAAAAIA/AAAAP6uqKj8AAAA/q6qqPgAAAACrqio/AAAAAKuqqj4AAAA/q6oqPwAAAD8AAAAAAAAAP6uqqj4AAAA/AAAAAAAAgD+rqqo+AACAP6uqKj8AAAA/AACAPwAAAD+rqio/AACAPwAAgD8AAIA/"),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgABwAJAAgACgALAAwACwANAAwADgAPABAADwARABAA"),
+"material": SubResource("ShaderMaterial_sc6ye"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AAAwvwrXgz72KLw+AAAwPwrXg772KLw+AAAwvwrXg772KLw+AAAwvwrXgz72KLy+AAAwvwrXg772KLy+AAAwPwrXg772KLy+AAAwvwrXgz72KLw+AAAwvwrXgz72KLy+AAAwPwrXg772KLw+AAAwPwrXg772KLy+AAAwvwrXgz72KLy+AAAwvwrXgz72KLw+AAAwvwrXg772KLy+AAAwvwrXg772KLw+AAAwvwrXg772KLw+AAAwPwrXg772KLw+AAAwvwrXg772KLy+AAAwPwrXg772KLy+IEVtof///78asRp3////v1RVVFX///+/l0vy8wAA/78yMzIzAAD/vz/6vh8AAP+/IEVtof////+XS/Lz/////xqxGnf/////P/q+H/////+XS/Lz/3//vyBFbaH/f/+/MjMyM/9//79UVVRV/3//v1RVVFX///+/GrEad////78yMzIz////vz/6vh////+/")
+}]
+
 [sub_resource type="BoxMesh" id="BoxMesh_u0op8"]
 size = Vector3(0.15, 0.15, 0.15)
 
@@ -1208,7 +1255,7 @@ shader_parameter/_textureOffset = Vector2(0, 0)
 render_priority = 10
 next_pass = SubResource("ShaderMaterial_8km6w")
 shader = ExtResource("14_vn2rd")
-shader_parameter/_thickness = 0.03
+shader_parameter/_thickness = 0.015
 shader_parameter/_color = Color(1, 1, 1, 1)
 shader_parameter/_useEmission = false
 shader_parameter/_emissionStrength = 1.0
@@ -1235,6 +1282,13 @@ _surfaces = [{
 "vertex_count": 24,
 "vertex_data": PackedByteArray("mpmZvZqZmT2amZk9mpmZPZqZmT2amZk9mpmZvZqZmb2amZk9mpmZPZqZmb2amZk9mpmZPZqZmT2amZm9mpmZvZqZmT2amZm9mpmZPZqZmb2amZm9mpmZvZqZmb2amZm9mpmZPZqZmT2amZk9mpmZPZqZmT2amZm9mpmZPZqZmb2amZk9mpmZPZqZmb2amZm9mpmZvZqZmT2amZm9mpmZvZqZmT2amZk9mpmZvZqZmb2amZm9mpmZvZqZmb2amZk9mpmZPZqZmT2amZk9mpmZvZqZmT2amZk9mpmZPZqZmT2amZm9mpmZvZqZmT2amZm9mpmZvZqZmb2amZk9mpmZPZqZmb2amZk9mpmZvZqZmb2amZm9mpmZPZqZmb2amZm9zEwys////7//n/+f////v/9f/1////+/MrPMTP///7/MzMzMAAD/v/8f/98AAP+//9//HwAA/78yMzIzAAD/v/+f/5//////zMzMzP////8ys8xM///////f/x///////x//3/9//7/MTDKz/3//vzIzMjP/f/+//1//X/9//7//n/+fAAD/v8xMMrMAAP+/zMzMzAAA/7//H//fAAD/v/9f/1////+/MrPMTP///78yMzIz////v//f/x////+/")
 }]
+
+[sub_resource type="Curve3D" id="Curve3D_h7niu"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.98726463, 0.97047794, 0.038475037, 0, 0, 0, 0, 0, 0, 0.20503426, 0.58859384, 0.0033092499, 0, 0, 0, 0, 0, 0, 1.475, 0.589, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
 
 [sub_resource type="Animation" id="Animation_fu1ug"]
 length = 0.001
@@ -1393,6 +1447,92 @@ shadow_mesh = SubResource("ArrayMesh_ifbvb")
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h7niu"]
 data = PackedVector3Array(-0.005, 0.0034999999, 0.003, -0.0025, 0.006, 0.003, -0.0025, 0.0019999999, 0.003, -0.0025, 0.0019999999, 0.003, -0.005, 0.0019999999, 0.003, -0.005, 0.0034999999, 0.003, -0.0025, -0.0013, 0.003, -0.0025, 0.0019999999, 0.003, 0, 0.0019999999, 0.003, 0, 0.0019999999, 0.003, 0, -0.0013, 0.003, -0.0025, -0.0013, 0.003, -0.0025, -0.0047, 0.003, -0.0025, -0.0013, 0.003, 0, -0.0013, 0.003, 0, -0.0013, 0.003, 0, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0.003, 0.0025, 0.006, 0.003, 0.005, 0.0034999999, 0.003, 0.005, 0.0034999999, 0.003, 0.005, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0.003, 0.0025, -0.0013, 0.003, 0, -0.0013, 0.003, 0, -0.0013, 0.003, 0, -0.0047, 0.003, -0.0025, -0.0047, 0.003, 0, -0.0047, 0.003, 0, -0.0013, 0.003, 0.0025, -0.0013, 0.003, -0.0025, -0.007999999, 0.003, -0.0025, -0.0047, 0.003, 0, -0.0047, 0.003, 0.0025, -0.0013, 0.003, 0.0025, -0.0047, 0.003, 0, -0.0047, 0.003, 0, -0.0047, 0.003, 0, -0.007999999, 0.003, -0.0025, -0.007999999, 0.003, 0, -0.007999999, 0.003, 0, -0.0047, 0.003, 0.0025, -0.0047, 0.003, 0.0025, -0.0047, 0.003, 0.0025, -0.007999999, 0.003, 0, -0.007999999, 0.003, 0, -0.007999999, 0, 0, -0.0047, 0, -0.0025, -0.0047, 0, -0.0025, -0.0047, 0, -0.0025, -0.007999999, 0, 0, -0.007999999, 0, 0, -0.0047, 0, 0, -0.007999999, 0, 0.0025, -0.007999999, 0, -0.0025, -0.0013, 0, -0.0025, -0.0047, 0, 0, -0.0047, 0, 0.0025, -0.007999999, 0, 0.0025, -0.0047, 0, 0, -0.0047, 0, 0, -0.0047, 0, 0, -0.0013, 0, -0.0025, -0.0013, 0, 0, -0.0013, 0, 0, -0.0047, 0, 0.0025, -0.0047, 0, 0.0025, -0.0047, 0, 0.0025, -0.0013, 0, 0, -0.0013, 0, -0.0025, 0.0019999999, 0, -0.0025, -0.0013, 0, 0, -0.0013, 0, 0, 0.0019999999, 0, 0, -0.0013, 0, 0.0025, -0.0013, 0, 0, -0.0013, 0, 0, 0.0019999999, 0, -0.0025, 0.0019999999, 0, 0.0025, -0.0013, 0, 0.0025, 0.0019999999, 0, 0, 0.0019999999, 0, -0.005, 0.0034999999, 0, -0.005, 0.0019999999, 0, -0.0025, 0.0019999999, 0, -0.0025, 0.0019999999, 0, -0.0025, 0.006, 0, -0.005, 0.0034999999, 0, -0.0025, 0.006, 0, -0.0025, 0.0019999999, 0, 0, 0.0019999999, 0, 0, 0.0019999999, 0, 0, 0.0084999995, 0, -0.0025, 0.006, 0, 0.0025, 0.006, 0, 0, 0.0084999995, 0, 0, 0.0019999999, 0, 0, 0.0019999999, 0, 0.0025, 0.0019999999, 0, 0.0025, 0.006, 0, 0.005, 0.0034999999, 0, 0.0025, 0.006, 0, 0.0025, 0.0019999999, 0, 0.0025, 0.0019999999, 0, 0.005, 0.0019999999, 0, 0.005, 0.0034999999, 0, 0, -0.007999999, 0.003, 0.0025, -0.007999999, 0.003, 0.0025, -0.007999999, 0, 0.0025, -0.007999999, 0, 0, -0.007999999, 0, 0, -0.007999999, 0.003, -0.0025, -0.007999999, 0.003, 0, -0.007999999, 0.003, 0, -0.007999999, 0, 0, -0.007999999, 0, -0.0025, -0.007999999, 0, -0.0025, -0.007999999, 0.003, 0.005, 0.0034999999, 0.003, 0.0025, 0.006, 0.003, 0.0025, 0.006, 0, 0.0025, 0.006, 0, 0.005, 0.0034999999, 0, 0.005, 0.0034999999, 0.003, 0, 0.0084999995, 0.003, -0.0025, 0.006, 0.003, -0.0025, 0.006, 0, -0.0025, 0.006, 0, 0, 0.0084999995, 0, 0, 0.0084999995, 0.003, -0.0025, 0.006, 0.003, -0.005, 0.0034999999, 0.003, -0.005, 0.0034999999, 0, -0.005, 0.0034999999, 0, -0.0025, 0.006, 0, -0.0025, 0.006, 0.003, 0.0025, 0.006, 0.003, 0, 0.0084999995, 0.003, 0, 0.0084999995, 0, 0, 0.0084999995, 0, 0.0025, 0.006, 0, 0.0025, 0.006, 0.003, 0.0025, 0.006, 0.003, 0.0025, 0.0019999999, 0.003, 0, 0.0019999999, 0.003, 0, 0.0019999999, 0.003, 0, 0.0084999995, 0.003, 0.0025, 0.006, 0.003, 0.005, 0.0034999999, 0, 0.005, 0.0019999999, 0, 0.005, 0.0019999999, 0.003, 0.005, 0.0019999999, 0.003, 0.005, 0.0034999999, 0.003, 0.005, 0.0034999999, 0, -0.0025, 0.006, 0.003, 0, 0.0084999995, 0.003, 0, 0.0019999999, 0.003, 0, 0.0019999999, 0.003, -0.0025, 0.0019999999, 0.003, -0.0025, 0.006, 0.003, -0.005, 0.0034999999, 0.003, -0.005, 0.0019999999, 0.003, -0.005, 0.0019999999, 0, -0.005, 0.0019999999, 0, -0.005, 0.0034999999, 0, -0.005, 0.0034999999, 0.003, -0.0025, 0.0019999999, 0, -0.005, 0.0019999999, 0, -0.005, 0.0019999999, 0.003, -0.005, 0.0019999999, 0.003, -0.0025, 0.0019999999, 0.003, -0.0025, 0.0019999999, 0, -0.0025, 0.0019999999, 0, -0.0025, 0.0019999999, 0.003, -0.0025, -0.0013, 0.003, -0.0025, -0.0013, 0.003, -0.0025, -0.0013, 0, -0.0025, 0.0019999999, 0, -0.0025, -0.0013, 0, -0.0025, -0.0013, 0.003, -0.0025, -0.0047, 0.003, -0.0025, -0.0047, 0.003, -0.0025, -0.0047, 0, -0.0025, -0.0013, 0, -0.0025, -0.007999999, 0, -0.0025, -0.0047, 0, -0.0025, -0.0047, 0.003, -0.0025, -0.0047, 0.003, -0.0025, -0.007999999, 0.003, -0.0025, -0.007999999, 0, 0.005, 0.0019999999, 0, 0.0025, 0.0019999999, 0, 0.0025, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0.003, 0.005, 0.0019999999, 0.003, 0.005, 0.0019999999, 0, 0.0025, 0.0019999999, 0.003, 0.0025, 0.0019999999, 0, 0.0025, -0.0013, 0, 0.0025, -0.0013, 0, 0.0025, -0.0013, 0.003, 0.0025, 0.0019999999, 0.003, 0.0025, -0.0013, 0.003, 0.0025, -0.0013, 0, 0.0025, -0.0047, 0, 0.0025, -0.0047, 0, 0.0025, -0.0047, 0.003, 0.0025, -0.0013, 0.003, 0.0025, -0.007999999, 0.003, 0.0025, -0.0047, 0.003, 0.0025, -0.0047, 0, 0.0025, -0.0047, 0, 0.0025, -0.007999999, 0, 0.0025, -0.007999999, 0.003)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vn2rd"]
+resource_name = "main"
+cull_mode = 2
+albedo_texture = ExtResource("2_8onjr")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_krkbj"]
+_surfaces = [{
+"aabb": AABB(-0.3000002, 0, -0.44999993, 0.60000014, 0.030000005, 0.8999999),
+"format": 34359742465,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAgABAAEAAQAAAAAAAgABAAIAAQAAAAEAAgABAAMAAQAAAAQAAQAEAAMAAAAFAAAABQAEAAAAAAACAAUAAAAFAAUABQACAAIABQACAAUABQACAAYAAgADAAYABQAHAAQABQAGAAcABAAHAAgABwAGAAkAAwAJAAYABwAJAAgAAwAKAAkABAAIAAsAAwAEAAsACQALAAgAAwALAAoACQAKAAsA"),
+"lods": [0.38021645, PackedByteArray("AAABAAIAAgABAAMAAQAAAAQAAQAEAAMAAAACAAUABQAEAAAAAgADAAYABQACAAYABgADAAQABQAHAAQABgAEAAcABQAGAAcA")],
+"name": "main",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("oJmZvgAAAABmZuY+mJmZPgAAAABmZuY+mJmZPgAAAABkZua+4BmVPk7HrTy05uE+6BmVvk7HrTy05uE+oJmZvgAAAABkZua+4BmVPk7HrTy45uG+6BmVvk7HrTy45uG+eD2KvpLC9Tw8Cte+cD2KPpLC9Tw8Cte+cD2KPpLC9Tw8Ctc+eD2KvpLC9Tw8Ctc+")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wobn5"]
+resource_name = "Furniture Pack_Plane_004"
+_surfaces = [{
+"aabb": AABB(-0.3000002, 0, -0.44999993, 0.60000014, 0.030000005, 0.8999999),
+"attribute_data": PackedByteArray("xOifPkbCAD/E6J8+RsIAPzTTpD5GwgA/NNOkPkbCAD/sxqQ+crMAPw71nz5yswA/DvWfPnKzAD8006Q+RsIAP8Tonz5GwgA/xOifPkbCAD/E6J8+RsIAPzTTpD5GwgA/NNOkPkbCAD/sxqQ+crMAPzTTpD5GwgA/xOifPkbCAD/E6J8+RsIAPzTTpD5GwgA/NNOkPkbCAD8006Q+RsIAP8Tonz5GwgA/NNOkPkbCAD/E6J8+RsIAP8Tonz5GwgA/QqmkPk6tAD+2EqA+Tq0AP7YSoD5OrQA/QqmkPk6tAD8="),
+"format": 34359742487,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAAACAAMAEAARABIAEQATABIAEAASABQAEQAVABMAFgAQABQAFQAXABMAFgAUABcAFQAWABcAGAAZABoABQAaABkABQAZABgAGAAaABsABgAbABoABQAGABoADQAYABsABgANABsACQAGAAUACQAKAAYADgANAAYADgAGAA8ADQAEABgABQAYAAQACwAEAA0ACwAMAAQABwAFAAQABwAIAAUA"),
+"lods": [0.38021645, PackedByteArray("AAABAAIAAAACAAMABAAFAAYABwAFAAQABwAIAAUACQAGAAUACQAKAAYACwAMAAQACwAEAA0ABAAGAA0ADgANAAYADgAGAA8A")],
+"material": SubResource("StandardMaterial3D_vn2rd"),
+"name": "main",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("oJmZvgAAAABmZuY+mJmZPgAAAABmZuY+mJmZPgAAAABkZua+oJmZvgAAAABkZua+4BmVPk7HrTy45uG+4BmVPk7HrTy05uE+6BmVvk7HrTy05uE+mJmZPgAAAABkZua+mJmZPgAAAABmZuY+mJmZPgAAAABmZuY+oJmZvgAAAABmZuY+oJmZvgAAAABkZua+mJmZPgAAAABkZua+6BmVvk7HrTy45uG+oJmZvgAAAABkZua+oJmZvgAAAABmZuY+oJmZvgAAAABmZuY+oJmZvgAAAABkZua+oJmZvgAAAABkZua+mJmZPgAAAABkZua+oJmZvgAAAABmZuY+mJmZPgAAAABkZua+mJmZPgAAAABmZuY+mJmZPgAAAABmZuY+cD2KPpLC9Tw8Cte+cD2KPpLC9Tw8Ctc+eD2KvpLC9Tw8Ctc+eD2KvpLC9Tw8Cte+/38AAP///7//fwAA////v/9/AAD///+//38AAP///7+ryqnabiGzi1WlU7WQ3kr0qVpTtW4htAuB2n2l/////4HafaX//////399pf///z//f32l////P4Ha//////+/gdr//////79TNana////v30lfaX//wAAfSV9pf//AAD/f///////v/9///////+//3///////7//f///////v/9///////+//3///////7//f///////v/9///////+/wZ0d8TEQOYHgjjzize/F/h5xPOIxEDkBPWId8c3vxX4=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_krkbj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhevs"]
+render_priority = 5
+shader = ExtResource("13_u0op8")
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5q54s"]
+render_priority = 10
+next_pass = SubResource("ShaderMaterial_hhevs")
+shader = ExtResource("14_vn2rd")
+shader_parameter/_thickness = 0.015
+shader_parameter/_color = Color(1, 1, 1, 1)
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ibb4t"]
+_surfaces = [{
+"aabb": AABB(-0.3000002, 0, -0.44999993, 0.60000014, 0.030000005, 0.8999999),
+"attribute_data": PackedByteArray("xOifPkbCAD/E6J8+RsIAPzTTpD5GwgA/NNOkPkbCAD/E6J8+RsIAPzTTpD5GwgA/NNOkPkbCAD/E6J8+RsIAP0KppD5OrQA/thKgPk6tAD+2EqA+Tq0APw71nz5yswA/QqmkPk6tAD8O9Z8+crMAP+zGpD5yswA/xOifPkbCAD/E6J8+RsIAPzTTpD5GwgA/xOifPkbCAD/sxqQ+crMAPzTTpD5GwgA/NNOkPkbCAD8006Q+RsIAP8Tonz5GwgA/"),
+"format": 34359742487,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAUABQAGAAUABAAFAAQABQAGAAYABwAEAAQABgAHAAYABwAEAAcABgAHAAcACAAJAAoACwAKAAkACwAJAAgACAAKAAwADQAMAAoACwANAAoADgAIAAwADQAOAAwADwANAAsADwAQAA0AEQAOAA0AEQANABIADgATAAgACwAIABMAFAATAA4AFAAVABMAFgALABMAFgAXAAsA"),
+"material": SubResource("ShaderMaterial_5q54s"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("oJmZvgAAAABmZuY+mJmZPgAAAABmZuY+mJmZPgAAAABkZua+oJmZvgAAAABkZua+oJmZvgAAAABmZuY+oJmZvgAAAABkZua+mJmZPgAAAABkZua+mJmZPgAAAABmZuY+cD2KPpLC9Tw8Cte+cD2KPpLC9Tw8Ctc+eD2KvpLC9Tw8Ctc+4BmVPk7HrTy05uE+eD2KvpLC9Tw8Cte+6BmVvk7HrTy05uE+6BmVvk7HrTy45uG+mJmZPgAAAABmZuY+oJmZvgAAAABmZuY+oJmZvgAAAABkZua+oJmZvgAAAABmZuY+4BmVPk7HrTy45uG+oJmZvgAAAABkZua+mJmZPgAAAABkZua+mJmZPgAAAABkZua+mJmZPgAAAABmZuY+olm6TP///7+AqH2G////P+bhREH///+/EhAIyP///z+iWbpM////PxIQCMj///+/5uFEQf///z+AqH2G////vxybcPIwEDmBjo3h5M3vxf65dyznMBA4AZGkyMOQ3kr0IGIV7M3vxX5tWzW8biG0C01FZeb///+/gKh9hv///z+iWbpM////PxIQCMj//wAAolm6TP//AABMxWXmbiGzixIQCMj///+/5uFEQf///7/m4URB/////4CofYb/////")
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jspl7"]
 render_priority = 5
@@ -1784,8 +1924,6 @@ _surfaces = [{
 "vertex_count": 24,
 "vertex_data": PackedByteArray("zczMvc3MzD3NzMw9zczMPc3MzD3NzMw9zczMvc3MzL3NzMw9zczMPc3MzL3NzMw9zczMPc3MzD3NzMy9zczMvc3MzD3NzMy9zczMPc3MzL3NzMy9zczMvc3MzL3NzMy9zczMPc3MzD3NzMw9zczMPc3MzD3NzMy9zczMPc3MzL3NzMw9zczMPc3MzL3NzMy9zczMvc3MzD3NzMy9zczMvc3MzD3NzMw9zczMvc3MzL3NzMy9zczMvc3MzL3NzMw9zczMPc3MzD3NzMw9zczMvc3MzD3NzMw9zczMPc3MzD3NzMy9zczMvc3MzD3NzMy9zczMvc3MzL3NzMw9zczMPc3MzL3NzMw9zczMvc3MzL3NzMy9zczMPc3MzL3NzMy9zEwys////7//n/+f////v/9f/1////+/MrPMTP///7/MzMzMAAD/v/8f/98AAP+//9//HwAA/78yMzIzAAD/v/+f/5//////zMzMzP////8ys8xM///////f/x///////x//3/9//7/MTDKz/3//vzIzMjP/f/+//1//X/9//7//n/+fAAD/v8xMMrMAAP+/zMzMzAAA/7//H//fAAD/v/9f/1////+/MrPMTP///78yMzIz////v//f/x////+/")
 }]
-
-[sub_resource type="Curve3D" id="Curve3D_4h21d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4fdm"]
 render_priority = 5
@@ -3408,7 +3546,7 @@ shape = SubResource("BoxShape3D_xyyef")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Rooms/MechanicsRoom/Labs/FrictionExperiment"]
 
-[node name="InclinedPlaneExperiment" parent="Rooms/MechanicsRoom/Labs" node_paths=PackedStringArray("cube", "indicateEffect", "triggerArea", "collisionLabel", "placedObject", "arrowObject", "placedObjectAnimationPlayer", "hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="InclinedPlaneExperiment" parent="Rooms/MechanicsRoom/Labs" node_paths=PackedStringArray("cube", "indicateEffect", "triggerArea", "collisionLabel", "placedObject", "arrowObject", "pathFollow", "hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(0.49999994, 0, 0, 0, 0.5, 0, 0, 0, 0.49999994, -13.901301, -0.75, -6.314387)
 script = ExtResource("43_85ror")
 currentStep = 0
@@ -3416,10 +3554,10 @@ cube = NodePath("LabObjects/CB")
 indicateEffect = NodePath("DownArrow")
 triggerArea = NodePath("Area3D")
 collisionLabel = NodePath("PutLabel")
-placedObject = NodePath("LabObjects/CB2")
+placedObject = NodePath("LabObjects/Path3D/PathFollow3D/CB2")
 arrowObject = NodePath("Arrow")
-placedObjectAnimationPlayer = NodePath("LabObjects/CB2/AnimationPlayer")
-moveAnimationName = "move"
+pathFollow = NodePath("LabObjects/Path3D/PathFollow3D")
+moveDuration = 0.5
 placableItemPaths = Array[NodePath]([NodePath("LabObjects/CB")])
 hintLabel = NodePath("Hint")
 nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/NextButton")
@@ -3428,7 +3566,7 @@ voicePlayer = NodePath("AudioStreamPlayer3D")
 stepVoiceResources = Array[AudioStream]([ExtResource("15_d3guo"), ExtResource("17_4h21d"), ExtResource("14_fbdsj"), ExtResource("17_4h21d"), ExtResource("14_fbdsj"), ExtResource("15_d3guo"), ExtResource("14_fbdsj"), ExtResource("17_4h21d")])
 ExperimentName = "斜坡实验"
 TeleportPosition = NodePath("TeleportPos")
-outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/CB/outline")]
+outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/CB/outline"), NodePath("Carpet_002/outline"), NodePath("LabObjects/MeshInstance3D/outline")]
 
 [node name="NameLabel" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0353298, 2.0611017, 0)
@@ -3474,10 +3612,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0197308, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.44848824, -0.32169104, 0)
 mesh = SubResource("PrismMesh_1m4v3")
 
+[node name="outline" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/MeshInstance3D" groups=["outline"]]
+visible = false
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_l0r83")
+metadata/_edit_lock_ = true
+metadata/outline = 0
+
 [node name="CB" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects" node_paths=PackedStringArray("outlineMesh", "collisionArea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0638237, -0.1125195, 0)
 mesh = SubResource("BoxMesh_u0op8")
-script = ExtResource("44_1m4v3")
+script = ExtResource("43_h7niu")
 dragPlane1 = 2
 dragPlane2 = 1
 outlineMesh = NodePath("outline")
@@ -3495,23 +3640,31 @@ mesh = SubResource("ArrayMesh_hhevs")
 metadata/_edit_lock_ = true
 metadata/outline = 0
 
-[node name="CB2" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
-transform = Transform3D(0.9272884, 0.37434766, 0, -0.37434766, 0.9272884, 0, 0, 0, 1, -0.8607424, -0.06990366, 0)
+[node name="Path3D" type="Path3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0197308, 0)
+curve = SubResource("Curve3D_h7niu")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D"]
+transform = Transform3D(0.029480986, 0.30477294, -0.95195526, -2.9802042e-08, 0.95237404, 0.30490395, 0.99955606, -0.008988968, 0.028077051, -0.98726463, 0.97047794, 0.038475037)
+
+[node name="CB2" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8607424, -0.06990366, 0)
 mesh = SubResource("BoxMesh_u0op8")
+skeleton = NodePath("../../..")
 
-[node name="CollisionArea" type="Area3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/CB2"]
+[node name="CollisionArea" type="Area3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D/CB2"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/CB2/CollisionArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D/CB2/CollisionArea"]
 shape = SubResource("ConcavePolygonShape3D_vn2rd")
 
-[node name="outline" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/CB2" groups=["outline"]]
+[node name="outline" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D/CB2" groups=["outline"]]
 visible = false
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_hhevs")
 metadata/_edit_lock_ = true
 metadata/outline = 0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/CB2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Path3D/PathFollow3D/CB2"]
 libraries = {
 &"": SubResource("AnimationLibrary_gmr80")
 }
@@ -3554,6 +3707,18 @@ skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/Arrow/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_h7niu")
+
+[node name="Carpet_002" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
+transform = Transform3D(6.4960012, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0.64960015, 0.46744943, 0)
+mesh = SubResource("ArrayMesh_wobn5")
+skeleton = NodePath("")
+
+[node name="outline" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/Carpet_002" groups=["outline"]]
+visible = false
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_ibb4t")
+metadata/_edit_lock_ = true
+metadata/outline = 0
 
 [node name="Walls" type="Node3D" parent="Rooms/MechanicsRoom"]
 
@@ -4052,7 +4217,7 @@ metadata/outline = 0
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Rooms/ElectricRoom/OhmsLawLabItem"]
 polygon = PackedVector2Array()
 mode = 2
-path_node = NodePath("../Path3D")
+path_node = NodePath("")
 path_interval_type = 0
 path_interval = 1.0
 path_simplify_angle = 0.0
@@ -4062,9 +4227,6 @@ path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
-
-[node name="Path3D" type="Path3D" parent="Rooms/ElectricRoom/OhmsLawLabItem"]
-curve = SubResource("Curve3D_4h21d")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Rooms/ElectricRoom/OhmsLawLabItem"]
 

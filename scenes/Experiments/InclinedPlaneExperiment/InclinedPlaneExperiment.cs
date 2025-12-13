@@ -24,21 +24,19 @@ public enum InclinedPlaneExperimentItem {
 
 public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPlaneExperimentStep, InclinedPlaneExperimentItem> {
     [Export] protected override InclinedPlaneExperimentStep currentStep { get; set; } = InclinedPlaneExperimentStep.Setup;
-    
     [ExportGroup("Drag and Drop")]
     [Export] private PlacableItem cube;
     [Export] private Node3D indicateEffect;
     [Export] private Area3D triggerArea;
     [Export] private Label3D collisionLabel;
-    
     [ExportGroup("Placed Objects")]
     [Export] private Node3D placedObject;
     [Export] private Node3D arrowObject;
-    [Export] private AnimationPlayer placedObjectAnimationPlayer;
-    [Export] private string moveAnimationName = "move";
-    
+    [Export] private PathFollow3D pathFollow;
+    [Export] private float moveDuration = 2.0f;
     private bool isCubeInTriggerArea = false;
     private bool isCubePlaced = false;
+    private Tween moveTween;
      
     public override void _Ready() {
         base._Ready();
@@ -78,9 +76,7 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     private void InitializePlacedObject() {
         if (this.placedObject != null) {
             this.placedObject.Visible = false;
-            if (this.placedObjectAnimationPlayer == null) {
-                this.placedObjectAnimationPlayer = this.placedObject.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
-            }
+            this.pathFollow.ProgressRatio = 0f;
         }
     }
 
@@ -117,12 +113,12 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
             if (@event is InputEventMouseButton mouseButton) {
                 if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed && !mouseButton.IsEcho()) {
                     var intersect = this.GetMouseIntersect(mouseButton.Position);
-                    if (intersect != null) {
-                        if (this.IsClickOnArrow(intersect)) {
+                    if (intersect != null) {                        if (this.IsClickOnArrow(intersect)) {
                             this.OnArrowClicked();
                             GetViewport().SetInputAsHandled();
                         }
-                    } 
+                    }
+                }
             }
         }
     }
@@ -239,19 +235,15 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         }
         if (this.placedObject != null) {
             this.placedObject.Visible = true;
-            this.placedObject.GlobalPosition = this.cube.GlobalPosition;
         }
         if (this.arrowObject != null) {
             this.arrowObject.Visible = true;
-            if (this.placedObject != null) {
-            }
         }
         this.HideIndicateEffect();
         this.HideCollisionLabel();
         this.isCubeInTriggerArea = false;
         this.GoToNextStep();
     }
-
 
     private Dictionary GetMouseIntersect(Vector2 mousePos) {
         var currentCamera = GetViewport().GetCamera3D();
@@ -307,15 +299,17 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     }
 
     private void OnArrowClicked() {
-        if (this.placedObjectAnimationPlayer == null) {
+        if (this.pathFollow == null) {
             return;
         }
-        if (string.IsNullOrEmpty(this.moveAnimationName)) {
-            return;
+        if (this.moveTween != null && this.moveTween.IsValid()) {
+            this.moveTween.Kill();
         }
-        if (this.placedObjectAnimationPlayer.HasAnimation(this.moveAnimationName)) {
-            this.placedObjectAnimationPlayer.Play(this.moveAnimationName);
-        } 
+        this.moveTween = CreateTween();
+        this.moveTween.TweenProperty(this.pathFollow, "progress_ratio", 1.0f, this.moveDuration);
+        if (this.arrowObject != null) {
+            this.arrowObject.Visible = false;
+        }
     }
 
     private void InitializeStepHints() {
@@ -406,19 +400,4 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     protected override InclinedPlaneExperimentStep SetupStep => InclinedPlaneExperimentStep.Setup;
     
     protected override InclinedPlaneExperimentStep CompletedStep => InclinedPlaneExperimentStep.Completed;
-
-    public void OnItemsCollided(
-        InclinedPlaneExperimentItem aType,
-        InclinedPlaneExperimentItem bType,
-        InclinedPlanePlacableItem a,
-        InclinedPlanePlacableItem b
-    ) {
-        if (!IsStepCompleted(InclinedPlaneExperimentStep.ReleaseObject)) {
-            bool hasSlider = aType == InclinedPlaneExperimentItem.SliderObject || bType == InclinedPlaneExperimentItem.SliderObject;
-            bool hasSupport = aType == InclinedPlaneExperimentItem.SupportStand || bType == InclinedPlaneExperimentItem.SupportStand;
-            if (hasSlider && hasSupport) {
-                base.SetCurrentStep(InclinedPlaneExperimentStep.RecordData);
-            }
-        }
-    }
 }
