@@ -1,4 +1,4 @@
-[gd_scene load_steps=238 format=4 uid="uid://p5vg4aeef8ba"]
+[gd_scene load_steps=244 format=4 uid="uid://p5vg4aeef8ba"]
 
 [ext_resource type="Texture2D" uid="uid://c8arnlq67qi7" path="res://textures/grids/Dark/texture_05.png" id="1_c6gwx"]
 [ext_resource type="Texture2D" uid="uid://befj66gsisx8e" path="res://assets/Furniture Pack/Furniture Pack_grandient texture.png" id="2_8onjr"]
@@ -58,6 +58,7 @@
 [ext_resource type="Shader" uid="uid://d2yva4fknjh5v" path="res://assets/EffectBlocks/source_files/shaders/gradient_scroll.gdshader" id="44_h7niu"]
 [ext_resource type="Texture2D" uid="uid://be5acis1q4v56" path="res://assets/EffectBlocks/source_files/textures/icons/down_arrow.png" id="45_fu1ug"]
 [ext_resource type="AudioStream" uid="uid://d1t3mise0xonp" path="res://assets/sounds/sfx/page.ogg" id="45_u0op8"]
+[ext_resource type="Script" uid="uid://da7jimuwun6qg" path="res://scenes/World/DataBoard.cs" id="46_fu1ug"]
 [ext_resource type="AudioStream" uid="uid://djuoopc50si8w" path="res://assets/sounds/music/1-09 风の憧憬.mp3" id="46_u0op8"]
 [ext_resource type="AudioStream" uid="uid://7f1vtms5ao8g" path="res://assets/sounds/music/splash.ogg" id="51_1m4v3"]
 [ext_resource type="AudioStream" uid="uid://clidgmvrnnhqg" path="res://assets/sounds/sfx/Door_Open.wav" id="52_u0op8"]
@@ -1570,6 +1571,83 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_vai2e")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_fu1ug"]
+data = PackedVector3Array(-0.1875, 0.48, 0.023, -0.1875, 0, 0.023, -0.1875, 0, -0.0145, -0.1875, 0.48, 0.023, -0.1875, 0, -0.0145, -0.1875, 0.48, -0.0145, -0.1875, 0.48, -0.0145, -0.1875, 0, -0.0145, 0.1875, 0, -0.0145, -0.1875, 0.48, -0.0145, 0.1875, 0, -0.0145, 0.1875, 0.48, -0.0145, 0.1875, 0.48, -0.0145, 0.1875, 0, -0.0145, 0.1875, 0, 0.023, 0.1875, 0.48, -0.0145, 0.1875, 0, 0.023, 0.1875, 0.48, 0.023, 0.16499999, 0.022499999, 0.023, -0.16499999, 0.022499999, 0.023, -0.16499999, 0.022499999, 0.007999999, 0.16499999, 0.022499999, 0.023, -0.16499999, 0.022499999, 0.007999999, 0.16499999, 0.022499999, 0.007999999, 0.1875, 0, -0.0145, -0.1875, 0, -0.0145, -0.1875, 0, 0.023, 0.1875, 0, -0.0145, -0.1875, 0, 0.023, 0.1875, 0, 0.023, -0.1875, 0.48, -0.0145, 0.1875, 0.48, -0.0145, 0.1875, 0.48, 0.023, -0.1875, 0.48, -0.0145, 0.1875, 0.48, 0.023, -0.1875, 0.48, 0.023, -0.16499999, 0.45749998, 0.023, -0.16499999, 0.022499999, 0.023, -0.1875, 0, 0.023, -0.16499999, 0.45749998, 0.023, -0.1875, 0, 0.023, -0.1875, 0.48, 0.023, -0.16499999, 0.022499999, 0.023, 0.1875, 0, 0.023, -0.1875, 0, 0.023, 0.16499999, 0.45749998, 0.023, -0.16499999, 0.45749998, 0.023, -0.1875, 0.48, 0.023, -0.16499999, 0.022499999, 0.023, 0.16499999, 0.022499999, 0.023, 0.1875, 0, 0.023, 0.16499999, 0.45749998, 0.023, 0.1875, 0, 0.023, 0.16499999, 0.022499999, 0.023, 0.16499999, 0.45749998, 0.023, 0.1875, 0.48, 0.023, 0.1875, 0, 0.023, 0.16499999, 0.45749998, 0.023, -0.1875, 0.48, 0.023, 0.1875, 0.48, 0.023, 0.16499999, 0.45749998, 0.007999999, 0.16499999, 0.022499999, 0.007999999, -0.16499999, 0.022499999, 0.007999999, 0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.022499999, 0.007999999, -0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.022499999, 0.023, -0.16499999, 0.45749998, 0.023, -0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.022499999, 0.023, -0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.022499999, 0.007999999, -0.16499999, 0.45749998, 0.023, 0.16499999, 0.45749998, 0.023, 0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.45749998, 0.023, 0.16499999, 0.45749998, 0.007999999, -0.16499999, 0.45749998, 0.007999999, 0.16499999, 0.45749998, 0.023, 0.16499999, 0.022499999, 0.023, 0.16499999, 0.022499999, 0.007999999, 0.16499999, 0.45749998, 0.023, 0.16499999, 0.022499999, 0.007999999, 0.16499999, 0.45749998, 0.007999999)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0r83"]
+render_priority = 5
+shader = ExtResource("13_u0op8")
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q14oe"]
+render_priority = 10
+next_pass = SubResource("ShaderMaterial_l0r83")
+shader = ExtResource("14_vn2rd")
+shader_parameter/_thickness = 0.015
+shader_parameter/_color = Color(1, 1, 1, 1)
+shader_parameter/_useEmission = false
+shader_parameter/_emissionStrength = 1.0
+shader_parameter/_useDistanceFade = false
+shader_parameter/_fadeStart = 10.0
+shader_parameter/_fadeEnd = 20.0
+shader_parameter/_useDistanceScale = false
+shader_parameter/_scaleMultiplier = 0.1
+shader_parameter/_useTexture = false
+shader_parameter/_multiplyWithColor = false
+shader_parameter/_textureTiling = Vector2(1, 1)
+shader_parameter/_textureOffset = Vector2(0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s7eqg"]
+_surfaces = [{
+"aabb": AABB(-0.18750024, 0, -0.014510989, 0.375, 0.48000008, 0.037500024),
+"attribute_data": PackedByteArray("roctP/Sscz+uhy0/9Q51P67QLT/1DnU/rtAtP/Sscz+u0C0/9KxzP67QLT/1DnU/rtAtP/UOdT+u0C0/9KxzP67QLT/0rHM/rtAtP/UOdT+uhy0/9Q51P66HLT/0rHM/roctP/XidD+uhy0/9eJ0P66kLT/14nQ/rqQtP/XidD+u0C0/9Q51P67QLT/1DnU/roctP/UOdT+uhy0/9Q51P67QLT/0rHM/rtAtP/Sscz+uhy0/9KxzP66HLT/0rHM/roctP/TZcz+uhy0/9eJ0P66HLT/1DnU/roctP/Sscz+uhy0/9Q51P66HLT/02XM/roctP/XidD+uhy0/9KxzP66+LT/lzGQ/rr4tP+ZXZj+uvi0/5ldmP66+LT/lzGQ/roctP/XidD+uhy0/9NlzP66kLT/02XM/rqQtP/XidD+uhy0/9NlzP66HLT/02XM/rqQtP/TZcz+upC0/9NlzP66HLT/02XM/roctP/XidD+upC0/9eJ0P66kLT/02XM/"),
+"format": 34359742487,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAGQAcABoAHQAYABsAGQAeABwAHQAcAB4AHQAfABwAHQAbAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8A"),
+"material": SubResource("ShaderMaterial_q14oe"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("EABAvpLC9T6AU7w8EABAvgAAAACAU7w8EABAvgAAAACAv228EABAvpLC9T6Av228EABAvpLC9T6Av228EABAvgAAAACAv2288P8/PgAAAACAv2288P8/PpLC9T6Av2288P8/PpLC9T6Av2288P8/PgAAAACAv2288P8/PgAAAACAU7w88P8/PpLC9T6AU7w8WvQoPkpDuDyAU7w8+fUovkpDuDyAU7w8+fUovkpDuDxo5AI8WvQoPkpDuDxo5AI88P8/PgAAAACAv228EABAvgAAAACAv228EABAvgAAAACAU7w88P8/PgAAAACAU7w8EABAvpLC9T6Av2288P8/PpLC9T6Av2288P8/PpLC9T6AU7w8EABAvpLC9T6AU7w8+fUovmg96j6AU7w8+fUovkpDuDyAU7w8EABAvgAAAACAU7w8EABAvpLC9T6AU7w88P8/PgAAAACAU7w8WvQoPmg96j6AU7w8WvQoPkpDuDyAU7w88P8/PpLC9T6AU7w8WvQoPmg96j5o5AI8WvQoPkpDuDxo5AI8+fUovkpDuDxo5AI8+fUovmg96j5o5AI8+fUovkpDuDyAU7w8+fUovmg96j6AU7w8+fUovmg96j5o5AI8+fUovkpDuDxo5AI8+fUovmg96j6AU7w8WvQoPmg96j6AU7w8WvQoPmg96j5o5AI8+fUovmg96j5o5AI8WvQoPmg96j6AU7w8WvQoPkpDuDyAU7w8WvQoPkpDuDxo5AI8WvQoPmg96j5o5AI8VFVUlf7/AQCqalRV/v8BAP8f/z/+/wEAMjNl5v7/AQAyM2Xm///+v/8f/z////6/zMyZGf///r//3/+////+v//f/7/+//7/zMyZGf7//v+RpLZt/v/+/5mZMrP+//7/ZmYys/7//7+qqlSV/v//v5mZMrP+//+//z//n/7//7/MzJkZ/v//v/8f/z/+//+/qmpUVf7//7+RpLZt/v//vzIzZeb+//+//9//v/7//7+ZmTKz/v//v1RVVJX+//+/VJVUVfr//z+qqlSV+v//P6pqVFX6//8/VFVUlfr//z+RpLZt+v//P21btm36//8/ZmYys/r//z+ZmTKz+v//P2ZmzEz6//8//z//n/r//z+ZmTKz+v//P/+//1/6//8/qqpUlf7//v9UlVRV/v/+//+//1/+//7/mZkys/7//v9UlVRV/v//v21btm3+//+/ZmbMTP7//7//v/9f/v//v21btm3+/wEAZmYys/7/AQD/P/+f/v8BAGZmzEz+/wEA")
+}]
+
+[sub_resource type="FontFile" id="FontFile_fu1ug"]
+cache/0/5/0/ascent = 0.0
+cache/0/5/0/descent = 0.0
+cache/0/5/0/underline_position = 0.0
+cache/0/5/0/underline_thickness = 0.0
+cache/0/5/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/7/0/ascent = 0.0
+cache/0/7/0/descent = 0.0
+cache/0/7/0/underline_position = 0.0
+cache/0/7/0/underline_thickness = 0.0
+cache/0/7/0/scale = 1.0
+cache/0/12/0/ascent = 0.0
+cache/0/12/0/descent = 0.0
+cache/0/12/0/underline_position = 0.0
+cache/0/12/0/underline_thickness = 0.0
+cache/0/12/0/scale = 1.0
+cache/0/8/0/ascent = 0.0
+cache/0/8/0/descent = 0.0
+cache/0/8/0/underline_position = 0.0
+cache/0/8/0/underline_thickness = 0.0
+cache/0/8/0/scale = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jspl7"]
 render_priority = 5
@@ -3934,21 +4012,39 @@ pixel_size = 0.01
 text = "放置方块"
 font_size = 8
 
-[node name="Picture_002" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
-transform = Transform3D(1.0000001, 0, 0, 0, -4.3711385e-08, 1, 0, -0.99999994, -4.371139e-08, 2.0421107, -0.49645907, -0.062319737)
+[node name="DataBoard" type="Node3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects" node_paths=PackedStringArray("outlineMesh", "targetMarker")]
+transform = Transform3D(1.0000001, 0, 0, 0, -4.3711385e-08, 1, 0, -0.99999994, -4.371139e-08, 2.0421104, -0.496459, -0.062318802)
+script = ExtResource("46_fu1ug")
+outlineMesh = NodePath("MeshInstance3D/outline")
+targetMarker = NodePath("../Marker3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard"]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.24623297, 0.29383475, 9.992007e-16)
 mesh = SubResource("ArrayMesh_w2gn4")
-skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Picture_002"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard/MeshInstance3D"]
 
-[node name="DataBoard" type="Node3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Picture_002"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_fu1ug")
+
+[node name="outline" type="MeshInstance3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard/MeshInstance3D" groups=["outline"]]
+cast_shadow = 0
+mesh = SubResource("ArrayMesh_s7eqg")
+metadata/_edit_lock_ = true
+metadata/outline = 0
+
+[node name="RecordText" type="Node3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard"]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0.0005065687, 0.41523784, 0.058873314)
 
-[node name="Label3D" type="Label3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/Picture_002/DataBoard"]
+[node name="Label3D" type="Label3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects/DataBoard/RecordText"]
 pixel_size = 0.01
 text = "实验数据记录:
 "
-font_size = 10
+font = SubResource("FontFile_fu1ug")
+font_size = 8
+
+[node name="Marker3D" type="Marker3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
+transform = Transform3D(1.0000001, 0, 0, 0, 0.80732083, 0.5901126, 0, -0.5901126, 0.80732083, 0.47299957, -0.4831946, 0.7492542)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment"]
 

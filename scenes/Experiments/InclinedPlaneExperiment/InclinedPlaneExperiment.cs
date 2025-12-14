@@ -55,7 +55,7 @@ public partial class InclinedPlaneExperiment : LabItem {
     [ExportGroup("Data Recording")]
     private List<ExperimentData> experimentDataList = new List<ExperimentData>();
     private int experimentCount = 0;
-    private Node3D dataBoard;
+    private DataBoard dataBoard;
      
     public override void _Ready() {
         base._Ready();
@@ -78,7 +78,6 @@ public partial class InclinedPlaneExperiment : LabItem {
                 ArrowObject = i < this.arrowObjects.Count ? this.arrowObjects[i] : null,
                 PathFollow = i < this.pathFollows.Count ? this.pathFollows[i] : null
             };
-            
             this.InitializeSingleCubeConfig(config, i);
             this.cubeConfigs.Add(config);
         }
@@ -94,7 +93,6 @@ public partial class InclinedPlaneExperiment : LabItem {
         if (config.PathFollow != null) {
             config.InitialPathFollowProgress = config.PathFollow.ProgressRatio;
         }
-        
         if (config.IndicateEffect != null) {
             config.IndicateEffect.Visible = false;
             if (config.TriggerArea == null) {
@@ -158,12 +156,12 @@ public partial class InclinedPlaneExperiment : LabItem {
     }
     
     private void InitializeDataBoard() {
-        this.dataBoard = this.FindChild("DataBoard", true, false) as Node3D;
+        this.dataBoard = this.FindChild("DataBoard", true, false) as DataBoard;
         if (this.dataBoard == null) {
             var children = this.GetChildren();
             foreach (Node child in children) {
                 if (child.Name.ToString().Contains("DataBoard", System.StringComparison.OrdinalIgnoreCase)) {
-                    this.dataBoard = child as Node3D;
+                    this.dataBoard = child as DataBoard;
                     break;
                 }
             }
@@ -272,7 +270,6 @@ public partial class InclinedPlaneExperiment : LabItem {
                 multiMeshInstance.MaterialOverride = newMaterial;
             }
         }
-        
         foreach (Node child in node.GetChildren()) {
             if (child is Node3D child3D) {
                 this.SetArrowAlphaRecursive(child3D, alpha);
