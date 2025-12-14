@@ -126,8 +126,11 @@ public partial class Interactable : Node3D {
     }
 
     protected void ApplyOutline(bool enable) {
+        if (this.outlineMeshs == null) return;
         foreach (var mesh in this.outlineMeshs) {
-            mesh.Visible = enable;
+            if (mesh != null && GodotObject.IsInstanceValid(mesh)) {
+                mesh.Visible = enable;
+            }
         }
     }
 

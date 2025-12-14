@@ -6897,6 +6897,14 @@ offset_right = 100.0
 offset_bottom = 116.0
 text = "像素模式"
 
+[node name="ClearButton" type="Button" parent="CanvasLayer/Control/PaintContrl/Panel"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 120.0
+offset_right = 100.0
+offset_bottom = 151.0
+text = "清除画布"
+
 [node name="Book" parent="." instance=ExtResource("11_tl8lu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6392417, -1.9767611)
 visible = false

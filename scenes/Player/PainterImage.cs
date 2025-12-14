@@ -104,6 +104,16 @@ public partial class PainterImage : Sprite2D {
         brush_size = (int)value;
     }
 
+    public void ClearCanvas() {
+        if (img != null) {
+            img.Fill(Colors.White);
+            if (Texture is ImageTexture imgTex) {
+                imgTex.Update(img);
+            }
+            this.UpdateCanvasMeshTexture();
+        }
+    }
+
     public override void _Input(InputEvent @event) {
         if (@event is InputEventMouseButton mb) {
             if (mb.Pressed && !mb.IsEcho()) {

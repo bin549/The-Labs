@@ -14,6 +14,7 @@ public partial class PaintBoard : Interactable {
             this.paintContrl.Visible = false;
         }
         CallDeferred(MethodName.SetupCanvasMesh);
+        CallDeferred(MethodName.SetupClearButton);
     }
 
     private void SetupCanvasMesh() {
@@ -22,6 +23,24 @@ public partial class PaintBoard : Interactable {
         if (canvasMesh != null) {
             this.painterImage.SetCanvasMesh(canvasMesh);
         } 
+    }
+
+    private void SetupClearButton() {
+        if (this.painterImage == null) {
+            this.painterImage = GetNodeOrNull<PainterImage>(this.painterImagePath);
+        }
+        if (this.painterImage == null) return;
+        
+        var clearButton = this.painterImage.GetNodeOrNull<Button>("../Panel/ClearButton");
+        if (clearButton != null) {
+            clearButton.Pressed += OnClearButtonPressed;
+        }
+    }
+
+    private void OnClearButtonPressed() {
+        if (this.painterImage != null) {
+            this.painterImage.ClearCanvas();
+        }
     }
 
     public override void EnterInteraction() {
