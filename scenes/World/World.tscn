@@ -1547,6 +1547,11 @@ cache/0/8/0/descent = 0.0
 cache/0/8/0/underline_position = 0.0
 cache/0/8/0/underline_thickness = 0.0
 cache/0/8/0/scale = 1.0
+cache/0/6/0/ascent = 0.0
+cache/0/6/0/descent = 0.0
+cache/0/6/0/underline_position = 0.0
+cache/0/6/0/underline_thickness = 0.0
+cache/0/6/0/scale = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jspl7"]
 render_priority = 5
@@ -3891,7 +3896,7 @@ pixel_size = 0.01
 text = "实验数据记录:
 "
 font = SubResource("FontFile_fu1ug")
-font_size = 8
+font_size = 6
 
 [node name="Marker3D" type="Marker3D" parent="Rooms/MechanicsRoom/Labs/InclinedPlaneExperiment/LabObjects"]
 transform = Transform3D(1.0000001, 0, 0, 0, 0.80732083, 0.5901126, 0, -0.5901126, 0.80732083, 0.47299957, -0.4831946, 0.7492542)
