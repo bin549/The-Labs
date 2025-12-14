@@ -1,98 +1,173 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
 
-public enum InclinedPlaneExperimentStep {
-    Setup,
-    PlaceObject,
-    AdjustAngle,
-    MeasureAngle,
-    ReleaseObject,
-    RecordData,
-    AnalyzeResult,
-    Completed
-}
-
-public enum InclinedPlaneExperimentItem {
-    InclinedPlane,
-    SliderObject,
-    AngleMeter,
-    Ruler,
-    Timer,
-    DataBoard,
-    SupportStand
-}
-
-public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPlaneExperimentStep, InclinedPlaneExperimentItem> {
-    [Export] protected override InclinedPlaneExperimentStep currentStep { get; set; } = InclinedPlaneExperimentStep.Setup;
-    [ExportGroup("Drag and Drop")]
-    [Export] private PlacableItem cube;
-    [Export] private Node3D indicateEffect;
-    [Export] private Area3D triggerArea;
-    [Export] private Label3D collisionLabel;
-    [ExportGroup("Placed Objects")]
-    [Export] private Node3D placedObject;
-    [Export] private Node3D arrowObject;
-    [Export] private PathFollow3D pathFollow;
-    [Export] private float moveDuration = 2.0f;
-    private bool isCubeInTriggerArea = false;
-    private bool isCubePlaced = false;
-    private Tween moveTween;
+public class ExperimentData {
+    public int ExperimentNumber { get; set; }
+    public float Time { get; set; }
+    public float Distance { get; set; }
+    public float? Angle { get; set; }
     
+    public ExperimentData(int number, float time, float distance, float? angle = null) {
+        this.ExperimentNumber = number;
+        this.Time = time;
+        this.Distance = distance;
+        this.Angle = angle;
+    }
+    
+    public override string ToString() {
+        string angleStr = this.Angle.HasValue ? this.Angle.Value.ToString("F2") : "N/A";
+        return $"实验 {ExperimentNumber}: 时间={Time:F2}s, 距离={Distance:F2}m, 角度={angleStr}°";
+    }
+}
+
+public class CubeObjectConfig {
+    public PlacableItem Cube { get; set; }
+    public Node3D IndicateEffect { get; set; }
+    public Area3D TriggerArea { get; set; }
+    public Label3D CollisionLabel { get; set; }
+    public Node3D PlacedObject { get; set; }
+    public Node3D ArrowObject { get; set; }
+    public PathFollow3D PathFollow { get; set; }
+    public bool IsCubeInTriggerArea { get; set; } = false;
+    public bool IsCubePlaced { get; set; } = false;
+    public Tween MoveTween { get; set; }
+    public ExperimentData ExperimentData { get; set; }
+    public Vector3 InitialCubePosition { get; set; }
+    public Vector3 InitialPlacedObjectPosition { get; set; }
+    public float InitialPathFollowProgress { get; set; } = 0f;
+}
+
+public partial class InclinedPlaneExperiment : LabItem {
+    [ExportGroup("Cube Objects")]
+    [Export] private Godot.Collections.Array<PlacableItem> cubes = new Godot.Collections.Array<PlacableItem>();
+    [Export] private Godot.Collections.Array<Node3D> indicateEffects = new Godot.Collections.Array<Node3D>();
+    [Export] private Godot.Collections.Array<Area3D> triggerAreas = new Godot.Collections.Array<Area3D>();
+    [Export] private Godot.Collections.Array<Label3D> hintLabels = new Godot.Collections.Array<Label3D>();
+    [Export] private Godot.Collections.Array<Node3D> placedObjects = new Godot.Collections.Array<Node3D>();
+    [Export] private Godot.Collections.Array<Node3D> arrowObjects = new Godot.Collections.Array<Node3D>();
+    [Export] private Godot.Collections.Array<PathFollow3D> pathFollows = new Godot.Collections.Array<PathFollow3D>();
+    [Export] private float moveDuration = 2.0f;
+    private List<CubeObjectConfig> cubeConfigs = new List<CubeObjectConfig>();
     [ExportGroup("Arrow Hover")]
     [Export] private float arrowNormalAlpha = 0.35f;
     [Export] private float arrowHoverAlpha = 1.0f;
-    private MeshInstance3D arrowMesh;
-    private BaseMaterial3D arrowHoverMaterial;
-    private bool isArrowHovered = false;
+    [ExportGroup("Data Recording")]
+    private List<ExperimentData> experimentDataList = new List<ExperimentData>();
+    private int experimentCount = 0;
+    private Node3D dataBoard;
      
     public override void _Ready() {
         base._Ready();
-        this.InitializeStepHints();
-        base.InitializeStepExperiment();
-        this.InitializeIndicateEffect();
+        this.InitializeCubeConfigs();
+        this.InitializeDataBoard();
     }
-
-    private void InitializeIndicateEffect() {
-        if (this.indicateEffect != null) {
-            this.indicateEffect.Visible = false;
+    
+    private void InitializeCubeConfigs() {
+        int count = this.cubes.Count;
+        if (count == 0) {
+            return;
         }
-        this.InitializeTriggerArea();
-        this.InitializeCollisionLabel();
-        this.InitializePlacedObject();
-        this.InitializeArrowObject();
-    }
-
-    private void InitializeTriggerArea() {
-        if (this.triggerArea == null && this.indicateEffect != null) {
-            this.triggerArea = this.indicateEffect.GetNodeOrNull<Area3D>("Area3D");
-        }
-        if (this.triggerArea != null) {
-            this.triggerArea.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea.AreaExited += OnTriggerAreaExited;
+        for (int i = 0; i < count; i++) {
+            var config = new CubeObjectConfig {
+                Cube = this.cubes[i],
+                IndicateEffect = i < this.indicateEffects.Count ? this.indicateEffects[i] : null,
+                TriggerArea = i < this.triggerAreas.Count ? this.triggerAreas[i] : null,
+                CollisionLabel = i < this.hintLabels.Count ? this.hintLabels[i] : null,
+                PlacedObject = i < this.placedObjects.Count ? this.placedObjects[i] : null,
+                ArrowObject = i < this.arrowObjects.Count ? this.arrowObjects[i] : null,
+                PathFollow = i < this.pathFollows.Count ? this.pathFollows[i] : null
+            };
+            
+            this.InitializeSingleCubeConfig(config, i);
+            this.cubeConfigs.Add(config);
         }
     }
-
-    private void InitializeCollisionLabel() {
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = false;
+    
+    private void InitializeSingleCubeConfig(CubeObjectConfig config, int index) {
+        if (config.Cube != null) {
+            config.InitialCubePosition = config.Cube.GlobalPosition;
+        }
+        if (config.PlacedObject != null) {
+            config.InitialPlacedObjectPosition = config.PlacedObject.GlobalPosition;
+        }
+        if (config.PathFollow != null) {
+            config.InitialPathFollowProgress = config.PathFollow.ProgressRatio;
+        }
+        
+        if (config.IndicateEffect != null) {
+            config.IndicateEffect.Visible = false;
+            if (config.TriggerArea == null) {
+                config.TriggerArea = config.IndicateEffect.GetNodeOrNull<Area3D>("Area3D");
+                if (config.TriggerArea == null) {
+                    config.TriggerArea = config.IndicateEffect.FindChild("Area3D", true, false) as Area3D;
+                }
+            }
+            if (config.CollisionLabel == null) {
+                config.CollisionLabel = config.IndicateEffect.GetNodeOrNull<Label3D>("Label3D");
+                if (config.CollisionLabel == null) {
+                    config.CollisionLabel = config.IndicateEffect.FindChild("Label3D", true, false) as Label3D;
+                }
+            }
+        }
+        if (config.TriggerArea != null) {
+            var currentConfig = config;
+            config.TriggerArea.BodyEntered += (body) => OnTriggerAreaBodyEntered(body, currentConfig);
+            config.TriggerArea.BodyExited += (body) => OnTriggerAreaBodyExited(body, currentConfig);
+            config.TriggerArea.AreaEntered += (area) => OnTriggerAreaEntered(area, currentConfig);
+            config.TriggerArea.AreaExited += (area) => OnTriggerAreaExited(area, currentConfig);
+        } 
+        if (config.CollisionLabel != null) {
+            config.CollisionLabel.Visible = false;
+        } 
+        if (config.PlacedObject != null) {
+            config.PlacedObject.Visible = false;
+        }
+        if (config.ArrowObject != null) {
+            config.ArrowObject.Visible = false;
+            bool useAreaInput = false;
+            bool useRaycast = false;
+            Area3D clickArea = null;
+            if (config.ArrowObject is Area3D area) {
+                clickArea = area;
+            } else {
+                clickArea = config.ArrowObject.FindChild("*", true, false) as Area3D;
+            }
+            if (clickArea != null) {
+                clickArea.InputRayPickable = true;
+                clickArea.Monitorable = true;
+                clickArea.Monitoring = true;
+                var currentConfig = config;
+                clickArea.InputEvent += (camera, @event, position, normal, shapeIdx) => {
+                    OnArrowInputEvent(camera, @event, position, normal, shapeIdx, currentConfig);
+                };
+                useAreaInput = true;
+            }
+            if (!useAreaInput) {
+                CollisionObject3D collisionBody = null;
+                if (config.ArrowObject is CollisionObject3D col) {
+                    collisionBody = col;
+                } else {
+                    collisionBody = config.ArrowObject.FindChild("*", true, false) as CollisionObject3D;
+                }
+                if (collisionBody != null) {
+                    useRaycast = true;
+                }
+            }
         }
     }
-
-    private void InitializePlacedObject() {
-        if (this.placedObject != null) {
-            this.placedObject.Visible = false;
+    
+    private void InitializeDataBoard() {
+        this.dataBoard = this.FindChild("DataBoard", true, false) as Node3D;
+        if (this.dataBoard == null) {
+            var children = this.GetChildren();
+            foreach (Node child in children) {
+                if (child.Name.ToString().Contains("DataBoard", System.StringComparison.OrdinalIgnoreCase)) {
+                    this.dataBoard = child as Node3D;
+                    break;
+                }
+            }
         }
-    }
-
-    private void InitializeArrowObject() {
-        if (this.arrowObject != null) {
-            this.arrowObject.Visible = false;
-        }
-        this.arrowMesh = this.arrowObject as MeshInstance3D;
-        this.EnsureArrowMaterial();
-        this.SetArrowHover(false);
     }
 
     public override void EnterInteraction() {
@@ -106,159 +181,218 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
     public override void ExitInteraction() {
         base.isInteracting = false;
         base.ExitInteraction();
-        this.HideIndicateEffect();
-        this.SetArrowHover(false);
+        foreach (var config in this.cubeConfigs) {
+            this.HideIndicateEffect(config);
+            this.SetArrowHover(config, false);
+        }
+        this.EnableAllCubesDrag();
     }
 
     public override void _Process(double delta) {
         base._Process(delta);
-        this.UpdateIndicateEffect();
-    }
-
-    public override void _Input(InputEvent @event) {
-        if (!base.isInteracting) {
-            return;
+        foreach (var config in this.cubeConfigs) {
+            this.UpdateIndicateEffect(config);
         }
-        if (this.isCubePlaced && this.arrowObject != null && this.arrowObject.Visible) {
-            if (@event is InputEventMouseMotion motionEvent) {
-                this.UpdateArrowHover(motionEvent.Position);
-            }
-        }
-        if (this.isCubePlaced && this.arrowObject != null && this.arrowObject.Visible) {
-            if (@event is InputEventMouseButton mouseButton) {
-                if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed && !mouseButton.IsEcho()) {
-                    var intersect = this.GetMouseIntersect(mouseButton.Position);
-                    if (intersect != null) {                        
-                        if (this.IsClickOnArrow(intersect)) {
-                            this.OnArrowClicked();
-                            GetViewport().SetInputAsHandled();
-                        }
-                    }
+        if (base.isInteracting) {
+            Vector2 mousePos = GetViewport().GetMousePosition();
+            foreach (var config in this.cubeConfigs) {
+                if (config.IsCubePlaced && config.ArrowObject != null && config.ArrowObject.Visible) {
+                    var intersect = this.GetMouseIntersectForArrow(mousePos, config);
+                    bool isHovering = intersect != null && this.IsClickOnArrow(intersect, config);
+                    this.SetArrowHover(config, isHovering);
                 }
             }
         }
     }
+
+    public override void _Input(InputEvent @event) {
+        if (@event is InputEventMouseButton mb && mb.ButtonIndex == MouseButton.Left && mb.Pressed) {
+            int placedCount = 0;
+            foreach (var cfg in this.cubeConfigs) {
+                if (cfg.IsCubePlaced && cfg.ArrowObject != null) {
+                    placedCount++;
+                }
+            }
+        }
+        if (!base.isInteracting) {
+            return;
+        }
+        if (@event is InputEventMouseButton mouseButton) {
+            if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed && !mouseButton.IsEcho()) {
+                var arrowConfigs = new List<(CubeObjectConfig config, float distance)>();
+                foreach (var config in this.cubeConfigs) {
+                    if (config.IsCubePlaced && config.ArrowObject != null && config.ArrowObject.Visible) {
+                        var intersect = this.GetMouseIntersectForArrow(mouseButton.Position, config);
+                        if (intersect != null && this.IsClickOnArrow(intersect, config)) {
+                            float distance = 0f;
+                            if (intersect.ContainsKey("position") && intersect.ContainsKey("collider")) {
+                                var currentCamera = GetViewport().GetCamera3D();
+                                if (currentCamera != null) {
+                                    var hitPos = intersect["position"].As<Vector3>();
+                                    var cameraPos = currentCamera.GlobalPosition;
+                                    distance = cameraPos.DistanceTo(hitPos);
+                                }
+                            }
+                            arrowConfigs.Add((config, distance));
+                        }
+                    }
+                }
+                if (arrowConfigs.Count > 0) {
+                    arrowConfigs.Sort((a, b) => a.distance.CompareTo(b.distance));
+                    this.OnArrowClicked(arrowConfigs[0].config);
+                    GetViewport().SetInputAsHandled();
+                    return;
+                }
+            }
+        }
+    }
+
+    private void SetArrowHover(CubeObjectConfig config, bool hovered) {
+        if (config.ArrowObject == null) return;
+        float alpha = hovered ? this.arrowHoverAlpha : this.arrowNormalAlpha;
+        if (config.ArrowObject is MeshInstance3D arrowMesh) {
+            this.SetArrowAlpha(arrowMesh, alpha);
+        } else {
+            this.SetArrowAlphaRecursive(config.ArrowObject, alpha);
+        }
+    }
     
-    private void UpdateArrowHover(Vector2 mousePos) {
-        var intersect = this.GetMouseIntersect(mousePos);
-        bool isHovering = intersect != null && this.IsClickOnArrow(intersect);
-        this.SetArrowHover(isHovering);
-    }
-
-    private void SetArrowHover(bool hovered) {
-        if (this.isArrowHovered == hovered) return;
-        this.isArrowHovered = hovered;
-        float alpha = hovered ? this.arrowNormalAlpha : this.arrowHoverAlpha;
-        this.SetArrowAlpha(alpha);
-    }
-
-    private void EnsureArrowMaterial() {
-        if (this.arrowMesh == null) return;
-        if (this.arrowHoverMaterial != null) return;
-        Material baseMaterial = this.arrowMesh.MaterialOverride;
-        if (baseMaterial == null && this.arrowMesh.Mesh != null && this.arrowMesh.Mesh.GetSurfaceCount() > 0) {
-            baseMaterial = this.arrowMesh.Mesh.SurfaceGetMaterial(0);
+    private void SetArrowAlphaRecursive(Node3D node, float alpha) {
+        if (node == null) return;
+        if (node is MeshInstance3D meshInstance) {
+            this.SetArrowAlpha(meshInstance, alpha);
         }
-        if (baseMaterial is BaseMaterial3D bm) {
-            this.arrowHoverMaterial = (BaseMaterial3D)bm.Duplicate();
+        if (node is MultiMeshInstance3D multiMeshInstance) {
+            if (multiMeshInstance.MaterialOverride is BaseMaterial3D material) {
+                var newMaterial = (BaseMaterial3D)material.Duplicate();
+                newMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+                alpha = Mathf.Clamp(alpha, 0f, 1f);
+                var c = newMaterial.AlbedoColor;
+                newMaterial.AlbedoColor = new Color(c.R, c.G, c.B, alpha);
+                multiMeshInstance.MaterialOverride = newMaterial;
+            }
+        }
+        
+        foreach (Node child in node.GetChildren()) {
+            if (child is Node3D child3D) {
+                this.SetArrowAlphaRecursive(child3D, alpha);
+            }
+        }
+    }
+
+    private void SetArrowAlpha(MeshInstance3D arrowMesh, float alpha) {
+        if (arrowMesh == null) return;
+        BaseMaterial3D material = null;
+        if (arrowMesh.MaterialOverride is BaseMaterial3D existingMaterial) {
+            material = (BaseMaterial3D)existingMaterial.Duplicate();
         } else {
-            this.arrowHoverMaterial = new StandardMaterial3D();
+            Material baseMaterial = arrowMesh.MaterialOverride;
+            if (baseMaterial == null && arrowMesh.Mesh != null && arrowMesh.Mesh.GetSurfaceCount() > 0) {
+                baseMaterial = arrowMesh.Mesh.SurfaceGetMaterial(0);
+            }
+            if (baseMaterial is BaseMaterial3D bm3d) {
+                material = (BaseMaterial3D)bm3d.Duplicate();
+            } else {
+                material = new StandardMaterial3D();
+            }
         }
-        this.arrowHoverMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
-        this.arrowMesh.MaterialOverride = this.arrowHoverMaterial;
+        
+        if (material != null) {
+            material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+            alpha = Mathf.Clamp(alpha, 0f, 1f);
+            var c = material.AlbedoColor;
+            material.AlbedoColor = new Color(c.R, c.G, c.B, alpha);
+            arrowMesh.MaterialOverride = material;
+        }
     }
 
-    private void SetArrowAlpha(float alpha) {
-        if (this.arrowMesh == null) return;
-        this.EnsureArrowMaterial();
-        if (this.arrowHoverMaterial == null) return;
-        alpha = Mathf.Clamp(alpha, 0f, 1f);
-        var c = this.arrowHoverMaterial.AlbedoColor;
-        this.arrowHoverMaterial.AlbedoColor = new Color(c.R, c.G, c.B, alpha);
-    }
-
-    private void UpdateIndicateEffect() {
-        if (this.cube == null || this.indicateEffect == null) {
+    private void UpdateIndicateEffect(CubeObjectConfig config) {
+        if (config.Cube == null || config.IndicateEffect == null) {
             return;
         }
-        if (this.isCubePlaced) {
+        if (config.IsCubePlaced) {
+            this.HideIndicateEffect(config);
             return;
         }
-        if (this.cube.IsDragging) {
-            this.ShowIndicateEffect();
+        if (config.Cube.IsDragging) {
+            this.ShowIndicateEffect(config);
         } else {
-            this.HideIndicateEffect();
-            if (this.isCubeInTriggerArea && !this.isCubePlaced) {
-                this.OnCubePlaced();
+            this.HideIndicateEffect(config);
+            if (config.IsCubeInTriggerArea && !config.IsCubePlaced) {
+                this.OnCubePlaced(config);
             }
         }
     }    
 
-    private void ShowIndicateEffect() {
-        if (this.indicateEffect == null || this.cube == null) {
+    private void ShowIndicateEffect(CubeObjectConfig config) {
+        if (config.IndicateEffect == null || config.Cube == null) {
             return;
         }
-        this.indicateEffect.Visible = true;
+        if (!config.IndicateEffect.Visible) {
+            config.IndicateEffect.Visible = true;
+        }
     }
 
-    private void HideIndicateEffect() {
-        if (this.indicateEffect == null) {
+    private void HideIndicateEffect(CubeObjectConfig config) {
+        if (config.IndicateEffect == null) {
             return;
         }
-        this.indicateEffect.Visible = false;
-        this.HideCollisionLabel();
+        if (config.IndicateEffect.Visible) {
+            config.IndicateEffect.Visible = false;
+        }
+        this.HideCollisionLabel(config);
     }
 
-    private void OnTriggerAreaBodyEntered(Node3D body) {
-        this.HandleTriggerAreaCollision(body);
+    private void OnTriggerAreaBodyEntered(Node3D body, CubeObjectConfig config) {
+        this.HandleTriggerAreaCollision(body, config);
     }
 
-    private void OnTriggerAreaBodyExited(Node3D body) {
-        this.HandleTriggerAreaExit(body);
+    private void OnTriggerAreaBodyExited(Node3D body, CubeObjectConfig config) {
+        this.HandleTriggerAreaExit(body, config);
     }
 
-    private void OnTriggerAreaEntered(Area3D area) {
-        this.HandleTriggerAreaCollision(area);
+    private void OnTriggerAreaEntered(Area3D area, CubeObjectConfig config) {
+        this.HandleTriggerAreaCollision(area, config);
     }
 
-    private void OnTriggerAreaExited(Area3D area) {
-        this.HandleTriggerAreaExit(area);
+    private void OnTriggerAreaExited(Area3D area, CubeObjectConfig config) {
+        this.HandleTriggerAreaExit(area, config);
     }
 
-    private void HandleTriggerAreaCollision(Node node) {
-        if (this.cube == null || this.isCubePlaced) {
+    private void HandleTriggerAreaCollision(Node node, CubeObjectConfig config) {
+        if (config.Cube == null || config.IsCubePlaced) {
             return;
         }
-        if (this.IsNodePartOfCube(node)) {
-            this.isCubeInTriggerArea = true;
-            if (this.cube.IsDragging) {
-                this.ShowCollisionLabel();
+        if (this.IsNodePartOfCube(node, config)) {
+            config.IsCubeInTriggerArea = true;
+            if (config.Cube.IsDragging) {
+                this.ShowCollisionLabel(config);
             }
         }
     }
 
-    private void HandleTriggerAreaExit(Node node) {
-        if (this.cube == null || this.isCubePlaced) {
+    private void HandleTriggerAreaExit(Node node, CubeObjectConfig config) {
+        if (config.Cube == null || config.IsCubePlaced) {
             return;
         }
-        if (this.IsNodePartOfCube(node)) {
-            this.isCubeInTriggerArea = false;
-            this.HideCollisionLabel();
+        if (this.IsNodePartOfCube(node, config)) {
+            config.IsCubeInTriggerArea = false;
+            this.HideCollisionLabel(config);
         }
     }
 
-    private bool IsNodePartOfCube(Node node) {
+    private bool IsNodePartOfCube(Node node, CubeObjectConfig config) {
         if (node == null) {
             return false;
         }
-        if (node == this.cube) {
+        if (node == config.Cube) {
             return true;
         }
         Node current = node;
         int depth = 0;
         const int maxDepth = 10;
         while (current != null && depth < maxDepth) {
-            if (current == this.cube) {
+            if (current == config.Cube) {
                 return true;
             }
             current = current.GetParent();
@@ -267,37 +401,85 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         return false;
     }
 
-    private void ShowCollisionLabel() {
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = true;
+    private void ShowCollisionLabel(CubeObjectConfig config) {
+        if (config.CollisionLabel != null) {
+            config.CollisionLabel.Visible = true;
         }
     }
 
-    private void HideCollisionLabel() {
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = false;
+    private void HideCollisionLabel(CubeObjectConfig config) {
+        if (config.CollisionLabel != null) {
+            config.CollisionLabel.Visible = false;
         }
     }
 
-    private void OnCubePlaced() {
-        if (this.cube == null || this.isCubePlaced) {
+    private void OnCubePlaced(CubeObjectConfig config) {
+        if (config.Cube == null || config.IsCubePlaced) {
             return;
         }
-        this.isCubePlaced = true;
-        if (this.cube != null) {
-            this.cube.Visible = false;
+        foreach (var otherConfig in this.cubeConfigs) {
+            if (otherConfig != config && otherConfig.IsCubePlaced) {
+                this.ResetCubeToInitialPosition(otherConfig);
+            }
         }
-        if (this.placedObject != null) {
-            this.placedObject.Visible = true;
+        config.IsCubePlaced = true;
+        if (config.Cube != null) {
+            config.Cube.Visible = false;
         }
-        if (this.arrowObject != null) {
-            this.arrowObject.Visible = true;
-            this.SetArrowHover(false);
+        if (config.PlacedObject != null) {
+            config.PlacedObject.Visible = true;
         }
-        this.HideIndicateEffect();
-        this.HideCollisionLabel();
-        this.isCubeInTriggerArea = false;
-        this.GoToNextStep();
+        if (config.ArrowObject != null) {
+            config.ArrowObject.Visible = true;
+            this.SetArrowHover(config, false);
+            this.DebugArrowClickability(config);
+        } 
+        this.HideIndicateEffect(config);
+        this.HideCollisionLabel(config);
+        config.IsCubeInTriggerArea = false;
+        this.DisableOtherCubesDrag(config);
+    }
+    
+    private void ResetCubeToInitialPosition(CubeObjectConfig config) {
+        if (config.MoveTween != null && config.MoveTween.IsValid()) {
+            config.MoveTween.Kill();
+            config.MoveTween = null;
+        }
+        if (config.PathFollow != null) {
+            config.PathFollow.ProgressRatio = config.InitialPathFollowProgress;
+        }
+        if (config.PlacedObject != null) {
+            config.PlacedObject.GlobalPosition = config.InitialPlacedObjectPosition;
+            config.PlacedObject.Visible = false;
+        }
+        if (config.Cube != null) {
+            config.Cube.GlobalPosition = config.InitialCubePosition;
+            config.Cube.Visible = true;
+        }
+        if (config.ArrowObject != null) {
+            config.ArrowObject.Visible = false;
+            this.SetArrowHover(config, false);
+        }
+        config.IsCubePlaced = false;
+        config.IsCubeInTriggerArea = false;
+    }
+    
+    private void DisableOtherCubesDrag(CubeObjectConfig placedConfig) {
+        foreach (var config in this.cubeConfigs) {
+            if (config != placedConfig && config.Cube != null) {
+                config.Cube.StopDragging();
+                config.Cube.IsDraggable = false;
+            }
+        }
+    }
+    
+    private void EnableAllCubesDrag() {
+        foreach (var config in this.cubeConfigs) {
+            if (config.Cube != null) {
+                config.Cube.StopDragging();
+                config.Cube.IsDraggable = true;
+            }
+        }
     }
 
     private Dictionary GetMouseIntersect(Vector2 mousePos) {
@@ -316,8 +498,10 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         if (labStaticBody != null) {
             excludeList.Add(labStaticBody.GetRid());
         }
-        if (this.triggerArea != null) {
-            excludeList.Add(this.triggerArea.GetRid());
+        foreach (var cfg in this.cubeConfigs) {
+            if (cfg.TriggerArea != null) {
+                excludeList.Add(cfg.TriggerArea.GetRid());
+            }
         }
         if (excludeList.Count > 0) {
             query.Exclude = excludeList;
@@ -326,25 +510,86 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         var result = spaceState.IntersectRay(query);
         return result;
     }
+    
+    private Dictionary GetMouseIntersectForArrow(Vector2 mousePos, CubeObjectConfig targetConfig) {
+        var currentCamera = GetViewport().GetCamera3D();
+        if (currentCamera == null) {
+            return null;
+        }
+        var from = currentCamera.ProjectRayOrigin(mousePos);
+        var to = from + currentCamera.ProjectRayNormal(mousePos) * 1000f;
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithBodies = true;
+        query.CollideWithAreas = true;
+        query.CollisionMask = 0xFFFFFFFF;
+        var excludeList = new Godot.Collections.Array<Rid>();
+        var labStaticBody = GetNodeOrNull<StaticBody3D>("StaticBody3D");
+        if (labStaticBody != null) {
+            excludeList.Add(labStaticBody.GetRid());
+        }
+        foreach (var cfg in this.cubeConfigs) {
+            if (cfg.TriggerArea != null) {
+                excludeList.Add(cfg.TriggerArea.GetRid());
+            }
+        }
+        foreach (var cfg in this.cubeConfigs) {
+            if (cfg != targetConfig && cfg.ArrowObject != null) {
+                this.AddCollisionRidsToExclude(cfg.ArrowObject, excludeList);
+            }
+        }
+        if (excludeList.Count > 0) {
+            query.Exclude = excludeList;
+        }
+        var spaceState = GetWorld3D().DirectSpaceState;
+        var result = spaceState.IntersectRay(query);
+        return result;
+    }
+    
+    private void AddCollisionRidsToExclude(Node node, Godot.Collections.Array<Rid> excludeList) {
+        if (node == null) return;
+        if (node is CollisionObject3D collisionObj) {
+            excludeList.Add(collisionObj.GetRid());
+        }
+        foreach (Node child in node.GetChildren()) {
+            this.AddCollisionRidsToExclude(child, excludeList);
+        }
+    }
 
-    private bool IsClickOnArrow(Dictionary intersect) {
-        if (intersect == null || !intersect.ContainsKey("collider")) {
+    private bool IsClickOnArrow(Dictionary intersect, CubeObjectConfig config) {
+        if (intersect == null || !intersect.ContainsKey("collider") || config.ArrowObject == null) {
             return false;
         }
         var colliderVariant = intersect["collider"];
-        var collider = colliderVariant.As<Node3D>();
+        var collider = colliderVariant.As<Node>();
         if (collider == null) {
             return false;
         }
-        var parent = collider.GetParent();
-        if (parent == this.arrowObject) {
+        if (collider == config.ArrowObject) {
             return true;
         }
         Node current = collider;
         int depth = 0;
-        const int maxDepth = 10;
+        const int maxDepth = 20;
         while (current != null && depth < maxDepth) {
-            if (current == this.arrowObject) {
+            if (current == config.ArrowObject) {
+                return true;
+            }
+            current = current.GetParent();
+            depth++;
+        }
+        
+        return false;
+    }
+    
+    private bool IsDescendantOf(Node node, Node potentialAncestor) {
+        if (node == null || potentialAncestor == null) {
+            return false;
+        }
+        Node current = node;
+        int depth = 0;
+        const int maxDepth = 15;
+        while (current != null && depth < maxDepth) {
+            if (current == potentialAncestor) {
                 return true;
             }
             current = current.GetParent();
@@ -353,98 +598,114 @@ public partial class InclinedPlaneExperiment : StepExperimentLabItem<InclinedPla
         return false;
     }
 
-    private void OnArrowClicked() {
-        if (this.pathFollow == null) {
+    private void DebugArrowClickability(CubeObjectConfig config) {
+        if (config.ArrowObject == null) return;
+        this.PrintNodeTree(config.ArrowObject, 8);
+        Area3D area = null;
+        if (config.ArrowObject is Area3D a) {
+            area = a;
+        } else {
+            area = config.ArrowObject.FindChild("*", true, false) as Area3D;
+        }
+        if (area != null) {
+            var shape = area.FindChild("*", true, false) as CollisionShape3D;
+        } else {
+            var body = config.ArrowObject.FindChild("*", true, false) as StaticBody3D;
+            if (body != null) {
+                var shape = body.FindChild("*", true, false) as CollisionShape3D;
+            }
+        }
+    }
+    
+    private void PrintNodeTree(Node node, int indent, int depth = 0, int maxDepth = 3) {
+        if (depth > maxDepth) return;
+        string indentStr = new string(' ', indent + depth * 2);
+        foreach (Node child in node.GetChildren()) {
+            PrintNodeTree(child, indent, depth + 1, maxDepth);
+        }
+    }
+    
+    private void OnArrowInputEvent(Node camera, InputEvent @event, Vector3 position, Vector3 normal, long shapeIdx, CubeObjectConfig config) {
+        if (!base.isInteracting) {
             return;
         }
-        if (this.moveTween != null && this.moveTween.IsValid()) {
-            this.moveTween.Kill();
-        }
-        this.moveTween = CreateTween();
-        this.moveTween.TweenProperty(this.pathFollow, "progress_ratio", 1.0f, this.moveDuration);
-        if (this.arrowObject != null) {
-            this.arrowObject.Visible = false;
-            this.SetArrowHover(false);
+        if (@event is InputEventMouseButton mouseButton) {
+            if (mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed && !mouseButton.IsEcho()) {
+                this.OnArrowClicked(config);
+            }
         }
     }
-
-    private void InitializeStepHints() {
-        base.stepHints[InclinedPlaneExperimentStep.Setup] = 
-            "[b]步骤 1：拖拽和放置物品";
-        base.stepHints[InclinedPlaneExperimentStep.PlaceObject] = 
-            "[b]步骤 2：放置物体[/b]\n\n" +
-            "[color=yellow]提示：[/color] 物体应该放在斜坡顶部，准备进行实验";
-        base.stepHints[InclinedPlaneExperimentStep.AdjustAngle] = 
-            "[b]步骤 3：调整角度[/b]\n\n" +
-            "• 使用支撑架（SupportStand）来调整斜坡的角度\n" +
-            "• 可以逐渐增加或减少斜坡的倾斜角度\n" +
-            "• 观察物体在不同角度下的状态\n" +
-            "• 选择合适的角度进行实验（建议从较小角度开始）\n\n" +
-            "[color=yellow]提示：[/color] 角度越大，物体下滑的速度越快";
-        base.stepHints[InclinedPlaneExperimentStep.MeasureAngle] = 
-            "[b]步骤 4：测量角度[/b]\n\n" +
-            "• 使用角度测量器（AngleMeter）来测量斜坡的倾斜角度\n" +
-            "• 将角度测量器放置在斜坡表面\n" +
-            "• 读取并记录角度数值\n" +
-            "• 可以尝试测量多个不同的角度\n\n" +
-            "[color=yellow]提示：[/color] 准确记录角度值，这对后续数据分析很重要";
-        base.stepHints[InclinedPlaneExperimentStep.ReleaseObject] = 
-            "[b]步骤 5：释放物体[/b]\n\n" +
-            "• 确认物体已放置在斜坡顶部\n" +
-            "• 准备好计时器（Timer）开始计时\n" +
-            "• 释放物体，让它沿着斜坡自由滑动\n" +
-            "• 观察物体的运动情况\n\n" +
-            "[color=yellow]提示：[/color] 释放时要确保物体从静止状态开始运动";
-        base.stepHints[InclinedPlaneExperimentStep.RecordData] = 
-            "[b]步骤 6：记录数据[/b]\n\n" +
-            "• 使用计时器记录物体从顶部滑到底部的时间\n" +
-            "• 使用尺子（Ruler）测量斜坡的长度\n" +
-            "• 将测量数据记录到数据记录板（DataBoard）上\n" +
-            "• 可以尝试不同角度，记录多组数据\n" +
-            "• 记录内容包括：角度、时间、距离等\n\n" +
-            "[color=yellow]提示：[/color] 多次测量取平均值可以提高实验精度";
-        base.stepHints[InclinedPlaneExperimentStep.AnalyzeResult] = 
-            "[b]步骤 7：分析结果[/b]\n\n" +
-            "• 查看数据记录板上的所有实验数据\n" +
-            "• 分析角度与运动时间的关系\n" +
-            "• 观察是否存在规律性\n" +
-            "• 思考：为什么角度越大，物体下滑越快？\n" +
-            "• 可以绘制角度-时间的图表来直观分析\n\n" +
-            "[color=yellow]提示：[/color] 这与重力分力和摩擦力有关，角度越大，重力沿斜坡的分力越大";
-        base.stepHints[InclinedPlaneExperimentStep.Completed] = 
-            "[b]实验完成！[/b]\n\n" +
-            "恭喜你完成了斜坡实验！\n\n" +
-            "[color=lightgreen]实验总结：[/color]\n" +
-            "• 你已经成功完成了所有实验步骤\n" +
-            "• 记录了实验数据并进行了分析\n" +
-            "• 理解了斜坡角度对物体运动的影响\n\n" +
-            "可以重新开始实验，尝试不同的角度和物体，探索更多有趣的物理现象！";
-    }
-
-    protected override string GetStepName(InclinedPlaneExperimentStep step) {
-        switch (step) {
-            case InclinedPlaneExperimentStep.Setup:
-                return "准备阶段";
-            case InclinedPlaneExperimentStep.PlaceObject:
-                return "放置物体";
-            case InclinedPlaneExperimentStep.AdjustAngle:
-                return "调整角度";
-            case InclinedPlaneExperimentStep.MeasureAngle:
-                return "测量角度";
-            case InclinedPlaneExperimentStep.ReleaseObject:
-                return "释放物体";
-            case InclinedPlaneExperimentStep.RecordData:
-                return "记录数据";
-            case InclinedPlaneExperimentStep.AnalyzeResult:
-                return "分析结果";
-            case InclinedPlaneExperimentStep.Completed:
-                return "实验完成";
-            default:
-                return "未知步骤";
-        }
-    }
-
-    protected override InclinedPlaneExperimentStep SetupStep => InclinedPlaneExperimentStep.Setup;
     
-    protected override InclinedPlaneExperimentStep CompletedStep => InclinedPlaneExperimentStep.Completed;
+    private void OnArrowClicked(CubeObjectConfig config) {
+        if (config.PathFollow == null) {
+            return;
+        }
+        if (config.MoveTween != null && config.MoveTween.IsValid()) {
+            config.MoveTween.Kill();
+        }
+        config.MoveTween = CreateTween();
+        config.MoveTween.TweenProperty(config.PathFollow, "progress_ratio", 1.0f, this.moveDuration);
+        config.MoveTween.TweenCallback(Callable.From(() => this.OnObjectMoveCompleted(config)));
+        if (config.ArrowObject != null) {
+            config.ArrowObject.Visible = false;
+            this.SetArrowHover(config, false);
+        }
+        
+        this.EnableAllCubesDrag();
+    }
+    
+    private void OnObjectMoveCompleted(CubeObjectConfig config) {
+        this.experimentCount++;
+        float time = this.moveDuration;
+        float distance = this.CalculatePathDistance(config);
+        ExperimentData data = new ExperimentData(this.experimentCount, time, distance);
+        config.ExperimentData = data;
+        this.experimentDataList.Add(data);
+        this.UpdateDataBoardDisplay();
+    }
+    
+    private void ResetCubeConfig(CubeObjectConfig config) {
+        if (config.PlacedObject != null) {
+            config.PlacedObject.Visible = false;
+        }
+        if (config.Cube != null) {
+            config.Cube.Visible = true;
+        }
+        if (config.ArrowObject != null) {
+            config.ArrowObject.Visible = true;
+            this.SetArrowHover(config, false);
+        }
+        config.IsCubePlaced = false;
+        config.IsCubeInTriggerArea = false;
+        
+    }
+    
+    private float CalculatePathDistance(CubeObjectConfig config) {
+        if (config.PathFollow == null || config.PathFollow.GetParent() is not Path3D path3D) {
+            return 0f;
+        }
+        var curve = path3D.Curve;
+        if (curve == null) {
+            return 0f;
+        }
+        return curve.GetBakedLength();
+    }
+    
+    private void UpdateDataBoardDisplay() {
+        if (this.dataBoard == null) {
+            return;
+        }
+        var label = this.dataBoard.GetNodeOrNull<Label3D>("Label3D");
+        if (label == null) {
+            label = this.dataBoard.FindChild("Label3D", true, false) as Label3D;
+        }
+        if (label != null) {
+            string displayText = "实验数据记录:\n";
+            foreach (var data in this.experimentDataList) {
+                displayText += $"{data}\n";
+            }
+            label.Text = displayText;
+            label.Visible = true;
+        }
+    }
 }

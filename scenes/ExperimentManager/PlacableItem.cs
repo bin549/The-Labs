@@ -17,6 +17,13 @@ public partial class PlacableItem : Node3D {
 		get => this.dragPlane;
 		set => this.dragPlane = value;
 	}
+	
+	public void StopDragging() {
+		if (this.isDragging) {
+			this.isDragging = false;
+			this.EndDrag();
+		}
+	}
 
 	public override void _Ready() {
 		base._Ready();
