@@ -3,24 +3,24 @@ using PhantomCamera;
 
 public partial class LabItem : Interactable {
     private PhantomCamera3D phantomCam;
-    private ExperimentManager experimentManager;
+    private TeleportManager teteportManager;
     [ExportGroup("Teleport Settings")]
     [Export] public bool RegisterToMenu { get; set; } = true;
-    [Export] public string ExperimentName { get; set; } = "实验";
-    [Export] public string ExperimentDescription { get; set; } = "";
-    [Export] public ExperimentCategory ExperimentCategory { get; set; } = ExperimentCategory.Mechanics;
+    [Export] public string TeleportName { get; set; } = "实验";
+    [Export] public string TeleportDescription { get; set; } = "";
+    [Export(PropertyHint.Enum, "Mechanics,Electricity,Chemistry")] public int TeleportCategory { get; set; } = 0;
     [Export] public Node3D TeleportPosition { get; set; }
     public bool IsInteracting => base.isInteracting;
 
     public override void _Ready() {
         base._Ready();
         this.InitPhantomCamera();
-        this.RegisterToExperimentManager();
+        this.RegisterToTeleportManager();
     }
 
     public override void _ExitTree() {
         base._ExitTree();
-        this.UnregisterFromExperimentManager();
+        this.UnregisterFromTeleportManager();
     }
 
     public override void _Input(InputEvent @event) {
@@ -36,10 +36,10 @@ public partial class LabItem : Interactable {
         if (phantomCamNode != null) this.phantomCam = phantomCamNode.AsPhantomCamera3D();
     }
 
-    private void RegisterToExperimentManager() {
+    private void RegisterToTeleportManager() {
         if (!this.RegisterToMenu) return;
-        this.experimentManager = GetTree().Root.FindChild("ExperimentManager", true, false) as ExperimentManager;
-        if (this.experimentManager == null) {
+        this.teteportManager = GetTree().Root.FindChild("TeleportManager", true, false) as TeleportManager;
+        if (this.teteportManager == null) {
             return;
         }
         Vector3 teleportPos;
@@ -49,19 +49,19 @@ public partial class LabItem : Interactable {
             teleportPos = GlobalPosition;
         }
         var expInfo = new ExperimentInfo {
-            ExperimentName = string.IsNullOrEmpty(ExperimentName) ? DisplayName : ExperimentName,
-            Description = ExperimentDescription,
-            Category = ExperimentCategory,
+            ExperimentName = string.IsNullOrEmpty(TeleportName) ? DisplayName : TeleportName,
+            Description = TeleportDescription,
+            Category = (ExperimentCategory)TeleportCategory,
             Position = teleportPos,
             ExperimentNodePath = GetPath()
         };
-        this.experimentManager.RegisterExperiment(expInfo);
+        this.teteportManager.RegisterExperiment(expInfo);
     }
 
-    private void UnregisterFromExperimentManager() {
-        if (!this.RegisterToMenu || this.experimentManager == null) return;
-        string expName = string.IsNullOrEmpty(ExperimentName) ? DisplayName : ExperimentName;
-        this.experimentManager.UnregisterExperiment(expName);
+    private void UnregisterFromTeleportManager() {
+        if (!this.RegisterToMenu || this.teteportManager == null) return;
+        string expName = string.IsNullOrEmpty(TeleportName) ? DisplayName : TeleportName;
+        this.teteportManager.UnregisterExperiment(expName);
     }
 
     public override void EnterInteraction() {

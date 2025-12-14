@@ -36,7 +36,7 @@
 [ext_resource type="Script" uid="uid://71qpocj8j8k" path="res://scenes/Experiments/FrictionExperiment/FrictionExperiment.cs" id="21_el0ym"]
 [ext_resource type="PackedScene" uid="uid://csqvs2a0tg0jf" path="res://scenes/PaintBoard/PaintBoard.tscn" id="22_fu1ug"]
 [ext_resource type="Script" uid="uid://byh704u3wf46f" path="res://scenes/Experiments/AluminumReactionExperiment/AluminumReactionExperiment.cs" id="22_g7bw1"]
-[ext_resource type="Script" uid="uid://dvl0x4l10i824" path="res://scenes/ExperimentManager/ExperimentManager.cs" id="23_expman"]
+[ext_resource type="Script" uid="uid://dvl0x4l10i824" path="res://scenes/Player/TeleportManager.cs" id="23_expman"]
 [ext_resource type="Script" uid="uid://cchf1w2k483wh" path="res://scenes/Item/Connection/ConnectableNode.cs" id="24_connnode"]
 [ext_resource type="Script" uid="uid://dvumky18el73i" path="res://scenes/Item/Connection/ConnectionManager.cs" id="25_connmgr"]
 [ext_resource type="Shader" uid="uid://d4ap67j1gkx2k" path="res://shaders/Water.gdshader" id="33_qx83b"]
@@ -3274,7 +3274,7 @@ script = ExtResource("7_host")
 script = ExtResource("10_interact_mgr")
 pauseMenu = NodePath("../PauseMenu")
 
-[node name="ExperimentManager" type="Node" parent="."]
+[node name="TeleportManager" type="Node" parent="."]
 script = ExtResource("23_expman")
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("gameManager") instance=ExtResource("13_bbv3w")]
@@ -3471,8 +3471,8 @@ nextStepButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/V
 playVoiceButton = NodePath("../../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
 voicePlayer = NodePath("AudioStreamPlayer")
 stepVoiceResources = Array[AudioStream]([ExtResource("43_1m4v3"), ExtResource("52_u0op8")])
-ExperimentName = "摩檫力实验"
-ExperimentDescription = "~！"
+TeleportName = "摩檫力实验"
+TeleportDescription = "摩檫力实验"
 TeleportPosition = NodePath("TeleportPos")
 DisplayName = "摩檫力实验"
 outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("../InclinedPlaneExperiment/LabObjects/PlaceObjects/CB3/outline")]
@@ -3523,7 +3523,8 @@ pathFollows = [NodePath("LabObjects/PathFollows/Path3D1/PathFollow3D"), NodePath
 moveDuration = 0.34
 arrowNormalAlpha = 0.35
 arrowHoverAlpha = 1.0
-ExperimentName = "斜坡实验"
+TeleportName = "斜坡实验"
+TeleportDescription = "牛顿第二定律与摩擦力"
 TeleportPosition = NodePath("TeleportPos")
 outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline"), NodePath("LabObjects/PlaceObjects/CB3/outline"), NodePath("LabObjects/Carpet_002/outline"), NodePath("LabObjects/Slope/outline")]
 
@@ -4054,7 +4055,7 @@ shape = SubResource("ConcavePolygonShape3D_fieaw")
 [node name="ChemistryRoom" type="Node3D" parent="Rooms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.6)
 
-[node name="AluminumLabItem" parent="Rooms/ChemistryRoom" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "outlineMeshs") instance=ExtResource("3_kurpr")]
+[node name="AluminumLabItem" parent="Rooms/ChemistryRoom" node_paths=PackedStringArray("hintLabel", "nextStepButton", "playVoiceButton", "voicePlayer", "TeleportPosition", "outlineMeshs") instance=ExtResource("3_kurpr")]
 transform = Transform3D(-2.1855692e-08, 0, 0.49999994, 0, 0.5, 0, -0.49999994, 0, -2.1855692e-08, -15.98513, -0.75, -4.8643875)
 script = ExtResource("22_g7bw1")
 currentStep = 0
@@ -4064,8 +4065,10 @@ nextStepButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBox
 playVoiceButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
 voicePlayer = NodePath("AudioStreamPlayer")
 stepVoiceResources = Array[AudioStream]([ExtResource("43_1m4v3"), ExtResource("14_fbdsj"), ExtResource("46_u0op8"), ExtResource("45_u0op8"), ExtResource("43_1m4v3")])
-ExperimentName = "铝和氢氧化钠反应实验"
-ExperimentCategory = 2
+TeleportName = "铝和氢氧化钠反应实验"
+TeleportDescription = "铝和氢氧化钠反应实验"
+TeleportCategory = 2
+TeleportPosition = NodePath("TeleportPos")
 DisplayName = "铝和氢氧化钠反应实验"
 outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
 
@@ -4302,9 +4305,9 @@ nextStepButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBox
 playVoiceButton = NodePath("../../../Player/CanvasLayer/Control/ExperimentUI/VBoxContainer/PlayVoiceButton")
 voicePlayer = NodePath("AudioStreamPlayer")
 stepVoiceResources = Array[AudioStream]([ExtResource("51_1m4v3"), ExtResource("52_u0op8"), ExtResource("45_u0op8")])
-ExperimentName = "欧姆实验"
-ExperimentDescription = "欧姆~~~"
-ExperimentCategory = 1
+TeleportName = "欧姆实验"
+TeleportDescription = "画线测试"
+TeleportCategory = 1
 TeleportPosition = NodePath("TeleportPos")
 DisplayName = "欧姆定律"
 outlineMeshs = [NodePath("CHEMESTRYtable2/CHEMESTRYtable/outline")]
