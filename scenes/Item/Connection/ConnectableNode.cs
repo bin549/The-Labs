@@ -4,12 +4,8 @@ using Godot.Collections;
 public partial class ConnectableNode : Node3D {
     [Export] public Color SelectedColor { get; set; } = Colors.Yellow;
     [Export] public Color ConnectedColor { get; set; } = Colors.Green;
-    
-    // 不再使用 Export 属性，避免场景文件中的类型错误
-    // 改为在 _Ready() 中自动查找子节点
     private MeshInstance3D meshInstance;
     private MeshInstance3D outlineMesh;
-    
     private bool isSelected = false;
     private bool isHovered = false;
     private StandardMaterial3D material;
@@ -37,7 +33,6 @@ public partial class ConnectableNode : Node3D {
     }
 
     public override void _Ready() {
-        // 自动查找 meshInstance：查找第一个 MeshInstance3D 子节点（排除 outlineMesh）
         if (this.meshInstance == null || !GodotObject.IsInstanceValid(this.meshInstance)) {
             foreach (Node child in GetChildren()) {
                 if (child is MeshInstance3D mesh && child != this.outlineMesh) {
@@ -46,8 +41,6 @@ public partial class ConnectableNode : Node3D {
                 }
             }
         }
-        
-        // 自动查找 outlineMesh：查找名为 "outline" 或包含 "outline" 的 MeshInstance3D 子节点
         if (this.outlineMesh == null || !GodotObject.IsInstanceValid(this.outlineMesh)) {
             foreach (Node child in GetChildren()) {
                 if (child is MeshInstance3D mesh && 
@@ -58,7 +51,6 @@ public partial class ConnectableNode : Node3D {
                 }
             }
         }
-        
         this.EnsurePhysicsBody();
         this.SetupCollisionLayers();
         if (this.outlineMesh != null) {

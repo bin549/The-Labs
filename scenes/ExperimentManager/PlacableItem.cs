@@ -105,7 +105,7 @@ public partial class PlacableItem : Node3D {
 		}
 		return false;
 	}
-
+	
 	private bool IsClickOnSelf(Dictionary intersect) {
 		if (intersect == null || !intersect.ContainsKey("collider")) {
 			return false;

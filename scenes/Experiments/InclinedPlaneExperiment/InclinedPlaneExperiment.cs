@@ -139,18 +139,6 @@ public partial class InclinedPlaneExperiment : LabItem {
                 clickArea.InputEvent += (camera, @event, position, normal, shapeIdx) => {
                     OnArrowInputEvent(camera, @event, position, normal, shapeIdx, currentConfig);
                 };
-                useAreaInput = true;
-            }
-            if (!useAreaInput) {
-                CollisionObject3D collisionBody = null;
-                if (config.ArrowObject is CollisionObject3D col) {
-                    collisionBody = col;
-                } else {
-                    collisionBody = config.ArrowObject.FindChild("*", true, false) as CollisionObject3D;
-                }
-                if (collisionBody != null) {
-                    useRaycast = true;
-                }
             }
         }
     }
@@ -293,7 +281,6 @@ public partial class InclinedPlaneExperiment : LabItem {
                 material = new StandardMaterial3D();
             }
         }
-        
         if (material != null) {
             material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
             alpha = Mathf.Clamp(alpha, 0f, 1f);
@@ -574,7 +561,6 @@ public partial class InclinedPlaneExperiment : LabItem {
             current = current.GetParent();
             depth++;
         }
-        
         return false;
     }
     
@@ -647,7 +633,6 @@ public partial class InclinedPlaneExperiment : LabItem {
             config.ArrowObject.Visible = false;
             this.SetArrowHover(config, false);
         }
-        
         this.EnableAllCubesDrag();
     }
     
@@ -659,22 +644,6 @@ public partial class InclinedPlaneExperiment : LabItem {
         config.ExperimentData = data;
         this.experimentDataList.Add(data);
         this.UpdateDataBoardDisplay();
-    }
-    
-    private void ResetCubeConfig(CubeObjectConfig config) {
-        if (config.PlacedObject != null) {
-            config.PlacedObject.Visible = false;
-        }
-        if (config.Cube != null) {
-            config.Cube.Visible = true;
-        }
-        if (config.ArrowObject != null) {
-            config.ArrowObject.Visible = true;
-            this.SetArrowHover(config, false);
-        }
-        config.IsCubePlaced = false;
-        config.IsCubeInTriggerArea = false;
-        
     }
     
     private float CalculatePathDistance(CubeObjectConfig config) {
