@@ -1,48 +1,83 @@
 using Godot;
+using Godot.Collections;
 
 public partial class ConnectableNode : Node3D {
-    [Export] public Color NormalColor { get; set; } = Colors.White;
     [Export] public Color SelectedColor { get; set; } = Colors.Yellow;
     [Export] public Color ConnectedColor { get; set; } = Colors.Green;
-    private bool isSelected = false;
+    
+    // 不再使用 Export 属性，避免场景文件中的类型错误
+    // 改为在 _Ready() 中自动查找子节点
     private MeshInstance3D meshInstance;
+    private MeshInstance3D outlineMesh;
+    
+    private bool isSelected = false;
+    private bool isHovered = false;
     private StandardMaterial3D material;
+    private ConnectionManager connectionManager;
 
     public bool IsSelected {
         get => this.isSelected;
         set {
             this.isSelected = value;
+            if (this.isSelected && this.isHovered) {
+                this.isHovered = false;
+                if (this.outlineMesh != null) {
+                    this.outlineMesh.Visible = false;
+                }
+            }
             this.UpdateColor();
         }
     }
 
+    public bool IsHovered {
+        get => this.isHovered;
+        set {
+            this.isHovered = value;
+        }
+    }
+
     public override void _Ready() {
-        this.EnsurePhysicsBody();
-        this.SetupCollisionLayers();
-        this.meshInstance = GetNodeOrNull<MeshInstance3D>("MeshInstance3D");
-        if (this.meshInstance == null) {
-            foreach (var child in GetChildren()) {
-                if (child is MeshInstance3D mesh) {
+        // 自动查找 meshInstance：查找第一个 MeshInstance3D 子节点（排除 outlineMesh）
+        if (this.meshInstance == null || !GodotObject.IsInstanceValid(this.meshInstance)) {
+            foreach (Node child in GetChildren()) {
+                if (child is MeshInstance3D mesh && child != this.outlineMesh) {
                     this.meshInstance = mesh;
                     break;
                 }
             }
         }
-        if (this.meshInstance == null) {
-            this.meshInstance = new MeshInstance3D();
-            var sphereMesh = new SphereMesh();
-            sphereMesh.Radius = 0.15f;
-            sphereMesh.Height = 0.3f;
-            this.meshInstance.Mesh = sphereMesh;
-            AddChild(this.meshInstance);
-            if (GetTree()?.EditedSceneRoot != null)
-                this.meshInstance.Owner = GetTree().EditedSceneRoot;
+        
+        // 自动查找 outlineMesh：查找名为 "outline" 或包含 "outline" 的 MeshInstance3D 子节点
+        if (this.outlineMesh == null || !GodotObject.IsInstanceValid(this.outlineMesh)) {
+            foreach (Node child in GetChildren()) {
+                if (child is MeshInstance3D mesh && 
+                    (child.Name.ToString().ToLower().Contains("outline") || 
+                     child.Name.ToString().ToLower().Contains("轮廓"))) {
+                    this.outlineMesh = mesh;
+                    break;
+                }
+            }
         }
-        this.material = new StandardMaterial3D();
-        this.material.AlbedoColor = this.NormalColor;
-        if (this.meshInstance != null) {
-            this.meshInstance.MaterialOverride = this.material;
+        
+        this.EnsurePhysicsBody();
+        this.SetupCollisionLayers();
+        if (this.outlineMesh != null) {
+            this.outlineMesh.Visible = false;
         }
+        this.ResolveConnectionManager();
+    }
+
+    private void ResolveConnectionManager() {
+        if (this.connectionManager != null && GodotObject.IsInstanceValid(this.connectionManager)) return;
+        this.connectionManager = GetTree().Root.GetNodeOrNull<ConnectionManager>("World/ConnectionManager");
+        if (this.connectionManager == null) {
+            this.connectionManager = GetTree().Root.FindChild("ConnectionManager", true, false) as ConnectionManager;
+        }
+    }
+
+    private bool IsConnectionManagerEnabled() {
+        this.ResolveConnectionManager();
+        return this.connectionManager != null && this.connectionManager.IsEnabled;
     }
 
     private void SetupCollisionLayers() {
@@ -107,8 +142,84 @@ public partial class ConnectableNode : Node3D {
     }
 
     public void UpdateColor() {
-        if (this.material == null) return;
-        this.material.AlbedoColor = this.isSelected ? this.SelectedColor : this.NormalColor;
+        if (this.meshInstance == null) return;
+        if (this.isSelected) {
+            if (this.material == null) {
+                this.material = new StandardMaterial3D();
+            }
+            this.material.AlbedoColor = this.SelectedColor;
+            this.meshInstance.MaterialOverride = this.material;
+        } else {
+            this.meshInstance.MaterialOverride = null;
+        }
+    }
+
+    public void OnHoverEnter() {
+        this.IsHovered = true;
+        if (this.outlineMesh != null && !this.isSelected) {
+            this.outlineMesh.Visible = true;
+        }
+    }
+
+    public void OnHoverExit() {
+        this.IsHovered = false;
+        if (this.outlineMesh != null) {
+            this.outlineMesh.Visible = false;
+        }
+    }
+
+    public override void _Input(InputEvent @event) {
+        if (!this.IsConnectionManagerEnabled()) return;
+        if (@event is InputEventMouseMotion motionEvent) {
+            var intersect = this.GetMouseIntersect(motionEvent.Position);
+            if (intersect != null && this.IsClickOnSelf(intersect)) {
+                if (!this.isHovered && !this.isSelected) {
+                    this.OnHoverEnter();
+                }
+            } else {
+                if (this.isHovered) {
+                    this.OnHoverExit();
+                }
+            }
+        }
+    }
+
+    private Dictionary GetMouseIntersect(Vector2 mousePos) {
+        var currentCamera = GetViewport().GetCamera3D();
+        if (currentCamera == null) {
+            return null;
+        }
+        var from = currentCamera.ProjectRayOrigin(mousePos);
+        var to = from + currentCamera.ProjectRayNormal(mousePos) * 1000f;
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithBodies = true;
+        query.CollideWithAreas = true;
+        query.CollisionMask = 1 << 19;
+        var spaceState = GetWorld3D().DirectSpaceState;
+        var result = spaceState.IntersectRay(query);
+        return result;
+    }
+
+    private bool IsClickOnSelf(Dictionary intersect) {
+        if (intersect == null || !intersect.ContainsKey("collider")) {
+            return false;
+        }
+        var colliderVariant = intersect["collider"];
+        var collider = colliderVariant.As<Node3D>();
+        if (collider == null) {
+            return false;
+        }
+        Node current = collider;
+        int depth = 0;
+        const int maxDepth = 10;
+        while (current != null && depth < maxDepth) {
+            if (current == this) {
+                return true;
+            }
+            current = current.GetParent();
+            depth++;
+        }
+        return false;
     }
 
     public Vector3 GetConnectionPoint() {

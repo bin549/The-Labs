@@ -62,20 +62,20 @@ public partial class ConnectionManager : Node3D {
     }
 
     private void HandleMouseMotion(Vector2 mousePos) {
-        var rayResult = this.PerformRaycastForLines(mousePos);
+        var rayResultForLines = this.PerformRaycastForLines(mousePos);
         if (this.hoveredLine != null) {
             this.hoveredLine.OnHoverExit();
             this.hoveredLine = null;
         }
-        if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
-            return;
-        }
-        var collider = rayResult["collider"].As<Node>();
-        if (collider == null) return;
-        var line = this.FindConnectionLine(collider);
-        if (line != null) {
-            this.hoveredLine = line;
-            this.hoveredLine.OnHoverEnter();
+        if (rayResultForLines != null && rayResultForLines.Count > 0 && rayResultForLines.ContainsKey("collider")) {
+            var collider = rayResultForLines["collider"].As<Node>();
+            if (collider != null) {
+                var line = this.FindConnectionLine(collider);
+                if (line != null) {
+                    this.hoveredLine = line;
+                    this.hoveredLine.OnHoverEnter();
+                }
+            }
         }
     }
 
@@ -125,6 +125,7 @@ public partial class ConnectionManager : Node3D {
         var to = from + this.camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithBodies = true;
         query.CollideWithAreas = true;
         query.CollisionMask = 1 << 19;
         return spaceState.IntersectRay(query);
@@ -141,6 +142,7 @@ public partial class ConnectionManager : Node3D {
         var to = from + this.camera.ProjectRayNormal(screenPos) * MaxRaycastDistance;
         var spaceState = GetWorld3D().DirectSpaceState;
         var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithBodies = true;
         query.CollideWithAreas = true;
         query.CollisionMask = 1 << 20;
         var result = spaceState.IntersectRay(query);

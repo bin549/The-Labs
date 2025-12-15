@@ -25,11 +25,48 @@ public enum AluminumReactionExperimentItem {
 
 public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
     [Export] protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Setup;
+    [Export] private PlacableItem sodiumHydroxideSolution;
+    [Export] private Node3D emptyReagent;
+    [Export] private Area3D triggerArea;
+    [Export] private Label3D collisionLabel;
+    private bool isSodiumHydroxideInArea = false;
+    private bool isItemPlaced = false;
 
     public override void _Ready() {
         base._Ready();
+        // 如果 sodiumHydroxideSolution 为 null，尝试从场景中查找
+        if (this.sodiumHydroxideSolution == null) {
+            var node = GetNodeOrNull<Node3D>("LabObjects/sodiumHydroxide");
+            if (node != null) {
+                this.sodiumHydroxideSolution = node as PlacableItem;
+            }
+        }
+        // 如果 emptyReagent 为 null，尝试从场景中查找
+        if (this.emptyReagent == null) {
+            this.emptyReagent = GetNodeOrNull<Node3D>("LabObjects/emptyReagent");
+        }
         this.InitializeStepHints();
         base.InitializeStepExperiment();
+        this.SetupStepOneCollision();
+    }
+
+    private void SetupStepOneCollision() {
+        this.isItemPlaced = false;
+        if (this.collisionLabel != null) {
+            this.collisionLabel.Visible = false;
+        }
+        if (this.sodiumHydroxideSolution != null) {
+            this.sodiumHydroxideSolution.StopDragging();
+        }
+        if (this.emptyReagent is PlacableItem emptyReagentItem) {
+            emptyReagentItem.StopDragging();
+        }
+        if (this.triggerArea != null) {
+            this.triggerArea.BodyEntered += OnTriggerAreaBodyEntered;
+            this.triggerArea.BodyExited += OnTriggerAreaBodyExited;
+            this.triggerArea.AreaEntered += OnTriggerAreaEntered;
+            this.triggerArea.AreaExited += OnTriggerAreaExited;
+        }
     }
 
     public override void EnterInteraction() {
@@ -42,13 +79,147 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     public override void ExitInteraction() {
         base.isInteracting = false;
+        this.HideStepOneObjects();
         base.ExitInteraction();
+    }
+
+    public override void _Input(InputEvent @event) {
+        if (!base.isInteracting) return;
+        
+        // 调试：监听鼠标释放事件
+        if (@event is InputEventMouseButton mouseButton && this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            if (mouseButton.ButtonIndex == MouseButton.Left && !mouseButton.Pressed) {
+                GD.Print($"[AluminumReaction] 鼠标释放: isSodiumHydroxideInArea={this.isSodiumHydroxideInArea}, isItemPlaced={this.isItemPlaced}");
+                if (this.sodiumHydroxideSolution != null) {
+                    GD.Print($"[AluminumReaction] sodiumHydroxideSolution.IsDragging={this.sodiumHydroxideSolution.IsDragging}");
+                }
+            }
+        }
+    }
+
+    public override void _Process(double delta) {
+        base._Process(delta);
+        if (base.isInteracting && this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            this.UpdateCollisionLabel();
+        }
+    }
+
+    private void UpdateCollisionLabel() {
+        if (this.sodiumHydroxideSolution == null || this.isItemPlaced) {
+            return;
+        }
+        
+        // 参考 InclinedPlaneExperiment 的逻辑
+        if (this.sodiumHydroxideSolution.IsDragging) {
+            // 正在拖拽时，根据是否在区域内显示 Label
+            if (this.isSodiumHydroxideInArea) {
+                this.ShowCollisionLabel();
+            } else {
+                this.HideCollisionLabel();
+            }
+        } else {
+            // 不在拖拽时，隐藏 Label
+            this.HideCollisionLabel();
+            // 如果不在拖拽且在触发区域内且未放置，则触发放置
+            if (this.isSodiumHydroxideInArea && !this.isItemPlaced) {
+                GD.Print($"[AluminumReaction] 触发放置: isSodiumHydroxideInArea={this.isSodiumHydroxideInArea}, isItemPlaced={this.isItemPlaced}, IsDragging={this.sodiumHydroxideSolution.IsDragging}");
+                this.OnItemPlaced();
+            }
+        }
+    }
+
+    private void OnItemPlaced() {
+        if (this.isItemPlaced) {
+            GD.Print("[AluminumReaction] 已经放置过，跳过");
+            return;
+        }
+        GD.Print("[AluminumReaction] 执行放置逻辑");
+        this.isItemPlaced = true;
+        // 放置完成：隐藏两个物体并进入下一步
+        this.HideStepOneObjects();
+        this.CompleteCurrentStep();
+    }
+
+    private void OnTriggerAreaBodyEntered(Node3D body) {
+        this.HandleTriggerAreaCollision(body);
+    }
+
+    private void OnTriggerAreaBodyExited(Node3D body) {
+        this.HandleTriggerAreaExit(body);
+    }
+
+    private void OnTriggerAreaEntered(Area3D area) {
+        this.HandleTriggerAreaCollision(area);
+    }
+
+    private void OnTriggerAreaExited(Area3D area) {
+        this.HandleTriggerAreaExit(area);
+    }
+
+    private void HandleTriggerAreaCollision(Node node) {
+        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+            GD.Print($"[AluminumReaction] sodiumHydroxideSolution 进入触发区域: {node.Name}");
+            this.isSodiumHydroxideInArea = true;
+            // 参考 InclinedPlaneExperiment：只在拖拽时显示 Label
+            if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
+                this.ShowCollisionLabel();
+            }
+        }
+    }
+
+    private void HandleTriggerAreaExit(Node node) {
+        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+            GD.Print($"[AluminumReaction] sodiumHydroxideSolution 离开触发区域: {node.Name}");
+            this.isSodiumHydroxideInArea = false;
+            this.HideCollisionLabel();
+        }
+    }
+
+    private bool IsNodePartOfItem(Node node, PlacableItem item) {
+        if (node == null || item == null) {
+            return false;
+        }
+        if (node == item) {
+            return true;
+        }
+        Node current = node;
+        int depth = 0;
+        const int maxDepth = 10;
+        while (current != null && depth < maxDepth) {
+            if (current == item) {
+                return true;
+            }
+            current = current.GetParent();
+            depth++;
+        }
+        return false;
+    }
+
+    private void ShowCollisionLabel() {
+        if (this.collisionLabel != null) {
+            this.collisionLabel.Visible = true;
+        }
+    }
+
+    private void HideCollisionLabel() {
+        if (this.collisionLabel != null) {
+            this.collisionLabel.Visible = false;
+        }
+    }
+
+    private void HideStepOneObjects() {
+        if (this.sodiumHydroxideSolution != null) {
+            this.sodiumHydroxideSolution.Visible = false;
+        }
+        if (this.emptyReagent != null) {
+            this.emptyReagent.Visible = false;
+        }
+        this.HideCollisionLabel();
     }
 
     private void InitializeStepHints() {
         base.stepHints[AluminumReactionExperimentStep.Setup] = 
             "[b]步骤 1：准备阶段[/b]\n\n" +
-            "• 将实验台放置在平稳的表面上\n" +
             "• 从实验物品中选择烧杯（Beaker）\n" +
             "• 将烧杯放置在实验台上\n" +
             "• 确保实验环境安全，准备好防护用品\n\n" +

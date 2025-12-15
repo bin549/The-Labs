@@ -247,7 +247,7 @@ public partial class InclinedPlaneExperiment : LabItem {
 
     private void SetArrowHover(CubeObjectConfig config, bool hovered) {
         if (config.ArrowObject == null) return;
-        float alpha = hovered ? this.arrowHoverAlpha : this.arrowNormalAlpha;
+        float alpha = hovered ? this.arrowNormalAlpha : this.arrowHoverAlpha;
         if (config.ArrowObject is MeshInstance3D arrowMesh) {
             this.SetArrowAlpha(arrowMesh, alpha);
         } else {
