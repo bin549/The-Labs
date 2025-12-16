@@ -17,6 +17,20 @@ public partial class PlacableItem : Node3D {
 		get => this.dragPlane;
 		set => this.dragPlane = value;
 	}
+
+	// 外部调用：让物体在当前鼠标位置开始拖拽
+	public void StartDraggingAtMouse() {
+		if (!this.IsDraggable) {
+			return;
+		}
+		var mousePos = GetViewport().GetMousePosition();
+		var intersect = this.GetMouseIntersect(mousePos);
+		if (intersect == null || !intersect.ContainsKey("position")) {
+			return;
+		}
+		this.isDragging = true;
+		this.StartDrag(intersect);
+	}
 	
 	public void StopDragging() {
 		if (this.isDragging) {

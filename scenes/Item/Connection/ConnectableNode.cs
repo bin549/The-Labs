@@ -2,10 +2,8 @@ using Godot;
 using Godot.Collections;
 
 public partial class ConnectableNode : Node3D {
-    [Export] public Color SelectedColor { get; set; } = Colors.Yellow;
-    [Export] public Color ConnectedColor { get; set; } = Colors.Green;
-    private MeshInstance3D meshInstance;
-    private MeshInstance3D outlineMesh;
+    [Export] private MeshInstance3D meshInstance;
+    [Export] private MeshInstance3D outlineMesh;
     private bool isSelected = false;
     private bool isHovered = false;
     private StandardMaterial3D material;
@@ -17,11 +15,8 @@ public partial class ConnectableNode : Node3D {
             this.isSelected = value;
             if (this.isSelected && this.isHovered) {
                 this.isHovered = false;
-                if (this.outlineMesh != null) {
-                    this.outlineMesh.Visible = false;
-                }
+                this.outlineMesh.Visible = false;
             }
-            this.UpdateColor();
         }
     }
 
@@ -33,29 +28,9 @@ public partial class ConnectableNode : Node3D {
     }
 
     public override void _Ready() {
-        if (this.meshInstance == null || !GodotObject.IsInstanceValid(this.meshInstance)) {
-            foreach (Node child in GetChildren()) {
-                if (child is MeshInstance3D mesh && child != this.outlineMesh) {
-                    this.meshInstance = mesh;
-                    break;
-                }
-            }
-        }
-        if (this.outlineMesh == null || !GodotObject.IsInstanceValid(this.outlineMesh)) {
-            foreach (Node child in GetChildren()) {
-                if (child is MeshInstance3D mesh && 
-                    (child.Name.ToString().ToLower().Contains("outline") || 
-                     child.Name.ToString().ToLower().Contains("轮廓"))) {
-                    this.outlineMesh = mesh;
-                    break;
-                }
-            }
-        }
         this.EnsurePhysicsBody();
         this.SetupCollisionLayers();
-        if (this.outlineMesh != null) {
-            this.outlineMesh.Visible = false;
-        }
+        this.outlineMesh.Visible = false;
         this.ResolveConnectionManager();
     }
 
@@ -65,7 +40,7 @@ public partial class ConnectableNode : Node3D {
         if (this.connectionManager == null) {
             this.connectionManager = GetTree().Root.FindChild("ConnectionManager", true, false) as ConnectionManager;
         }
-    }
+    }   
 
     private bool IsConnectionManagerEnabled() {
         this.ResolveConnectionManager();
@@ -132,20 +107,7 @@ public partial class ConnectableNode : Node3D {
             manager.OnNodeClicked(this);
         }
     }
-
-    public void UpdateColor() {
-        if (this.meshInstance == null) return;
-        if (this.isSelected) {
-            if (this.material == null) {
-                this.material = new StandardMaterial3D();
-            }
-            this.material.AlbedoColor = this.SelectedColor;
-            this.meshInstance.MaterialOverride = this.material;
-        } else {
-            this.meshInstance.MaterialOverride = null;
-        }
-    }
-
+    
     public void OnHoverEnter() {
         this.IsHovered = true;
         if (this.outlineMesh != null && !this.isSelected) {
@@ -155,9 +117,7 @@ public partial class ConnectableNode : Node3D {
 
     public void OnHoverExit() {
         this.IsHovered = false;
-        if (this.outlineMesh != null) {
-            this.outlineMesh.Visible = false;
-        }
+        this.outlineMesh.Visible = false;
     }
 
     public override void _Input(InputEvent @event) {

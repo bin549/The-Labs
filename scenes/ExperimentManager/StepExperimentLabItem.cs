@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     where TStep : struct, Enum {
-    [Export] public Godot.Collections.Array<NodePath> placableItemPaths { get; set; } = new();
     [Export] public Label3D hintLabel { get; set; }
     [Export] public Button nextStepButton { get; set; }
     [Export] public Button playVoiceButton { get; set; }
@@ -32,7 +31,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     }
     
     protected void InitializeStepExperiment() {
-        this.InitializeExperimentItems();
         this.InitializeStepStatus();
         this.InitializeButton();
         this.InitializeVoiceButton();
@@ -42,15 +40,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         this.ShowExperimentButtons(false);
     }
 
-    protected virtual void InitializeExperimentItems() {
-        foreach (var path in placableItemPaths) {
-            if (path != null && !path.IsEmpty) {
-                var item = GetNodeOrNull<Node3D>(path);
-                if (item != null) {
-                }
-            }
-        }
-    }
 
     protected virtual void InitializeStepStatus() {
         foreach (TStep step in Enum.GetValues(typeof(TStep))) {

@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 public enum AluminumReactionExperimentStep {
     Setup,
@@ -25,35 +26,47 @@ public enum AluminumReactionExperimentItem {
 public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
     [Export] protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Setup;
     [Export] private PlacableItem sodiumHydroxideSolution;
-    [Export] private Node3D emptyReagent;
-    [Export] private Area3D triggerArea;
-    [Export] private Label3D collisionLabel;
+    [Export] private Node3D emptyReagent1;
+    [Export] private Area3D triggerArea1;
+    [Export] private Label3D collisionLabel1;
     private bool isSodiumHydroxideInArea = false;
     private bool isItemPlaced = false;
+    [Export] private Node3D fillObjects;
+    [Export] private AnimationPlayer animationPlayer;
+    private Transform3D sodiumHydroxideSolutionInitialTransform;
+    [Export] private Node3D emptyReagent2;
+    [Export] private Area3D triggerArea2;
+    [Export] private Label3D collisionLabel2;
+    private bool isStepTwoCollisionInitialized = false;
+    [Export] private Node3D matchBox;
+    [Export] private PlacableItem matchItem;
 
     public override void _Ready() {
         base._Ready();
         this.InitializeStepHints();
         base.InitializeStepExperiment();
         this.SetupStepOneCollision();
+        if (this.sodiumHydroxideSolution != null) {
+            this.sodiumHydroxideSolutionInitialTransform = this.sodiumHydroxideSolution.GlobalTransform;
+        }
     }
 
     private void SetupStepOneCollision() {
         this.isItemPlaced = false;
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = false;
+        if (this.collisionLabel1 != null) {
+            this.collisionLabel1.Visible = false;
         }
         if (this.sodiumHydroxideSolution != null) {
             this.sodiumHydroxideSolution.StopDragging();
         }
-        if (this.emptyReagent is PlacableItem emptyReagentItem) {
+        if (this.emptyReagent1 is PlacableItem emptyReagentItem) {
             emptyReagentItem.StopDragging();
         }
-        if (this.triggerArea != null) {
-            this.triggerArea.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea.AreaExited += OnTriggerAreaExited;
+        if (this.triggerArea1 != null) {
+            this.triggerArea1.BodyEntered += OnTriggerAreaBodyEntered;
+            this.triggerArea1.BodyExited += OnTriggerAreaBodyExited;
+            this.triggerArea1.AreaEntered += OnTriggerAreaEntered;
+            this.triggerArea1.AreaExited += OnTriggerAreaExited;
         }
     }
 
@@ -67,25 +80,29 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     public override void ExitInteraction() {
         base.isInteracting = false;
-        this.HideStepOneObjects();
         base.ExitInteraction();
     }
 
     public override void _Input(InputEvent @event) {
         if (!base.isInteracting) return;
-        if (@event is InputEventMouseButton mouseButton && this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
-            if (mouseButton.ButtonIndex == MouseButton.Left && !mouseButton.Pressed) {
-                GD.Print($"[AluminumReaction] 鼠标释放: isSodiumHydroxideInArea={this.isSodiumHydroxideInArea}, isItemPlaced={this.isItemPlaced}");
-                if (this.sodiumHydroxideSolution != null) {
-                    GD.Print($"[AluminumReaction] sodiumHydroxideSolution.IsDragging={this.sodiumHydroxideSolution.IsDragging}");
-                }
-            }
+        if (this.currentStep == AluminumReactionExperimentStep.CollectGas) {
+            this.HandleMatchBoxInput(@event);
         }
     }
 
     public override void _Process(double delta) {
         base._Process(delta);
-        if (base.isInteracting && this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+        if (!base.isInteracting) {
+            return;
+        }
+
+        if (this.currentStep == AluminumReactionExperimentStep.Setup) {
+            this.UpdateCollisionLabel();
+        } else if (this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            if (!this.isStepTwoCollisionInitialized) {
+                this.SetupStepTwoCollision();
+                this.isStepTwoCollisionInitialized = true;
+            }
             this.UpdateCollisionLabel();
         }
     }
@@ -95,15 +112,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             return;
         }
         if (this.sodiumHydroxideSolution.IsDragging) {
-            if (this.isSodiumHydroxideInArea) {
-                this.ShowCollisionLabel();
-            } else {
-                this.HideCollisionLabel();
-            }
+            this.ShowCollisionLabel(this.isSodiumHydroxideInArea);
         } else {
-            this.HideCollisionLabel();
             if (this.isSodiumHydroxideInArea && !this.isItemPlaced) {
-                GD.Print($"[AluminumReaction] 触发放置: isSodiumHydroxideInArea={this.isSodiumHydroxideInArea}, isItemPlaced={this.isItemPlaced}, IsDragging={this.sodiumHydroxideSolution.IsDragging}");
                 this.OnItemPlaced();
             }
         }
@@ -113,8 +124,34 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.isItemPlaced) {
             return;
         }
+        this.ShowCollisionLabel(false);
         this.isItemPlaced = true;
-        this.HideStepOneObjects();
+        this.sodiumHydroxideSolution.Visible = false;
+        if (this.currentStep == AluminumReactionExperimentStep.Setup) {
+            if (this.emptyReagent1 != null) {
+                this.emptyReagent1.Visible = false;
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            if (this.emptyReagent2 != null) {
+                this.emptyReagent2.Visible = false;
+            }
+        }
+        this.fillObjects.Visible = true;
+        this.animationPlayer.Play("fill");
+    }
+
+    private void OnItemPlacedDone() {
+        if (this.sodiumHydroxideSolution != null) {
+            this.sodiumHydroxideSolution.GlobalTransform = this.sodiumHydroxideSolutionInitialTransform;
+        }
+        this.sodiumHydroxideSolution.Visible = true;
+        if (this.currentStep == AluminumReactionExperimentStep.Setup) {
+            this.emptyReagent1.Visible = true;
+        } else if (this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            this.emptyReagent2.Visible = true;
+            this.sodiumHydroxideSolution.IsDraggable = false;
+        }
+        this.fillObjects.Visible = false;
         this.CompleteCurrentStep();
     }
 
@@ -138,7 +175,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
             this.isSodiumHydroxideInArea = true;
             if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
-                this.ShowCollisionLabel();
+                this.ShowCollisionLabel(true);
             }
         }
     }
@@ -146,7 +183,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private void HandleTriggerAreaExit(Node node) {
         if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
             this.isSodiumHydroxideInArea = false;
-            this.HideCollisionLabel();
+            this.ShowCollisionLabel(false);
         }
     }
 
@@ -170,26 +207,100 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         return false;
     }
 
-    private void ShowCollisionLabel() {
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = true;
+    private void ShowCollisionLabel(bool isShow) {
+        if (this.currentStep == AluminumReactionExperimentStep.Setup) {
+            if (this.collisionLabel1 != null) {
+                this.collisionLabel1.Visible = isShow;
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
+            if (this.collisionLabel2 != null) {
+                this.collisionLabel2.Visible = isShow;
+            }
         }
     }
 
-    private void HideCollisionLabel() {
-        if (this.collisionLabel != null) {
-            this.collisionLabel.Visible = false;
+    private void SetupStepTwoCollision() {
+        this.isItemPlaced = false;
+        this.isSodiumHydroxideInArea = false;
+        if (this.collisionLabel2 != null) {
+            this.collisionLabel2.Visible = false;
         }
-    }
-
-    private void HideStepOneObjects() {
         if (this.sodiumHydroxideSolution != null) {
-            this.sodiumHydroxideSolution.Visible = false;
+            this.sodiumHydroxideSolution.StopDragging();
         }
-        if (this.emptyReagent != null) {
-            this.emptyReagent.Visible = false;
+        if (this.emptyReagent2 is PlacableItem emptyReagentItem) {
+            emptyReagentItem.StopDragging();
         }
-        this.HideCollisionLabel();
+        if (this.triggerArea2 != null) {
+            this.triggerArea2.BodyEntered += OnTriggerAreaBodyEntered;
+            this.triggerArea2.BodyExited += OnTriggerAreaBodyExited;
+            this.triggerArea2.AreaEntered += OnTriggerAreaEntered;
+            this.triggerArea2.AreaExited += OnTriggerAreaExited;
+        }
+    }
+
+    private void HandleMatchBoxInput(InputEvent @event) {
+        if (this.matchBox == null || this.matchItem == null) {
+            return;
+        }
+        if (@event is InputEventMouseButton mouseButton) {
+            bool leftPressed = mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed;
+            if (!leftPressed) {
+                return;
+            }
+            var intersect = this.GetMouseIntersect(mouseButton.Position);
+            if (intersect == null || !intersect.ContainsKey("collider")) {
+                return;
+            }
+            var colliderVariant = intersect["collider"];
+            var collider = colliderVariant.As<Node3D>();
+            if (collider == null) {
+                return;
+            }
+            if (this.IsNodePartOfNode(collider, this.matchBox)) {
+                // 显示火柴并让其在鼠标位置进入拖拽状态
+                this.matchItem.Visible = true;
+                this.matchItem.IsDraggable = true;
+                this.matchItem.StartDraggingAtMouse();
+                GetViewport().SetInputAsHandled();
+            }
+        }
+    }
+
+    private bool IsNodePartOfNode(Node node, Node target) {
+        if (node == null || target == null) {
+            return false;
+        }
+        if (node == target) {
+            return true;
+        }
+        Node current = node;
+        int depth = 0;
+        const int maxDepth = 10;
+        while (current != null && depth < maxDepth) {
+            if (current == target) {
+                return true;
+            }
+            current = current.GetParent();
+            depth++;
+        }
+        return false;
+    }
+
+    private Dictionary GetMouseIntersect(Vector2 mousePos) {
+        var currentCamera = GetViewport().GetCamera3D();
+        if (currentCamera == null) {
+            return null;
+        }
+        var from = currentCamera.ProjectRayOrigin(mousePos);
+        var to = from + currentCamera.ProjectRayNormal(mousePos) * 1000f;
+        var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithBodies = true;
+        query.CollideWithAreas = true;
+        query.CollisionMask = 0xFFFFFFFF;
+        var spaceState = GetWorld3D().DirectSpaceState;
+        var result = spaceState.IntersectRay(query);
+        return result;
     }
 
     private void InitializeStepHints() {
