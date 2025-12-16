@@ -118,7 +118,6 @@ public partial class OhmsLawExperiment : StepExperimentLabItem<OhmsLawExperiment
             "• 思考：为什么电阻不变时，电压与电流成正比？\n" +
             "• 总结欧姆定律的应用\n\n" +
             "[color=yellow]提示：[/color] U-I 图像的斜率就是电阻值 R";
-        
         base.stepHints[OhmsLawExperimentStep.Completed] = 
             "[b]实验完成！[/b]\n\n" +
             "恭喜你完成了欧姆定律实验！\n\n" +

@@ -95,7 +95,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (!base.isInteracting) {
             return;
         }
-
         if (this.currentStep == AluminumReactionExperimentStep.Setup) {
             this.UpdateCollisionLabel();
         } else if (this.currentStep == AluminumReactionExperimentStep.PrepareReagents) {
