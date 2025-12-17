@@ -31,6 +31,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private bool isSodiumHydroxideInArea = false;
     private bool isItemPlaced = false;
     [Export] private Node3D fillObjects;
+    [Export] private Node3D dropObjects;
     [Export] private AnimationPlayer animationPlayer;
     private Transform3D sodiumHydroxideSolutionInitialTransform;
     [Export] private Node3D emptyReagent2;
@@ -298,8 +299,11 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.tweezers.Visible = false;
         }
         
-        this.fillObjects.Visible = true;
-        this.animationPlayer.Play("fill");
+        // 步骤三和步骤四使用 drop 动画和 dropObjects
+        if (this.dropObjects != null) {
+            this.dropObjects.Visible = true;
+        }
+        this.animationPlayer.Play("drop");
     }
 
     private void OnItemPlacedDone() {
@@ -315,28 +319,26 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.emptyReagent2.Visible = true;
                 this.sodiumHydroxideSolution.IsDraggable = false;
             }
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step03 || 
+                   this.currentStep == AluminumReactionExperimentStep.Step04) {
+            // 步骤三和步骤四使用相同的逻辑
             if (this.tweezers != null) {
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
             this.SwitchTweezersToNormal();
             this.isPickupAluminum = false;
-            if (this.aluminumStrip1 != null) {
-                this.aluminumStrip1.Visible = true;
-            }
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            if (this.tweezers != null) {
-                this.tweezers.GlobalTransform = this.tweezersInitialTransform;
-            }
-            this.tweezers.Visible = true;
-            this.SwitchTweezersToNormal();
-            this.isPickupAluminum = false;
-            if (this.aluminumStrip2 != null) {
-                this.aluminumStrip2.Visible = true;
+            // 不恢复 aluminumStrip（铝片已经放入试管，不需要恢复）
+            // 隐藏 dropObjects（步骤三和步骤四使用 drop 动画）
+            if (this.dropObjects != null) {
+                this.dropObjects.Visible = false;
             }
         }
-        this.fillObjects.Visible = false;
+        // 步骤一和步骤二使用 fillObjects
+        if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
+            this.currentStep == AluminumReactionExperimentStep.Step02) {
+            this.fillObjects.Visible = false;
+        }
         this.CompleteCurrentStep();
     }
 
