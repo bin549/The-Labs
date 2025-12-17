@@ -53,9 +53,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private Transform3D tweezersInitialTransform;
     private bool wasTweezersDragging = false;
     [Export] private float tweezersDragRotationAngle = 45.0f;
-    // tweezer aluminum stuff
     private bool isPickupAluminum = false;
-    // 试管口的触发区域和标签（步骤三和步骤四）
     [Export] private Area3D triggerArea3Reagent;
     [Export] private Label3D collisionLabel3Reagent;
     [Export] private Area3D triggerArea4Reagent;
@@ -165,7 +163,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         this.wasTweezersDragging = isDragging;
         
-        // 如果已经夹住铝片，检测与试管口的碰撞
         if (this.isPickupAluminum) {
             bool isInReagentArea = false;
             if (this.currentStep == AluminumReactionExperimentStep.Step03) {
@@ -181,7 +178,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 }
             }
         } else {
-            // 第一步：检测与铝片的碰撞
             bool isInArea = false;
             bool isPlaced = false;
             if (this.currentStep == AluminumReactionExperimentStep.Step03) {
@@ -230,14 +226,12 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void SwitchTweezersToWithAluminum() {
-        // 使用 SwitchablePlacableItem 的切换方法
         if (this.tweezers != null) {
             this.tweezers.SwitchToSwitched();
         }
     }
 
     private void SwitchTweezersToNormal() {
-        // 使用 SwitchablePlacableItem 的切换方法
         if (this.tweezers != null) {
             this.tweezers.SwitchToNormal();
         }
@@ -260,17 +254,14 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void OnAluminumPickedUp() {
-        // 第一步：夹住铝片
         if (this.isPickupAluminum) {
             return;
         }
         this.ShowAluminumCollisionLabel(false);
         this.isPickupAluminum = true;
         
-        // 切换镊子显示（隐藏普通镊子，显示夹着铝片的镊子）
         this.SwitchTweezersToWithAluminum();
         
-        // 隐藏铝片
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (this.aluminumStrip1 != null) {
                 this.aluminumStrip1.Visible = false;
@@ -281,7 +272,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
         }
         
-        // 初始化试管口碰撞检测
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             this.SetupStepThreeCollisionReagent();
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
@@ -290,7 +280,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void OnAluminumDroppedIntoReagent() {
-        // 第二步：将铝片放入试管，触发动画
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (this.isItemPlaced3) {
                 return;
@@ -305,12 +294,10 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.isItemPlaced4 = true;
         }
         
-        // 隐藏镊子（节点由 SwitchablePlacableItem 管理）
         if (this.tweezers != null) {
             this.tweezers.Visible = false;
         }
         
-        // 播放动画
         this.fillObjects.Visible = true;
         this.animationPlayer.Play("fill");
     }
@@ -333,9 +320,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
-            // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
             this.SwitchTweezersToNormal();
-            // 重置状态
             this.isPickupAluminum = false;
             if (this.aluminumStrip1 != null) {
                 this.aluminumStrip1.Visible = true;
@@ -345,9 +330,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
-            // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
             this.SwitchTweezersToNormal();
-            // 重置状态
             this.isPickupAluminum = false;
             if (this.aluminumStrip2 != null) {
                 this.aluminumStrip2.Visible = true;
@@ -368,7 +351,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
         }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            // 检测是否在铝片区域（第一步）
             if (triggerArea == this.triggerArea3) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
                     this.isTweezersInArea3 = true;
@@ -377,7 +359,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     }
                 }
             }
-            // 检测是否在试管口区域（第二步）
             else if (triggerArea == this.triggerArea3Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea3 = true;
@@ -387,7 +368,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 }
             }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            // 检测是否在铝片区域（第一步）
             if (triggerArea == this.triggerArea4) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
                     this.isTweezersInArea4 = true;
@@ -396,7 +376,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     }
                 }
             }
-            // 检测是否在试管口区域（第二步）
             else if (triggerArea == this.triggerArea4Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea4 = true;
@@ -416,14 +395,12 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.ShowCollisionLabel(false);
         }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            // 铝片区域退出
             if (triggerArea == this.triggerArea3) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
                     this.isTweezersInArea3 = false;
                     this.ShowAluminumCollisionLabel(false);
                 }
             }
-            // 试管口区域退出
             else if (triggerArea == this.triggerArea3Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea3 = false;
@@ -431,14 +408,12 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 }
             }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            // 铝片区域退出
             if (triggerArea == this.triggerArea4) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
                     this.isTweezersInArea4 = false;
                     this.ShowAluminumCollisionLabel(false);
                 }
             }
-            // 试管口区域退出
             else if (triggerArea == this.triggerArea4Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea4 = false;
@@ -529,7 +504,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.collisionLabel3 != null) {
             this.collisionLabel3.Visible = false;
         }
-        // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
         this.SwitchTweezersToNormal();
         if (this.triggerArea3 != null) {
             this.triggerArea3.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea3);
@@ -577,7 +551,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.tweezers.StopDragging();
             this.RestoreTweezersRotation();
         }
-        // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
         this.SwitchTweezersToNormal();
         if (this.triggerArea4 != null) {
             this.triggerArea4.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea4);

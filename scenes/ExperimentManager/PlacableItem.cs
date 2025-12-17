@@ -27,7 +27,6 @@ public partial class PlacableItem : Node3D {
 	}
 
 	public void UpdateOutlineVisibility() {
-		// 更新 outline 显示，用于状态切换时
 		if (this.outlineMesh != null) {
 			if (this.isHovered && this.IsNodeVisible(this.outlineMesh)) {
 				this.outlineMesh.Visible = true;
@@ -63,7 +62,6 @@ public partial class PlacableItem : Node3D {
 
 	private bool IsNodeVisible(Node3D node) {
 		if (node == null) return false;
-		// 检查节点本身及其所有父节点是否可见
 		Node current = node;
 		int depth = 0;
 		const int maxDepth = 10;
