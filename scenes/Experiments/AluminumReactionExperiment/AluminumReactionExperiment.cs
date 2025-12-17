@@ -37,7 +37,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Area3D triggerArea2;
     [Export] private Label3D collisionLabel2;
     private bool isStepTwoCollisionInitialized = false;
-    [Export] private PlacableItem tweezers;
+    [Export] private SwitchablePlacableItem tweezers;
     [Export] private Node3D aluminumStrip1;
     [Export] private Area3D triggerArea3;
     [Export] private Label3D collisionLabel3;
@@ -55,6 +55,13 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private float tweezersDragRotationAngle = 45.0f;
     // tweezer aluminum stuff
     private bool isPickupAluminum = false;
+    // 试管口的触发区域和标签（步骤三和步骤四）
+    [Export] private Area3D triggerArea3Reagent;
+    [Export] private Label3D collisionLabel3Reagent;
+    [Export] private Area3D triggerArea4Reagent;
+    [Export] private Label3D collisionLabel4Reagent;
+    private bool isTweezersInReagentArea3 = false;
+    private bool isTweezersInReagentArea4 = false;
 
     public override void _Ready() {
         base._Ready();
@@ -81,10 +88,10 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             emptyReagentItem.StopDragging();
         }
         if (this.triggerArea1 != null) {
-            this.triggerArea1.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea1.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea1.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea1.AreaExited += OnTriggerAreaExited;
+            this.triggerArea1.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea1);
+            this.triggerArea1.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea1);
+            this.triggerArea1.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea1);
+            this.triggerArea1.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea1);
         }
     }
 
@@ -104,7 +111,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     public override void _Input(InputEvent @event) {
         if (!base.isInteracting) return;
     }
- 
+
     public override void _Process(double delta) {
         base._Process(delta);
         if (!base.isInteracting) {
@@ -150,18 +157,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.tweezers == null) {
             return;
         }
-        bool isInArea = false;
-        bool isPlaced = false;
-        if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            isInArea = this.isTweezersInArea3;
-            isPlaced = this.isItemPlaced3;
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            isInArea = this.isTweezersInArea4;
-            isPlaced = this.isItemPlaced4;
-        }
-        if (isPlaced) {
-            return;
-        }
         bool isDragging = this.tweezers.IsDragging;
         if (isDragging && !this.wasTweezersDragging) {
             this.ApplyTweezersDragRotation();
@@ -169,11 +164,42 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.RestoreTweezersRotation();
         }
         this.wasTweezersDragging = isDragging;
-        if (isDragging) {
-            this.ShowAluminumCollisionLabel(isInArea);
+        
+        // 如果已经夹住铝片，检测与试管口的碰撞
+        if (this.isPickupAluminum) {
+            bool isInReagentArea = false;
+            if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+                isInReagentArea = this.isTweezersInReagentArea3;
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+                isInReagentArea = this.isTweezersInReagentArea4;
+            }
+            if (isDragging) {
+                this.ShowReagentCollisionLabel(isInReagentArea);
+            } else {
+                if (isInReagentArea && !this.isItemPlaced3 && !this.isItemPlaced4) {
+                    this.OnAluminumDroppedIntoReagent();
+                }
+            }
         } else {
-            if (isInArea && !isPlaced) {
-                this.OnAluminumPlaced();
+            // 第一步：检测与铝片的碰撞
+            bool isInArea = false;
+            bool isPlaced = false;
+            if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+                isInArea = this.isTweezersInArea3;
+                isPlaced = this.isItemPlaced3;
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+                isInArea = this.isTweezersInArea4;
+                isPlaced = this.isItemPlaced4;
+            }
+            if (isPlaced) {
+                return;
+            }
+            if (isDragging) {
+                this.ShowAluminumCollisionLabel(isInArea);
+            } else {
+                if (isInArea && !isPlaced) {
+                    this.OnAluminumPickedUp();
+                }
             }
         }
     }
@@ -203,6 +229,20 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.tweezers.Rotation = initialRotation;
     }
 
+    private void SwitchTweezersToWithAluminum() {
+        // 使用 SwitchablePlacableItem 的切换方法
+        if (this.tweezers != null) {
+            this.tweezers.SwitchToSwitched();
+        }
+    }
+
+    private void SwitchTweezersToNormal() {
+        // 使用 SwitchablePlacableItem 的切换方法
+        if (this.tweezers != null) {
+            this.tweezers.SwitchToNormal();
+        }
+    }
+
     private void OnItemPlaced() {
         if (this.isItemPlaced) {
             return;
@@ -219,26 +259,60 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.animationPlayer.Play("fill");
     }
 
-    private void OnAluminumPlaced() {
+    private void OnAluminumPickedUp() {
+        // 第一步：夹住铝片
+        if (this.isPickupAluminum) {
+            return;
+        }
+        this.ShowAluminumCollisionLabel(false);
+        this.isPickupAluminum = true;
+        
+        // 切换镊子显示（隐藏普通镊子，显示夹着铝片的镊子）
+        this.SwitchTweezersToWithAluminum();
+        
+        // 隐藏铝片
+        if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+            if (this.aluminumStrip1 != null) {
+                this.aluminumStrip1.Visible = false;
+    }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+            if (this.aluminumStrip2 != null) {
+                this.aluminumStrip2.Visible = false;
+            }
+        }
+        
+        // 初始化试管口碰撞检测
+        if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+            this.SetupStepThreeCollisionReagent();
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+            this.SetupStepFourCollisionReagent();
+        }
+    }
+
+    private void OnAluminumDroppedIntoReagent() {
+        // 第二步：将铝片放入试管，触发动画
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (this.isItemPlaced3) {
                 return;
             }
-            this.ShowAluminumCollisionLabel(false);
+            this.ShowReagentCollisionLabel(false);
             this.isItemPlaced3 = true;
-            this.tweezers.Visible = false;
-            this.aluminumStrip1.Visible = false;
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
             if (this.isItemPlaced4) {
                 return;
             }
-            this.ShowAluminumCollisionLabel(false);
+            this.ShowReagentCollisionLabel(false);
             this.isItemPlaced4 = true;
-            this.tweezers.Visible = false;
-            this.aluminumStrip2.Visible = false;
         }
+        
+        // 隐藏镊子（节点由 SwitchablePlacableItem 管理）
+        if (this.tweezers != null) {
+            this.tweezers.Visible = false;
+        }
+        
+        // 播放动画
         this.fillObjects.Visible = true;
-        // this.animationPlayer.Play("fill");
+        this.animationPlayer.Play("fill");
     }
 
     private void OnItemPlacedDone() {
@@ -246,7 +320,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.currentStep == AluminumReactionExperimentStep.Step02) {
             if (this.sodiumHydroxideSolution != null) {
                 this.sodiumHydroxideSolution.GlobalTransform = this.sodiumHydroxideSolutionInitialTransform;
-            }
+    }
             this.sodiumHydroxideSolution.Visible = true;
             if (this.currentStep == AluminumReactionExperimentStep.Step01) {
                 this.emptyReagent1.Visible = true;
@@ -259,6 +333,10 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
+            // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
+            this.SwitchTweezersToNormal();
+            // 重置状态
+            this.isPickupAluminum = false;
             if (this.aluminumStrip1 != null) {
                 this.aluminumStrip1.Visible = true;
             }
@@ -267,6 +345,10 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
+            // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
+            this.SwitchTweezersToNormal();
+            // 重置状态
+            this.isPickupAluminum = false;
             if (this.aluminumStrip2 != null) {
                 this.aluminumStrip2.Visible = true;
             }
@@ -275,67 +357,97 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.CompleteCurrentStep();
     }
 
-    private void OnTriggerAreaBodyEntered(Node3D body) {
-        this.HandleTriggerAreaCollision(body);
-    }
 
-    private void OnTriggerAreaBodyExited(Node3D body) {
-        this.HandleTriggerAreaExit(body);
-    }
-
-    private void OnTriggerAreaEntered(Area3D area) {
-        this.HandleTriggerAreaCollision(area);
-    }
-
-    private void OnTriggerAreaExited(Area3D area) {
-        this.HandleTriggerAreaExit(area);
-    }
-
-    private void HandleTriggerAreaCollision(Node node) {
+    private void HandleTriggerAreaCollision(Node node, Area3D triggerArea) {
         if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
             this.currentStep == AluminumReactionExperimentStep.Step02) {
-            if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
-                this.isSodiumHydroxideInArea = true;
-                if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
-                    this.ShowCollisionLabel(true);
+        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+            this.isSodiumHydroxideInArea = true;
+            if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
+                this.ShowCollisionLabel(true);
+            }
+        }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+            // 检测是否在铝片区域（第一步）
+            if (triggerArea == this.triggerArea3) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
+                    this.isTweezersInArea3 = true;
+                    if (this.tweezers != null && this.tweezers.IsDragging) {
+                        this.ShowAluminumCollisionLabel(true);
+                    }
                 }
             }
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            if (this.IsNodePartOfItem(node, this.tweezers)) {
-                this.isTweezersInArea3 = true;
-                if (this.tweezers != null && this.tweezers.IsDragging) {
-                    this.ShowAluminumCollisionLabel(true);
+            // 检测是否在试管口区域（第二步）
+            else if (triggerArea == this.triggerArea3Reagent) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
+                    this.isTweezersInReagentArea3 = true;
+                    if (this.tweezers != null && this.tweezers.IsDragging) {
+                        this.ShowReagentCollisionLabel(true);
+                    }
                 }
             }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            if (this.IsNodePartOfItem(node, this.tweezers)) {
-                this.isTweezersInArea4 = true;
-                if (this.tweezers != null && this.tweezers.IsDragging) {
-                    this.ShowAluminumCollisionLabel(true);
+            // 检测是否在铝片区域（第一步）
+            if (triggerArea == this.triggerArea4) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
+                    this.isTweezersInArea4 = true;
+                    if (this.tweezers != null && this.tweezers.IsDragging) {
+                        this.ShowAluminumCollisionLabel(true);
+                    }
+                }
+            }
+            // 检测是否在试管口区域（第二步）
+            else if (triggerArea == this.triggerArea4Reagent) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
+                    this.isTweezersInReagentArea4 = true;
+                    if (this.tweezers != null && this.tweezers.IsDragging) {
+                        this.ShowReagentCollisionLabel(true);
+                    }
                 }
             }
         }
     }
 
-    private void HandleTriggerAreaExit(Node node) {
+    private void HandleTriggerAreaExit(Node node, Area3D triggerArea) {
         if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
             this.currentStep == AluminumReactionExperimentStep.Step02) {
-            if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
-                this.isSodiumHydroxideInArea = false;
-                this.ShowCollisionLabel(false);
-            }
+        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+            this.isSodiumHydroxideInArea = false;
+            this.ShowCollisionLabel(false);
+        }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            if (this.IsNodePartOfItem(node, this.tweezers)) {
-                this.isTweezersInArea3 = false;
-                this.ShowAluminumCollisionLabel(false);
+            // 铝片区域退出
+            if (triggerArea == this.triggerArea3) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
+                    this.isTweezersInArea3 = false;
+                    this.ShowAluminumCollisionLabel(false);
+                }
+            }
+            // 试管口区域退出
+            else if (triggerArea == this.triggerArea3Reagent) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
+                    this.isTweezersInReagentArea3 = false;
+                    this.ShowReagentCollisionLabel(false);
+                }
             }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            if (this.IsNodePartOfItem(node, this.tweezers)) {
-                this.isTweezersInArea4 = false;
-                this.ShowAluminumCollisionLabel(false);
+            // 铝片区域退出
+            if (triggerArea == this.triggerArea4) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
+                    this.isTweezersInArea4 = false;
+                    this.ShowAluminumCollisionLabel(false);
+                }
+            }
+            // 试管口区域退出
+            else if (triggerArea == this.triggerArea4Reagent) {
+                if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
+                    this.isTweezersInReagentArea4 = false;
+                    this.ShowReagentCollisionLabel(false);
+                }
             }
         }
     }
+
 
     private bool IsNodePartOfItem(Node node, PlacableItem item) {
         if (node == null || item == null) {
@@ -367,9 +479,25 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     private void ShowAluminumCollisionLabel(bool isShow) {
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-            this.collisionLabel3.Visible = isShow;
+            if (this.collisionLabel3 != null) {
+                this.collisionLabel3.Visible = isShow;
+            }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-            this.collisionLabel4.Visible = isShow;
+            if (this.collisionLabel4 != null) {
+                this.collisionLabel4.Visible = isShow;
+            }
+        }
+    }
+
+    private void ShowReagentCollisionLabel(bool isShow) {
+        if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+            if (this.collisionLabel3Reagent != null) {
+                this.collisionLabel3Reagent.Visible = isShow;
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+            if (this.collisionLabel4Reagent != null) {
+                this.collisionLabel4Reagent.Visible = isShow;
+            }
         }
     }
 
@@ -386,38 +514,61 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             emptyReagentItem.StopDragging();
         }
         if (this.triggerArea2 != null) {
-            this.triggerArea2.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea2.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea2.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea2.AreaExited += OnTriggerAreaExited;
+            this.triggerArea2.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea2);
+            this.triggerArea2.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea2);
+            this.triggerArea2.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea2);
+            this.triggerArea2.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea2);
         }
     }
 
     private void SetupStepThreeCollisionAluminum() {
         this.isItemPlaced3 = false;
         this.isTweezersInArea3 = false;
+        this.isPickupAluminum = false;
         this.wasTweezersDragging = false;
         if (this.collisionLabel3 != null) {
             this.collisionLabel3.Visible = false;
         }
+        // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
+        this.SwitchTweezersToNormal();
         if (this.triggerArea3 != null) {
-            this.triggerArea3.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea3.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea3.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea3.AreaExited += OnTriggerAreaExited;
+            this.triggerArea3.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea3);
+            this.triggerArea3.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea3);
+            this.triggerArea3.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea3);
+            this.triggerArea3.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea3);
         }
     }
 
     private void SetupStepThreeCollisionReagent() {
-        if (this.tweezers != null) {
-            this.tweezers.StopDragging();
-            this.RestoreTweezersRotation();
+        this.isTweezersInReagentArea3 = false;
+        if (this.collisionLabel3Reagent != null) {
+            this.collisionLabel3Reagent.Visible = false;
+        }
+        if (this.triggerArea3Reagent != null) {
+            this.triggerArea3Reagent.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea3Reagent);
+            this.triggerArea3Reagent.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea3Reagent);
+            this.triggerArea3Reagent.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea3Reagent);
+            this.triggerArea3Reagent.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea3Reagent);
+        }
+    }
+
+    private void SetupStepFourCollisionReagent() {
+        this.isTweezersInReagentArea4 = false;
+        if (this.collisionLabel4Reagent != null) {
+            this.collisionLabel4Reagent.Visible = false;
+        }
+        if (this.triggerArea4Reagent != null) {
+            this.triggerArea4Reagent.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea4Reagent);
+            this.triggerArea4Reagent.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea4Reagent);
+            this.triggerArea4Reagent.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea4Reagent);
+            this.triggerArea4Reagent.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea4Reagent);
         }
     }
 
     private void SetupStepFourCollision() {
         this.isItemPlaced4 = false;
         this.isTweezersInArea4 = false;
+        this.isPickupAluminum = false;
         this.wasTweezersDragging = false;
         if (this.collisionLabel4 != null) {
             this.collisionLabel4.Visible = false;
@@ -426,11 +577,13 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.tweezers.StopDragging();
             this.RestoreTweezersRotation();
         }
+        // 恢复镊子显示（显示普通镊子，隐藏夹着铝片的镊子）
+        this.SwitchTweezersToNormal();
         if (this.triggerArea4 != null) {
-            this.triggerArea4.BodyEntered += OnTriggerAreaBodyEntered;
-            this.triggerArea4.BodyExited += OnTriggerAreaBodyExited;
-            this.triggerArea4.AreaEntered += OnTriggerAreaEntered;
-            this.triggerArea4.AreaExited += OnTriggerAreaExited;
+            this.triggerArea4.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea4);
+            this.triggerArea4.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea4);
+            this.triggerArea4.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea4);
+            this.triggerArea4.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea4);
         }
     }
 

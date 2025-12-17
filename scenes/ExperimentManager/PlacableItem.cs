@@ -9,6 +9,7 @@ public partial class PlacableItem : Node3D {
 	[Export] private DragPlaneType dragPlane2 = DragPlaneType.Horizontal;
 	private DragPlaneType dragPlane = DragPlaneType.VerticalX;
 	private Vector3 initialDragPosition;
+	[Export] private MeshInstance3D mesh;
 	[Export] private MeshInstance3D outlineMesh;
 	[Export] protected Area3D collisionArea;
 	private bool isHovered = false;
@@ -25,6 +26,17 @@ public partial class PlacableItem : Node3D {
 		}
 	}
 
+	public void UpdateOutlineVisibility() {
+		// 更新 outline 显示，用于状态切换时
+		if (this.outlineMesh != null) {
+			if (this.isHovered && this.IsNodeVisible(this.outlineMesh)) {
+				this.outlineMesh.Visible = true;
+			} else {
+				this.outlineMesh.Visible = false;
+			}
+		}
+	}
+
 	public override void _Ready() {
 		base._Ready();
 		this.dragPlane = this.dragPlane1;
@@ -36,7 +48,7 @@ public partial class PlacableItem : Node3D {
 	private void OnMouseEntered() {
 		if (this.isHovered) return;
 		this.isHovered = true;
-		if (this.outlineMesh != null) {
+		if (this.outlineMesh != null && this.IsNodeVisible(this.outlineMesh)) {
 			this.outlineMesh.Visible = true;
 		}
 	}
@@ -44,9 +56,25 @@ public partial class PlacableItem : Node3D {
 	private void OnMouseExited() {
 		if (!this.isHovered) return;
 		this.isHovered = false;
-		if (this.outlineMesh != null) {
+		if (this.outlineMesh != null && this.IsNodeVisible(this.outlineMesh)) {
 			this.outlineMesh.Visible = false;
 		}
+	}
+
+	private bool IsNodeVisible(Node3D node) {
+		if (node == null) return false;
+		// 检查节点本身及其所有父节点是否可见
+		Node current = node;
+		int depth = 0;
+		const int maxDepth = 10;
+		while (current != null && depth < maxDepth) {
+			if (current is Node3D node3d && !node3d.Visible) {
+				return false;
+			}
+			current = current.GetParent();
+			depth++;
+		}
+		return true;
 	}
 
 	public override void _Input(InputEvent @event) {
