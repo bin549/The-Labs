@@ -40,7 +40,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         this.ShowExperimentButtons(false);
     }
 
-
     protected virtual void InitializeStepStatus() {
         foreach (TStep step in Enum.GetValues(typeof(TStep))) {
             this.stepCompletionStatus[step] = false;
