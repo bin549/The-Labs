@@ -22,11 +22,9 @@ public enum AluminumReactionExperimentItem {
     Thermometer
 }
 
-public partial class
-    AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
+public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
     [Export]
     protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Step01;
-
     [Export] private PlacableItem sodiumHydroxideSolution;
     [Export] private Node3D emptyReagent1;
     [Export] private Area3D triggerArea1;
@@ -74,7 +72,7 @@ public partial class
             this.sodiumHydroxideSolutionInitialTransform = this.sodiumHydroxideSolution.GlobalTransform;
         }
         if (this.tweezers != null) {
-            this.tweezersInitialTransform = this.tweezers.GlobalTransform;
+            this.tweezersInitialTransform = this.tweezers.Global Transform;
         }
     }
 
@@ -413,7 +411,6 @@ public partial class
         }
     }
 
-
     private bool IsNodePartOfItem(Node node, PlacableItem item) {
         if (node == null || item == null) {
             return false;
@@ -556,19 +553,19 @@ public partial class
 
     private void InitializeStepHints() {
         base.stepHints[AluminumReactionExperimentStep.Step01] =
-            "[b]步骤 1：将氢氧化钠倒入试剂1";
+            "[b]步骤 1：将氢氧化钠倒入第一根试剂";
         base.stepHints[AluminumReactionExperimentStep.Step02] =
-            "[b]步骤 2：将氢氧化钠倒入试剂2";
+            "[b]步骤 2：将氢氧化钠倒入第二根试剂";
         base.stepHints[AluminumReactionExperimentStep.Step03] =
-            "[b]步骤 3：使用镊子夹将铝片1放到试剂1";
+            "[b]步骤 3：使用镊子夹将第一个铝片放到第一根试剂";
         base.stepHints[AluminumReactionExperimentStep.Step04] =
-            "[b]步骤 4：使用镊子夹将铝片2放到试剂2";
+            "[b]步骤 4：使用镊子夹将第二个铝片放到第二根试剂";
         base.stepHints[AluminumReactionExperimentStep.Step05] =
             "[b]步骤 5：拾取火柴并点燃木棍";
         base.stepHints[AluminumReactionExperimentStep.Step06] =
-            "[b]步骤 6：点燃的木棍靠近试剂1试管口检测生成气体";
+            "[b]步骤 6：点燃的木棍靠近第一根试剂试管口检测生成气体";
         base.stepHints[AluminumReactionExperimentStep.Step07] =
-            "[b]步骤 7：点燃的木棍靠近试剂2     试管口检测生成气体";
+            "[b]步骤 7：点燃的木棍靠近第二根试剂管口检测生成气体";
         base.stepHints[AluminumReactionExperimentStep.Step08] =
             "[b]实验完成！[/b]实验结束";
     }
@@ -576,19 +573,19 @@ public partial class
     protected override string GetStepName(AluminumReactionExperimentStep step) {
         switch (step) {
             case AluminumReactionExperimentStep.Step01:
-                return "将氢氧化钠倒入试剂1";
+                return "将氢氧化钠倒入第一根试剂";
             case AluminumReactionExperimentStep.Step02:
-                return "将氢氧化钠倒入试剂2";
+                return "将氢氧化钠倒入第二根试剂";
             case AluminumReactionExperimentStep.Step03:
-                return "使用镊子夹将铝片1放到试剂1";
+                return "使用镊子夹将第一个铝片放到第一根试剂";
             case AluminumReactionExperimentStep.Step04:
-                return "使用镊子夹将铝片2放到试剂2";
+                return "使用镊子夹将第二个铝片放到第二根试剂";
             case AluminumReactionExperimentStep.Step05:
                 return "拾取火柴并点燃木棍";
             case AluminumReactionExperimentStep.Step06:
-                return "点燃的木棍靠近试管口1检测生成气体";
+                return "点燃的木棍靠近第一根试剂试管口检测生成气体";
             case AluminumReactionExperimentStep.Step07:
-                return "点燃的木棍靠近试管口2检测生成气体";
+                return "点燃的木棍靠近第二根试剂管口检测生成气体";
             case AluminumReactionExperimentStep.Step08:
                 return "实验完成";
             default:
