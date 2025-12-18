@@ -158,7 +158,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             return;
         }
         bool isDragging = this.tweezers.IsDragging;
-        if (isDragging && !this.wasTweezersDragging) {
+        if (isDragging && !this.wasTweezersDragging && !this.isPickupAluminum) {
             this.ApplyTweezersDragRotation();
         } else if (!isDragging && this.wasTweezersDragging) {
             this.RestoreTweezersRotation();
