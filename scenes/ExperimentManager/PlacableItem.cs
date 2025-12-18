@@ -61,8 +61,7 @@ public partial class PlacableItem : Node3D {
 	}
 
 	private bool IsNodeVisible(Node3D node) {
-		if (node == null) return false;
-		Node current = node;
+		Node current = node.GetParent();
 		int depth = 0;
 		const int maxDepth = 10;
 		while (current != null && depth < maxDepth) {

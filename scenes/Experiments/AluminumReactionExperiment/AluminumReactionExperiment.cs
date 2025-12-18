@@ -72,7 +72,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.sodiumHydroxideSolutionInitialTransform = this.sodiumHydroxideSolution.GlobalTransform;
         }
         if (this.tweezers != null) {
-            this.tweezersInitialTransform = this.tweezers.Global Transform;
+            this.tweezersInitialTransform = this.tweezers.GlobalTransform;
         }
     }
 
