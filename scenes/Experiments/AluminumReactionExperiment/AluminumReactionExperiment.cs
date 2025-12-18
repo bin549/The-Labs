@@ -22,8 +22,11 @@ public enum AluminumReactionExperimentItem {
     Thermometer
 }
 
-public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
-    [Export] protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Step01;
+public partial class
+    AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
+    [Export]
+    protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Step01;
+
     [Export] private PlacableItem sodiumHydroxideSolution;
     [Export] private Node3D emptyReagent1;
     [Export] private Area3D triggerArea1;
@@ -163,7 +166,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.RestoreTweezersRotation();
         }
         this.wasTweezersDragging = isDragging;
-        
         if (this.isPickupAluminum) {
             bool isInReagentArea = false;
             if (this.currentStep == AluminumReactionExperimentStep.Step03) {
@@ -260,19 +262,16 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         this.ShowAluminumCollisionLabel(false);
         this.isPickupAluminum = true;
-        
         this.SwitchTweezersToWithAluminum();
-        
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (this.aluminumStrip1 != null) {
                 this.aluminumStrip1.Visible = false;
-    }
+            }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
             if (this.aluminumStrip2 != null) {
                 this.aluminumStrip2.Visible = false;
             }
         }
-        
         if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             this.SetupStepThreeCollisionReagent();
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
@@ -294,12 +293,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.ShowReagentCollisionLabel(false);
             this.isItemPlaced4 = true;
         }
-        
         if (this.tweezers != null) {
             this.tweezers.Visible = false;
         }
-        
-        // 步骤三和步骤四使用 drop 动画和 dropObjects
         if (this.dropObjects != null) {
             this.dropObjects.Visible = true;
         }
@@ -307,11 +303,11 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void OnItemPlacedDone() {
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
+        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {
             if (this.sodiumHydroxideSolution != null) {
                 this.sodiumHydroxideSolution.GlobalTransform = this.sodiumHydroxideSolutionInitialTransform;
-    }
+            }
             this.sodiumHydroxideSolution.Visible = true;
             if (this.currentStep == AluminumReactionExperimentStep.Step01) {
                 this.emptyReagent1.Visible = true;
@@ -319,23 +315,19 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.emptyReagent2.Visible = true;
                 this.sodiumHydroxideSolution.IsDraggable = false;
             }
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step03 || 
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step03 ||
                    this.currentStep == AluminumReactionExperimentStep.Step04) {
-            // 步骤三和步骤四使用相同的逻辑
             if (this.tweezers != null) {
                 this.tweezers.GlobalTransform = this.tweezersInitialTransform;
             }
             this.tweezers.Visible = true;
             this.SwitchTweezersToNormal();
             this.isPickupAluminum = false;
-            // 不恢复 aluminumStrip（铝片已经放入试管，不需要恢复）
-            // 隐藏 dropObjects（步骤三和步骤四使用 drop 动画）
             if (this.dropObjects != null) {
                 this.dropObjects.Visible = false;
             }
         }
-        // 步骤一和步骤二使用 fillObjects
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
+        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {
             this.fillObjects.Visible = false;
         }
@@ -344,14 +336,14 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
 
     private void HandleTriggerAreaCollision(Node node, Area3D triggerArea) {
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
+        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {
-        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
-            this.isSodiumHydroxideInArea = true;
-            if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
-                this.ShowCollisionLabel(true);
+            if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+                this.isSodiumHydroxideInArea = true;
+                if (this.sodiumHydroxideSolution != null && this.sodiumHydroxideSolution.IsDragging) {
+                    this.ShowCollisionLabel(true);
+                }
             }
-        }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (triggerArea == this.triggerArea3) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
@@ -360,8 +352,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                         this.ShowAluminumCollisionLabel(true);
                     }
                 }
-            }
-            else if (triggerArea == this.triggerArea3Reagent) {
+            } else if (triggerArea == this.triggerArea3Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea3 = true;
                     if (this.tweezers != null && this.tweezers.IsDragging) {
@@ -377,8 +368,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                         this.ShowAluminumCollisionLabel(true);
                     }
                 }
-            }
-            else if (triggerArea == this.triggerArea4Reagent) {
+            } else if (triggerArea == this.triggerArea4Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea4 = true;
                     if (this.tweezers != null && this.tweezers.IsDragging) {
@@ -390,20 +380,19 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void HandleTriggerAreaExit(Node node, Area3D triggerArea) {
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 || 
+        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {
-        if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
-            this.isSodiumHydroxideInArea = false;
-            this.ShowCollisionLabel(false);
-        }
+            if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
+                this.isSodiumHydroxideInArea = false;
+                this.ShowCollisionLabel(false);
+            }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (triggerArea == this.triggerArea3) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
                     this.isTweezersInArea3 = false;
                     this.ShowAluminumCollisionLabel(false);
                 }
-            }
-            else if (triggerArea == this.triggerArea3Reagent) {
+            } else if (triggerArea == this.triggerArea3Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea3 = false;
                     this.ShowReagentCollisionLabel(false);
@@ -415,8 +404,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     this.isTweezersInArea4 = false;
                     this.ShowAluminumCollisionLabel(false);
                 }
-            }
-            else if (triggerArea == this.triggerArea4Reagent) {
+            } else if (triggerArea == this.triggerArea4Reagent) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && this.isPickupAluminum) {
                     this.isTweezersInReagentArea4 = false;
                     this.ShowReagentCollisionLabel(false);
@@ -521,9 +509,11 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.collisionLabel3Reagent.Visible = false;
         }
         if (this.triggerArea3Reagent != null) {
-            this.triggerArea3Reagent.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea3Reagent);
+            this.triggerArea3Reagent.BodyEntered +=
+                (body) => this.HandleTriggerAreaCollision(body, this.triggerArea3Reagent);
             this.triggerArea3Reagent.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea3Reagent);
-            this.triggerArea3Reagent.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea3Reagent);
+            this.triggerArea3Reagent.AreaEntered +=
+                (area) => this.HandleTriggerAreaCollision(area, this.triggerArea3Reagent);
             this.triggerArea3Reagent.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea3Reagent);
         }
     }
@@ -534,9 +524,11 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.collisionLabel4Reagent.Visible = false;
         }
         if (this.triggerArea4Reagent != null) {
-            this.triggerArea4Reagent.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerArea4Reagent);
+            this.triggerArea4Reagent.BodyEntered +=
+                (body) => this.HandleTriggerAreaCollision(body, this.triggerArea4Reagent);
             this.triggerArea4Reagent.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea4Reagent);
-            this.triggerArea4Reagent.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea4Reagent);
+            this.triggerArea4Reagent.AreaEntered +=
+                (area) => this.HandleTriggerAreaCollision(area, this.triggerArea4Reagent);
             this.triggerArea4Reagent.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea4Reagent);
         }
     }
@@ -563,21 +555,21 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void InitializeStepHints() {
-        base.stepHints[AluminumReactionExperimentStep.Step01] = 
+        base.stepHints[AluminumReactionExperimentStep.Step01] =
             "[b]步骤 1：将氢氧化钠倒入试剂1";
-        base.stepHints[AluminumReactionExperimentStep.Step02] = 
+        base.stepHints[AluminumReactionExperimentStep.Step02] =
             "[b]步骤 2：将氢氧化钠倒入试剂2";
-        base.stepHints[AluminumReactionExperimentStep.Step03] = 
+        base.stepHints[AluminumReactionExperimentStep.Step03] =
             "[b]步骤 3：使用镊子夹将铝片1放到试剂1";
-        base.stepHints[AluminumReactionExperimentStep.Step04] = 
+        base.stepHints[AluminumReactionExperimentStep.Step04] =
             "[b]步骤 4：使用镊子夹将铝片2放到试剂2";
-        base.stepHints[AluminumReactionExperimentStep.Step05] = 
+        base.stepHints[AluminumReactionExperimentStep.Step05] =
             "[b]步骤 5：拾取火柴并点燃木棍";
-        base.stepHints[AluminumReactionExperimentStep.Step06] = 
+        base.stepHints[AluminumReactionExperimentStep.Step06] =
             "[b]步骤 6：点燃的木棍靠近试剂1试管口检测生成气体";
-        base.stepHints[AluminumReactionExperimentStep.Step07] = 
+        base.stepHints[AluminumReactionExperimentStep.Step07] =
             "[b]步骤 7：点燃的木棍靠近试剂2     试管口检测生成气体";
-        base.stepHints[AluminumReactionExperimentStep.Step08] = 
+        base.stepHints[AluminumReactionExperimentStep.Step08] =
             "[b]实验完成！[/b]实验结束";
     }
 
@@ -605,6 +597,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     protected override AluminumReactionExperimentStep SetupStep => AluminumReactionExperimentStep.Step01;
-    
+
     protected override AluminumReactionExperimentStep CompletedStep => AluminumReactionExperimentStep.Step08;
 }

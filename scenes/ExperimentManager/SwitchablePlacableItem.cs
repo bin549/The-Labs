@@ -13,7 +13,7 @@ public partial class SwitchablePlacableItem : PlacableItem {
 
     public void SwitchToNormal() {
         this.isSwitched = false;
-        var meshField = typeof(PlacableItem).GetField("mesh", 
+        var meshField = typeof(PlacableItem).GetField("mesh",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var mesh = meshField?.GetValue(this) as MeshInstance3D;
         if (mesh != null) {
@@ -30,7 +30,7 @@ public partial class SwitchablePlacableItem : PlacableItem {
 
     public void SwitchToSwitched() {
         this.isSwitched = true;
-        var meshField = typeof(PlacableItem).GetField("mesh", 
+        var meshField = typeof(PlacableItem).GetField("mesh",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var mesh = meshField?.GetValue(this) as MeshInstance3D;
         if (mesh != null) {
@@ -40,7 +40,7 @@ public partial class SwitchablePlacableItem : PlacableItem {
             this.switchableNode.Visible = true;
         }
         if (this.switchableOutline != null) {
-            this.switchableOutline.Visible = false; 
+            this.switchableOutline.Visible = false;
         }
         this.UpdateOutlineVisibility();
         this.SyncCurrentOutline();
@@ -60,11 +60,11 @@ public partial class SwitchablePlacableItem : PlacableItem {
     }
 
     private void SyncCurrentOutline() {
-        var isHoveredField = typeof(PlacableItem).GetField("isHovered", 
+        var isHoveredField = typeof(PlacableItem).GetField("isHovered",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         bool isHovered = isHoveredField != null && (bool)(isHoveredField.GetValue(this) ?? false);
         if (!isHovered) {
-            var outlineMeshField = typeof(PlacableItem).GetField("outlineMesh", 
+            var outlineMeshField = typeof(PlacableItem).GetField("outlineMesh",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var outlineMesh = outlineMeshField?.GetValue(this) as MeshInstance3D;
             if (outlineMesh != null && outlineMesh.Visible) {
@@ -100,4 +100,3 @@ public partial class SwitchablePlacableItem : PlacableItem {
         return true;
     }
 }
-
