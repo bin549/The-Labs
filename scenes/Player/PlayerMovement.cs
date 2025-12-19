@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using PhantomCamera;
 
 public partial class PlayerMovement : CharacterBody3D {
     [Export] private float WalkSpeed = 3.0f;

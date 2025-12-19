@@ -332,7 +332,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.CompleteCurrentStep();
     }
 
-
     private void HandleTriggerAreaCollision(Node node, Area3D triggerArea) {
         if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {

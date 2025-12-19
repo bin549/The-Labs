@@ -602,7 +602,6 @@ public partial class InclinedPlaneExperiment : LabItem {
     
     private void PrintNodeTree(Node node, int indent, int depth = 0, int maxDepth = 3) {
         if (depth > maxDepth) return;
-        string indentStr = new string(' ', indent + depth * 2);
         foreach (Node child in node.GetChildren()) {
             PrintNodeTree(child, indent, depth + 1, maxDepth);
         }
