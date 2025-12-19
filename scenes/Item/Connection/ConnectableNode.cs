@@ -2,8 +2,8 @@ using Godot;
 using Godot.Collections;
 
 public partial class ConnectableNode : Node3D {
-    [Export] private MeshInstance3D meshInstance;
-    [Export] private MeshInstance3D outlineMesh;
+    [Export] private MeshInstance3D? meshInstance;
+    [Export] private MeshInstance3D? outlineMesh;
     private bool isSelected = false;
     private bool isHovered = false;
     private StandardMaterial3D material;
@@ -15,7 +15,9 @@ public partial class ConnectableNode : Node3D {
             this.isSelected = value;
             if (this.isSelected && this.isHovered) {
                 this.isHovered = false;
-                this.outlineMesh.Visible = false;
+                if (this.outlineMesh != null) {
+                    this.outlineMesh.Visible = false;
+                }
             }
         }
     }
@@ -30,7 +32,9 @@ public partial class ConnectableNode : Node3D {
     public override void _Ready() {
         this.EnsurePhysicsBody();
         this.SetupCollisionLayers();
-        this.outlineMesh.Visible = false;
+        if (this.outlineMesh != null) {
+            this.outlineMesh.Visible = false;
+        }
         this.ResolveConnectionManager();
     }
 
@@ -117,7 +121,9 @@ public partial class ConnectableNode : Node3D {
 
     public void OnHoverExit() {
         this.IsHovered = false;
-        this.outlineMesh.Visible = false;
+        if (this.outlineMesh != null) {
+            this.outlineMesh.Visible = false;
+        }
     }
 
     public override void _Input(InputEvent @event) {

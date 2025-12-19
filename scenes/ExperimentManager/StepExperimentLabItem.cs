@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     where TStep : struct, Enum {
     [Export] public Label3D hintLabel { get; set; }
-    [Export] public Button nextStepButton { get; set; }
     [Export] public Button playVoiceButton { get; set; }
     [Export] public AudioStreamPlayer voicePlayer { get; set; }
     [Export] public Godot.Collections.Array<AudioStream> stepVoiceResources { get; set; } = new();
@@ -32,7 +31,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     
     protected void InitializeStepExperiment() {
         this.InitializeStepStatus();
-        this.InitializeButton();
         this.InitializeVoiceButton();
         this.InitializeVoiceResources();
         this.InitializeHintTimer();
@@ -43,13 +41,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     protected virtual void InitializeStepStatus() {
         foreach (TStep step in Enum.GetValues(typeof(TStep))) {
             this.stepCompletionStatus[step] = false;
-        }
-    }
-
-    protected virtual void InitializeButton() {
-        if (this.nextStepButton != null) {
-            this.nextStepButton.Pressed += OnNextStepButtonPressed;
-            this.UpdateButtonState();
         }
     }
 
@@ -105,18 +96,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         }
         if (this.CanGoToNextStep()) {
             this.GoToNextStep();
-            this.UpdateButtonState();
-        }
-    }
-
-    protected virtual void UpdateButtonState() {
-        if (this.nextStepButton != null) {
-            this.nextStepButton.Disabled = !this.CanGoToNextStep();
-            if (this.stepToInt(this.currentStep) >= this.stepToInt(this.CompletedStep)) {
-                this.nextStepButton.Text = "实验完成";
-            } else {
-                this.nextStepButton.Text = "下一步";
-            }
         }
     }
 
@@ -165,7 +144,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         this.StopCurrentVoice();
         this.HideHintLabel();
         this.UpdateHintLabel();
-        this.UpdateButtonState();
     }
 
     protected virtual void StopCurrentVoice() {
@@ -246,9 +224,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     }
 
     protected virtual void ShowExperimentButtons(bool visible) {
-        if (this.nextStepButton != null) {
-            this.nextStepButton.Visible = visible;
-        }
         if (this.playVoiceButton != null) {
             this.playVoiceButton.Visible = visible;
         }
