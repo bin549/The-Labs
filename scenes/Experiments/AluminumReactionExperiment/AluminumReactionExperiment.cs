@@ -166,15 +166,18 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.wasTweezersDragging = isDragging;
         if (this.isPickupAluminum) {
             bool isInReagentArea = false;
+            bool isPlaced = false;
             if (this.currentStep == AluminumReactionExperimentStep.Step03) {
                 isInReagentArea = this.isTweezersInReagentArea3;
+                isPlaced = this.isItemPlaced3;
             } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
                 isInReagentArea = this.isTweezersInReagentArea4;
+                isPlaced = this.isItemPlaced4;
             }
             if (isDragging) {
                 this.ShowReagentCollisionLabel(isInReagentArea);
             } else {
-                if (isInReagentArea && !this.isItemPlaced3 && !this.isItemPlaced4) {
+                if (isInReagentArea && !isPlaced) {
                     this.OnAluminumDroppedIntoReagent();
                 }
             }
@@ -284,12 +287,18 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
             this.ShowReagentCollisionLabel(false);
             this.isItemPlaced3 = true;
+            if (this.emptyReagent1 != null) {
+                this.emptyReagent1.Visible = false;
+            }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
             if (this.isItemPlaced4) {
                 return;
             }
             this.ShowReagentCollisionLabel(false);
             this.isItemPlaced4 = true;
+            if (this.emptyReagent2 != null) {
+                this.emptyReagent2.Visible = false;
+            }
         }
         if (this.tweezers != null) {
             this.tweezers.Visible = false;
@@ -300,6 +309,14 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.animationPlayer.Play("drop");
     }
 
+    private void OnAnimationFinished(StringName animName) {
+        if (animName == "fill") {
+            this.OnItemPlacedDone();
+        } else if (animName == "drop") {
+            this.OnAluminumDroppedDone();
+        }
+    }
+
     private void OnItemPlacedDone() {
         if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
             this.currentStep == AluminumReactionExperimentStep.Step02) {
@@ -308,11 +325,16 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
             this.sodiumHydroxideSolution.Visible = true;
             if (this.currentStep == AluminumReactionExperimentStep.Step01) {
-                this.emptyReagent1.Visible = true;
+                if (this.emptyReagent1 != null) {
+                    this.emptyReagent1.Visible = true;
+                }
             } else if (this.currentStep == AluminumReactionExperimentStep.Step02) {
-                this.emptyReagent2.Visible = true;
+                if (this.emptyReagent2 != null) {
+                    this.emptyReagent2.Visible = true;
+                }
                 this.sodiumHydroxideSolution.IsDraggable = false;
             }
+            this.fillObjects.Visible = false;
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03 ||
                    this.currentStep == AluminumReactionExperimentStep.Step04) {
             if (this.tweezers != null) {
@@ -324,10 +346,40 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             if (this.dropObjects != null) {
                 this.dropObjects.Visible = false;
             }
+            if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+                if (this.emptyReagent1 != null) {
+                    this.emptyReagent1.Visible = true;
+                }
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+                if (this.emptyReagent2 != null) {
+                    this.emptyReagent2.Visible = true;
+                }
+            }
         }
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
-            this.currentStep == AluminumReactionExperimentStep.Step02) {
-            this.fillObjects.Visible = false;
+        this.CompleteCurrentStep();
+    }
+
+    private void OnAluminumDroppedDone() {
+        if (this.currentStep == AluminumReactionExperimentStep.Step03 ||
+            this.currentStep == AluminumReactionExperimentStep.Step04) {
+            if (this.tweezers != null) {
+                this.tweezers.GlobalTransform = this.tweezersInitialTransform;
+            }
+            this.tweezers.Visible = true;
+            this.SwitchTweezersToNormal();
+            this.isPickupAluminum = false;
+            if (this.dropObjects != null) {
+                this.dropObjects.Visible = false;
+            }
+            if (this.currentStep == AluminumReactionExperimentStep.Step03) {
+                if (this.emptyReagent1 != null) {
+                    this.emptyReagent1.Visible = true;
+                }
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
+                if (this.emptyReagent2 != null) {
+                    this.emptyReagent2.Visible = true;
+                }
+            }
         }
         this.CompleteCurrentStep();
     }
@@ -552,21 +604,21 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     private void InitializeStepHints() {
         base.stepHints[AluminumReactionExperimentStep.Step01] =
-            "[b]步骤 1：向第一支试管中加入氢氧化钠溶液";
+            "步骤 1：向第一支试管中加入氢氧化钠溶液";
         base.stepHints[AluminumReactionExperimentStep.Step02] =
-            "[b]步骤 2：向第二支试管中加入氢氧化钠溶液";
+            "步骤 2：向第二支试管中加入氢氧化钠溶液";
         base.stepHints[AluminumReactionExperimentStep.Step03] =
-            "[b]步骤 3：用镊子将第一片铝片放入第一支试管中";
+            "步骤 3：用镊子将第一片铝片放入第一支试管中";
         base.stepHints[AluminumReactionExperimentStep.Step04] =
-            "[b]步骤 4：用镊子将第二片铝片放入第二支试管中";
+            "步骤 4：用镊子将第二片铝片放入第二支试管中";
         base.stepHints[AluminumReactionExperimentStep.Step05] =
-            "[b]步骤 5：取一根火柴并点燃木条";
+            "步骤 5：取一根火柴并点燃木条";
         base.stepHints[AluminumReactionExperimentStep.Step06] =
-            "[b]步骤 6：将点燃的木条靠近第一支试管口，检测生成的气体";
+            "步骤 6：将点燃的木条靠近第一支试管口，检测生成的气体";
         base.stepHints[AluminumReactionExperimentStep.Step07] =
-            "[b]步骤 7：将点燃的木条靠近第二支试管口，检测生成的气体";
+            "步骤 7：将点燃的木条靠近第二支试管口，检测生成的气体";
         base.stepHints[AluminumReactionExperimentStep.Step08] =
-            "[b]实验完成！[/b]实验结束";
+            "实验完成";
     }
 
     protected override AluminumReactionExperimentStep SetupStep => AluminumReactionExperimentStep.Step01;
