@@ -129,29 +129,6 @@ public partial class OhmsLawExperiment : StepExperimentLabItem<OhmsLawExperiment
             "可以重新开始实验，尝试不同的电阻和电压，探索更多有趣的电学现象！";
     }
 
-    protected override string GetStepName(OhmsLawExperimentStep step) {
-        switch (step) {
-            case OhmsLawExperimentStep.Setup:
-                return "准备阶段";
-            case OhmsLawExperimentStep.ConnectCircuit:
-                return "连接电路";
-            case OhmsLawExperimentStep.AdjustVoltage:
-                return "调整电压";
-            case OhmsLawExperimentStep.MeasureCurrent:
-                return "测量电流";
-            case OhmsLawExperimentStep.RecordData:
-                return "记录数据";
-            case OhmsLawExperimentStep.ChangeResistor:
-                return "更换电阻";
-            case OhmsLawExperimentStep.AnalyzeResult:
-                return "分析结果";
-            case OhmsLawExperimentStep.Completed:
-                return "实验完成";
-            default:
-                return "未知步骤";
-        }
-    }
-
     protected override OhmsLawExperimentStep SetupStep => OhmsLawExperimentStep.Setup;
     
     protected override OhmsLawExperimentStep CompletedStep => OhmsLawExperimentStep.Completed;

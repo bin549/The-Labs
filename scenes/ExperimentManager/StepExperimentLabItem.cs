@@ -17,7 +17,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     protected abstract TStep currentStep { get; set; }
     protected abstract TStep SetupStep { get; }
     protected abstract TStep CompletedStep { get; }
-    protected abstract string GetStepName(TStep step);
     
     public override void EnterInteraction() {
         base.EnterInteraction();
@@ -217,10 +216,6 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
 
     public Dictionary<TStep, string> GetAllStepHints() {
         return new Dictionary<TStep, string>(this.stepHints);
-    }
-
-    public string GetCurrentStepName() {
-        return this.GetStepName(this.currentStep);
     }
 
     protected virtual void ShowExperimentButtons(bool visible) {

@@ -104,29 +104,6 @@ public partial class FrictionExperiment : StepExperimentLabItem<FrictionExperime
             "可以重新开始实验，尝试不同的材料和条件，探索更多有趣的物理现象！";
     }
 
-    protected override string GetStepName(FrictionExperimentStep step) {
-        switch (step) {
-            case FrictionExperimentStep.Setup:
-                return "准备阶段";
-            case FrictionExperimentStep.PrepareEquipment:
-                return "准备器材";
-            case FrictionExperimentStep.PlaceObject:
-                return "放置物体";
-            case FrictionExperimentStep.AddWeight:
-                return "添加砝码";
-            case FrictionExperimentStep.MeasureForce:
-                return "测量摩擦力";
-            case FrictionExperimentStep.RecordData:
-                return "记录数据";
-            case FrictionExperimentStep.AnalyzeResult:
-                return "分析结果";
-            case FrictionExperimentStep.Completed:
-                return "实验完成";
-            default:
-                return "未知步骤";
-        }
-    }
-
     protected override FrictionExperimentStep SetupStep => FrictionExperimentStep.Setup;
     
     protected override FrictionExperimentStep CompletedStep => FrictionExperimentStep.Completed;

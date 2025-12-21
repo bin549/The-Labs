@@ -552,44 +552,21 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     private void InitializeStepHints() {
         base.stepHints[AluminumReactionExperimentStep.Step01] =
-            "[b]步骤 1：将氢氧化钠倒入第一根试剂";
+            "[b]步骤 1：向第一支试管中加入氢氧化钠溶液";
         base.stepHints[AluminumReactionExperimentStep.Step02] =
-            "[b]步骤 2：将氢氧化钠倒入第二根试剂";
+            "[b]步骤 2：向第二支试管中加入氢氧化钠溶液";
         base.stepHints[AluminumReactionExperimentStep.Step03] =
-            "[b]步骤 3：使用镊子夹将第一个铝片放到第一根试剂";
+            "[b]步骤 3：用镊子将第一片铝片放入第一支试管中";
         base.stepHints[AluminumReactionExperimentStep.Step04] =
-            "[b]步骤 4：使用镊子夹将第二个铝片放到第二根试剂";
+            "[b]步骤 4：用镊子将第二片铝片放入第二支试管中";
         base.stepHints[AluminumReactionExperimentStep.Step05] =
-            "[b]步骤 5：拾取火柴并点燃木棍";
+            "[b]步骤 5：取一根火柴并点燃木条";
         base.stepHints[AluminumReactionExperimentStep.Step06] =
-            "[b]步骤 6：点燃的木棍靠近第一根试剂试管口检测生成气体";
+            "[b]步骤 6：将点燃的木条靠近第一支试管口，检测生成的气体";
         base.stepHints[AluminumReactionExperimentStep.Step07] =
-            "[b]步骤 7：点燃的木棍靠近第二根试剂管口检测生成气体";
+            "[b]步骤 7：将点燃的木条靠近第二支试管口，检测生成的气体";
         base.stepHints[AluminumReactionExperimentStep.Step08] =
             "[b]实验完成！[/b]实验结束";
-    }
-
-    protected override string GetStepName(AluminumReactionExperimentStep step) {
-        switch (step) {
-            case AluminumReactionExperimentStep.Step01:
-                return "将氢氧化钠倒入第一根试剂";
-            case AluminumReactionExperimentStep.Step02:
-                return "将氢氧化钠倒入第二根试剂";
-            case AluminumReactionExperimentStep.Step03:
-                return "使用镊子夹将第一个铝片放到第一根试剂";
-            case AluminumReactionExperimentStep.Step04:
-                return "使用镊子夹将第二个铝片放到第二根试剂";
-            case AluminumReactionExperimentStep.Step05:
-                return "拾取火柴并点燃木棍";
-            case AluminumReactionExperimentStep.Step06:
-                return "点燃的木棍靠近第一根试剂试管口检测生成气体";
-            case AluminumReactionExperimentStep.Step07:
-                return "点燃的木棍靠近第二根试剂管口检测生成气体";
-            case AluminumReactionExperimentStep.Step08:
-                return "实验完成";
-            default:
-                return "未知步骤";
-        }
     }
 
     protected override AluminumReactionExperimentStep SetupStep => AluminumReactionExperimentStep.Step01;
