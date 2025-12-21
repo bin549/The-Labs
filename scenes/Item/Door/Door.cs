@@ -1,7 +1,8 @@
 using Godot;
 
-public partial class Door : Interactable {
+public partial class Door : Node3D {
     [Export] public NodePath DoorPivotPath { get; set; } = new("walldoor_0012/Node3D");
+    [Export] public NodePath TriggerAreaPath { get; set; } = new("Area3D");
     [Export] public Vector3 ClosedRotationDegrees { get; set; } = Vector3.Zero;
     [Export] public Vector3 OpenRotationDegrees { get; set; } = new Vector3(0f, -90f, 0f);
     [Export] public float TransitionDuration { get; set; } = 0.6f;
@@ -11,40 +12,65 @@ public partial class Door : Interactable {
     [Export] public AudioStreamPlayer3D OpenSound { get; set; }
     [Export] public AudioStreamPlayer3D CloseSound { get; set; }
     private Node3D doorPivot;
+    private Area3D triggerArea;
     private Tween rotationTween;
     private bool disOpen;
+    private int playerCount = 0;
 
     public override void _Ready() {
-        base._Ready();
         this.ResolveDoorPivot();
+        this.ResolveTriggerArea();
         this.disOpen = this.StartsOpen;
         this.ApplyDoorRotation(this.disOpen ? OpenRotationDegrees : ClosedRotationDegrees);
     }
 
-    public override void EnterInteraction() {
-        if (base.isInteracting || this.rotationTween?.IsRunning() == true) {
-            return;
+    private void ResolveTriggerArea() {
+        if (TriggerAreaPath.GetNameCount() == 0) {
+            this.triggerArea = GetNodeOrNull<Area3D>("Area3D");
+        } else {
+            this.triggerArea = GetNodeOrNull<Area3D>(TriggerAreaPath);
         }
-        base.ResolveGameManager();
-        base.isInteracting = true;
-        base.gameManager?.SetCurrentInteractable(this);
-        this.ToggleDoor();
+        if (this.triggerArea != null) {
+            this.triggerArea.BodyEntered += OnBodyEntered;
+            this.triggerArea.BodyExited += OnBodyExited;
+        }
     }
 
-    public override void ExitInteraction() {
-        if (!base.isInteracting) return;
-        this.KillTween();
-        this.FinishInteraction();
+    private void OnBodyEntered(Node3D body) {
+        if (body is CharacterBody3D) {
+            this.playerCount++;
+            if (this.playerCount == 1 && !this.disOpen) {
+                this.OpenDoor();
+            }
+        }
     }
 
-    private void ToggleDoor() {
-        if (this.doorPivot == null) {
-            this.FinishInteraction();
+    private void OnBodyExited(Node3D body) {
+        if (body is CharacterBody3D) {
+            this.playerCount--;
+            if (this.playerCount <= 0) {
+                this.playerCount = 0;
+                if (this.disOpen) {
+                    this.CloseDoor();
+                }
+            }
+        }
+    }
+
+    private void OpenDoor() {
+        if (this.doorPivot == null || this.rotationTween?.IsRunning() == true) {
             return;
         }
-        bool targetState = !this.disOpen;
-        this.PlaySound(targetState);
-        this.AnimateDoor(targetState);
+        this.PlaySound(true);
+        this.AnimateDoor(true);
+    }
+
+    private void CloseDoor() {
+        if (this.doorPivot == null || this.rotationTween?.IsRunning() == true) {
+            return;
+        }
+        this.PlaySound(false);
+        this.AnimateDoor(false);
     }
 
     private void AnimateDoor(bool open) {
@@ -53,7 +79,6 @@ public partial class Door : Interactable {
         var targetRotation = open ? OpenRotationDegrees : ClosedRotationDegrees;
         if (TransitionDuration <= Mathf.Epsilon) {
             this.ApplyDoorRotation(targetRotation);
-            this.FinishInteraction();
             return;
         }
         var tween = CreateTween();
@@ -67,7 +92,6 @@ public partial class Door : Interactable {
 
     private void OnTweenFinished() {
         this.KillTween();
-        this.FinishInteraction();
     }
 
     private void ApplyDoorRotation(Vector3 rotationDegrees) {
@@ -95,11 +119,5 @@ public partial class Door : Interactable {
         this.rotationTween.Finished -= OnTweenFinished;
         this.rotationTween.Kill();
         this.rotationTween = null;
-    }
-
-    private void FinishInteraction() {
-        base.isInteracting = false;
-        base.gameManager?.SetCurrentInteractable(null);
-        Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 }
