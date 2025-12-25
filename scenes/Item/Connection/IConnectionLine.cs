@@ -7,4 +7,5 @@ public interface IConnectionLine {
     void OnHoverEnter();
     void OnHoverExit();
     void Destroy();
+    void SetColor(Color color);
 }

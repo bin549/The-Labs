@@ -162,4 +162,11 @@ public partial class ConnectionLine_ImmediateMesh : Node3D, IConnectionLine {
     public void Destroy() {
         QueueFree();
     }
+
+    public void SetColor(Color color) {
+        this.LineColor = color;
+        if (this.material != null) {
+            this.material.AlbedoColor = color;
+        }
+    }
 }

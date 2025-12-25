@@ -182,4 +182,55 @@ public partial class ConnectionManager : Node3D {
         }
         return null;
     }
+
+    public int GetConnectionCount() {
+        return this.connections.Count;
+    }
+
+    public int GetConnectionCountInExperiment(LabItem experiment) {
+        if (experiment == null) {
+            return 0;
+        }
+        int count = 0;
+        foreach (var conn in this.connections) {
+            if (conn.StartNode != null && conn.EndNode != null) {
+                if (this.IsNodeInExperiment(conn.StartNode, experiment) && 
+                    this.IsNodeInExperiment(conn.EndNode, experiment)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private bool IsNodeInExperiment(Node node, LabItem experiment) {
+        if (node == null || experiment == null) {
+            return false;
+        }
+        Node current = node;
+        int depth = 0;
+        const int maxDepth = 20;
+        while (current != null && depth < maxDepth) {
+            if (current == experiment) {
+                return true;
+            }
+            current = current.GetParent();
+            depth++;
+        }
+        return false;
+    }
+
+    public void SetConnectionsColorInExperiment(LabItem experiment, Color color) {
+        if (experiment == null) {
+            return;
+        }
+        foreach (var conn in this.connections) {
+            if (conn.StartNode != null && conn.EndNode != null) {
+                if (this.IsNodeInExperiment(conn.StartNode, experiment) && 
+                    this.IsNodeInExperiment(conn.EndNode, experiment)) {
+                    conn.SetColor(color);
+                }
+            }
+        }
+    }
 }
