@@ -31,6 +31,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Label3D collisionLabel1;
     private bool isSodiumHydroxideInArea = false;
     private bool isItemPlaced = false;
+    private AluminumReactionExperimentStep stepWhenFillAnimationStarted = AluminumReactionExperimentStep.Step01;
     [Export] private Node3D fillObjects;
     [Export] private Node3D dropObjects;
     [Export] private AnimationPlayer animationPlayer;
@@ -252,6 +253,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         this.ShowCollisionLabel(false);
         this.isItemPlaced = true;
+        this.stepWhenFillAnimationStarted = this.currentStep;
         this.sodiumHydroxideSolution.Visible = false;
         if (this.currentStep == AluminumReactionExperimentStep.Step01) {
             this.emptyReagent1.Visible = false;
@@ -323,45 +325,28 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void OnItemPlacedDone() {
-        if (this.currentStep == AluminumReactionExperimentStep.Step01 ||
-            this.currentStep == AluminumReactionExperimentStep.Step02) {
+        if (this.stepWhenFillAnimationStarted == AluminumReactionExperimentStep.Step01 ||
+            this.stepWhenFillAnimationStarted == AluminumReactionExperimentStep.Step02) {
+            if (this.currentStep != this.stepWhenFillAnimationStarted) {
+                return;
+            }
             if (this.sodiumHydroxideSolution != null) {
                 this.sodiumHydroxideSolution.GlobalTransform = this.sodiumHydroxideSolutionInitialTransform;
             }
             this.sodiumHydroxideSolution.Visible = true;
-            if (this.currentStep == AluminumReactionExperimentStep.Step01) {
+            if (this.stepWhenFillAnimationStarted == AluminumReactionExperimentStep.Step01) {
                 if (this.emptyReagent1 != null) {
                     this.emptyReagent1.Visible = true;
                 }
-            } else if (this.currentStep == AluminumReactionExperimentStep.Step02) {
+            } else if (this.stepWhenFillAnimationStarted == AluminumReactionExperimentStep.Step02) {
                 if (this.emptyReagent2 != null) {
                     this.emptyReagent2.Visible = true;
                 }
                 this.sodiumHydroxideSolution.IsDraggable = false;
             }
             this.fillObjects.Visible = false;
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step03 ||
-                   this.currentStep == AluminumReactionExperimentStep.Step04) {
-            if (this.tweezers != null) {
-                this.tweezers.GlobalTransform = this.tweezersInitialTransform;
-            }
-            this.tweezers.Visible = true;
-            this.SwitchTweezersToNormal();
-            this.isPickupAluminum = false;
-            if (this.dropObjects != null) {
-                this.dropObjects.Visible = false;
-            }
-            if (this.currentStep == AluminumReactionExperimentStep.Step03) {
-                if (this.emptyReagent1 != null) {
-                    this.emptyReagent1.Visible = true;
-                }
-            } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
-                if (this.emptyReagent2 != null) {
-                    this.emptyReagent2.Visible = true;
-                }
-            }
+            this.CompleteCurrentStep();
         }
-        this.CompleteCurrentStep();
     }
 
     private void OnAluminumDroppedDone() {
