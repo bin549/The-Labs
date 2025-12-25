@@ -41,15 +41,18 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private Transform3D sodiumHydroxideSolutionInitialTransform;
     private Transform3D tweezersInitialTransform;
     private Transform3D matchInitialTransform;
+    private Transform3D woodenStickInitialTransform;
     private AluminumReactionExperimentStep stepWhenFillAnimationStarted = AluminumReactionExperimentStep.Step01;
     private AluminumReactionExperimentStep stepWhenIgniteAnimationStarted = AluminumReactionExperimentStep.Step01;
 
     [ExportGroup("步骤 1-2: 氢氧化钠溶液")]
     [Export] private PlacableItem sodiumHydroxideSolution;
     [Export] private Node3D emptyReagent1;
+    [Export] private Node3D filledReagent1;
     [Export] private Area3D triggerArea1;
     [Export] private Label3D collisionLabel1;
     [Export] private Node3D emptyReagent2;
+    [Export] private Node3D filledReagent2;
     [Export] private Area3D triggerArea2;
     [Export] private Label3D collisionLabel2;
     private bool isSodiumHydroxideInArea = false;
@@ -126,6 +129,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.matchInitialTransform = this.match.GlobalTransform;
         }
         if (this.woodenStick != null) {
+            this.woodenStickInitialTransform = this.woodenStick.GlobalTransform;
             this.woodenStick.SwitchToNormal();
             this.woodenStick.IsDraggable = false;
         }
@@ -140,6 +144,12 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.animationPlayer != null) {
             this.animationPlayer.AnimationFinished += OnAnimationFinished;
+        }
+        if (this.filledReagent1 != null) {
+            this.filledReagent1.Visible = false;
+        }
+        if (this.filledReagent2 != null) {
+            this.filledReagent2.Visible = false;
         }
     }
 
@@ -562,9 +572,15 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 if (this.emptyReagent1 != null) {
                     this.emptyReagent1.Visible = true;
                 }
+                if (this.filledReagent1 != null) {
+                    this.filledReagent1.Visible = true;
+                }
             } else if (this.stepWhenFillAnimationStarted == AluminumReactionExperimentStep.Step02) {
                 if (this.emptyReagent2 != null) {
                     this.emptyReagent2.Visible = true;
+                }
+                if (this.filledReagent2 != null) {
+                    this.filledReagent2.Visible = true;
                 }
                 this.sodiumHydroxideSolution.IsDraggable = false;
             }
@@ -843,6 +859,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
             this.stepWhenIgniteAnimationStarted = AluminumReactionExperimentStep.Step07;
         }
+        if (this.woodenStick != null) {
+            this.woodenStick.Visible = false;
+        }
         if (this.igniteObjects != null) {
             this.igniteObjects.Visible = true;
         }
@@ -871,9 +890,16 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     this.emptyReagent2.Visible = true;
                 }
             }
+            if (this.woodenStick != null) {
+                this.woodenStick.Visible = true;
+                this.woodenStick.GlobalTransform = this.woodenStickInitialTransform;
+                this.woodenStick.SwitchToNormal();
+                this.woodenStick.IsDraggable = false;
+            }
             this.CompleteCurrentStep();
             if (isStepSeven && this.currentStep == AluminumReactionExperimentStep.Step08) {
                 this.ShowEndUI();
+                this.PlayCompletionVoice();
             }
         }
     }
@@ -1117,6 +1143,19 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.audioPlayer != null && this.gasExplosionSound != null) {
             this.audioPlayer.Stream = this.gasExplosionSound;
             this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayCompletionVoice() {
+        if (!base.IsInteracting) {
+            return;
+        }
+        if (base.voicePlayer == null) {
+            return;
+        }
+        if (base.stepVoices.ContainsKey(this.currentStep) && base.stepVoices[this.currentStep] != null) {
+            base.voicePlayer.Stream = base.stepVoices[this.currentStep];
+            base.voicePlayer.Play();
         }
     }
 
