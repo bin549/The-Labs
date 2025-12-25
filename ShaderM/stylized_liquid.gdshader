@@ -1,10 +1,10 @@
 // ANCHOR: all
 shader_type spatial;
-render_mode cull_disabled,shadows_disabled;
+render_mode cull_disabled, shadows_disabled, blend_mix;
 
 uniform float liquid_height = 0.5;
 // ANCHOR: surface_color
-uniform vec4 liquid_surface_color: source_color = vec4(0.7, 0.5, 1.0, 1.0);
+uniform vec4 liquid_surface_color : source_color = vec4(0.7, 0.5, 1.0, 0.0);
 // END: surface_color
 uniform sampler2D liquid_rim_gradient: repeat_disable;
 uniform float rim_emission_intensity: hint_range(0.0, 2.0) = 0.2;
@@ -89,5 +89,6 @@ void fragment() {
 	}
 	// Magical liquid!
 	EMISSION = ALBEDO * (pow_fresnel * rim_emission_intensity + emission_intensity);
+	ALPHA = liquid_surface_color.a;
 }
 // END: all

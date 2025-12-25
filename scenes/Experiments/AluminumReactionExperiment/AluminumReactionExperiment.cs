@@ -41,12 +41,14 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private bool isStepTwoCollisionInitialized = false;
     [Export] private SwitchablePlacableItem tweezers;
     [Export] private Node3D aluminumStrip1;
+    [Export] private Node3D aluminumStripInTube1;
     [Export] private Area3D triggerArea3;
     [Export] private Label3D collisionLabel3;
     private bool isTweezersInArea3 = false;
     private bool isItemPlaced3 = false;
     private bool isStepThreeCollisionInitialized = false;
     [Export] private Node3D aluminumStrip2;
+    [Export] private Node3D aluminumStripInTube2;
     [Export] private Area3D triggerArea4;
     [Export] private Label3D collisionLabel4;
     private bool isTweezersInArea4 = false;
@@ -73,6 +75,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.tweezers != null) {
             this.tweezersInitialTransform = this.tweezers.GlobalTransform;
+        }
+        if (this.animationPlayer != null) {
+            this.animationPlayer.AnimationFinished += OnAnimationFinished;
         }
     }
 
@@ -375,9 +380,15 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 if (this.emptyReagent1 != null) {
                     this.emptyReagent1.Visible = true;
                 }
+                if (this.aluminumStripInTube1 != null) {
+                    this.aluminumStripInTube1.Visible = true;
+                }
             } else if (this.currentStep == AluminumReactionExperimentStep.Step04) {
                 if (this.emptyReagent2 != null) {
                     this.emptyReagent2.Visible = true;
+                }
+                if (this.aluminumStripInTube2 != null) {
+                    this.aluminumStripInTube2.Visible = true;
                 }
             }
         }

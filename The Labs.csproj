@@ -33,6 +33,8 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup />
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="Shared">
       <HintPath>addons/TextAnimatorForGodot/Library/Shared.dll</HintPath>
