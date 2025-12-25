@@ -25,46 +25,80 @@ public enum AluminumReactionExperimentItem {
 public partial class AluminumReactionExperiment : StepExperimentLabItem<AluminumReactionExperimentStep, AluminumReactionExperimentItem> {
     [Export]
     protected override AluminumReactionExperimentStep currentStep { get; set; } = AluminumReactionExperimentStep.Step01;
+
+    [ExportGroup("通用设置")]
+    [Export] private AnimationPlayer animationPlayer;
+    [Export] private Node3D fillObjects;
+    [Export] private Node3D dropObjects;
+    [Export] private float tweezersDragRotationAngle = 45.0f;
+    private Transform3D sodiumHydroxideSolutionInitialTransform;
+    private Transform3D tweezersInitialTransform;
+    private Transform3D matchInitialTransform;
+    private AluminumReactionExperimentStep stepWhenFillAnimationStarted = AluminumReactionExperimentStep.Step01;
+
+    [ExportGroup("步骤 1-2: 氢氧化钠溶液")]
     [Export] private PlacableItem sodiumHydroxideSolution;
     [Export] private Node3D emptyReagent1;
     [Export] private Area3D triggerArea1;
     [Export] private Label3D collisionLabel1;
-    private bool isSodiumHydroxideInArea = false;
-    private bool isItemPlaced = false;
-    private AluminumReactionExperimentStep stepWhenFillAnimationStarted = AluminumReactionExperimentStep.Step01;
-    [Export] private Node3D fillObjects;
-    [Export] private Node3D dropObjects;
-    [Export] private AnimationPlayer animationPlayer;
-    private Transform3D sodiumHydroxideSolutionInitialTransform;
     [Export] private Node3D emptyReagent2;
     [Export] private Area3D triggerArea2;
     [Export] private Label3D collisionLabel2;
+    private bool isSodiumHydroxideInArea = false;
+    private bool isItemPlaced = false;
     private bool isStepTwoCollisionInitialized = false;
+
+    [ExportGroup("步骤 3-4: 镊子和铝片")]
     [Export] private SwitchablePlacableItem tweezers;
     [Export] private Node3D aluminumStrip1;
     [Export] private Node3D aluminumStripInTube1;
     [Export] private Area3D triggerArea3;
     [Export] private Label3D collisionLabel3;
-    private bool isTweezersInArea3 = false;
-    private bool isItemPlaced3 = false;
-    private bool isStepThreeCollisionInitialized = false;
+    [Export] private Area3D triggerArea3Reagent;
+    [Export] private Label3D collisionLabel3Reagent;
     [Export] private Node3D aluminumStrip2;
     [Export] private Node3D aluminumStripInTube2;
     [Export] private Area3D triggerArea4;
     [Export] private Label3D collisionLabel4;
+    [Export] private Area3D triggerArea4Reagent;
+    [Export] private Label3D collisionLabel4Reagent;
+    private bool isTweezersInArea3 = false;
+    private bool isItemPlaced3 = false;
+    private bool isStepThreeCollisionInitialized = false;
     private bool isTweezersInArea4 = false;
     private bool isItemPlaced4 = false;
     private bool isStepFourCollisionInitialized = false;
-    private Transform3D tweezersInitialTransform;
     private bool wasTweezersDragging = false;
-    [Export] private float tweezersDragRotationAngle = 45.0f;
     private bool isPickupAluminum = false;
-    [Export] private Area3D triggerArea3Reagent;
-    [Export] private Label3D collisionLabel3Reagent;
-    [Export] private Area3D triggerArea4Reagent;
-    [Export] private Label3D collisionLabel4Reagent;
     private bool isTweezersInReagentArea3 = false;
     private bool isTweezersInReagentArea4 = false;
+
+    [ExportGroup("步骤 5: 火柴和木棍")]
+    [Export] private SwitchablePlacableItem match;
+    [Export] private Node3D matchbox;
+    [Export] private Area3D triggerAreaMatchbox;
+    [Export] private Label3D collisionLabelMatchbox;
+    [Export] private SwitchablePlacableItem woodenStick1;
+    [Export] private Area3D triggerAreaWoodenStick;
+    [Export] private Label3D collisionLabelWoodenStick;
+    private bool isMatchInMatchboxArea = false;
+    private bool isMatchLit = false;
+    private bool wasMatchDragging = false;
+    private bool isMatchInWoodenStickArea = false;
+    private bool isWoodenStickLit = false;
+    private bool isStepFiveCollisionInitialized = false;
+
+    [ExportGroup("步骤 6-7: 试管检测")]
+    [Export] private Area3D triggerAreaTestTube1;
+    [Export] private Label3D collisionLabelTestTube1;
+    [Export] private Area3D triggerAreaTestTube2;
+    [Export] private Label3D collisionLabelTestTube2;
+    private bool isWoodenStickInTestTube1Area = false;
+    private bool isWoodenStickInTestTube2Area = false;
+    private bool isTestTube1Detected = false;
+    private bool isTestTube2Detected = false;
+    private bool isStepSixCollisionInitialized = false;
+    private bool isStepSevenCollisionInitialized = false;
 
     public override void _Ready() {
         base._Ready();
@@ -76,6 +110,13 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.tweezers != null) {
             this.tweezersInitialTransform = this.tweezers.GlobalTransform;
+        }
+        if (this.match != null) {
+            this.matchInitialTransform = this.match.GlobalTransform;
+        }
+        if (this.woodenStick1 != null) {
+            this.woodenStick1.SwitchToNormal();
+            this.woodenStick1.IsDraggable = false;
         }
         if (this.animationPlayer != null) {
             this.animationPlayer.AnimationFinished += OnAnimationFinished;
@@ -143,6 +184,23 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.isStepFourCollisionInitialized = true;
             }
             this.UpdateAluminumCollisionLabel();
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step05) {
+            if (!this.isStepFiveCollisionInitialized) {
+                this.SetupStepFiveCollision();
+                this.isStepFiveCollisionInitialized = true;
+            }
+            this.UpdateMatchCollisionLabel();
+            this.UpdateWoodenStickCollisionLabel();
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step06 ||
+                   this.currentStep == AluminumReactionExperimentStep.Step07) {
+            if (this.currentStep == AluminumReactionExperimentStep.Step06 && !this.isStepSixCollisionInitialized) {
+                this.SetupStepSixCollision();
+                this.isStepSixCollisionInitialized = true;
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step07 && !this.isStepSevenCollisionInitialized) {
+                this.SetupStepSevenCollision();
+                this.isStepSevenCollisionInitialized = true;
+            }
+            this.UpdateTestTubeCollisionLabel();
         }
     }
 
@@ -235,6 +293,31 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         this.tweezers.Rotation = initialRotation;
     }
 
+    private void ApplyMatchDragRotation() {
+        if (this.match == null) {
+            return;
+        }
+        Vector3 initialRotation = this.matchInitialTransform.Basis.GetEuler();
+        Vector3 initialRotationDegrees = new Vector3(
+            Mathf.RadToDeg(initialRotation.X),
+            Mathf.RadToDeg(initialRotation.Y),
+            Mathf.RadToDeg(initialRotation.Z)
+        );
+        this.match.RotationDegrees = new Vector3(
+            initialRotationDegrees.X,
+            initialRotationDegrees.Y,
+            initialRotationDegrees.Z + this.tweezersDragRotationAngle
+        );
+    }
+
+    private void RestoreMatchRotation() {
+        if (this.match == null) {
+            return;
+        }
+        Vector3 initialRotation = this.matchInitialTransform.Basis.GetEuler();
+        this.match.Rotation = initialRotation;
+    }
+
     private void SwitchTweezersToWithAluminum() {
         if (this.tweezers != null) {
             this.tweezers.SwitchToSwitched();
@@ -244,6 +327,113 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private void SwitchTweezersToNormal() {
         if (this.tweezers != null) {
             this.tweezers.SwitchToNormal();
+        }
+    }
+
+    private void UpdateMatchCollisionLabel() {
+        if (this.match == null || this.isMatchLit) {
+            if (this.match != null && !this.match.IsDragging && this.wasMatchDragging) {
+                this.RestoreMatchRotation();
+                this.wasMatchDragging = false;
+            }
+            return;
+        }
+        bool isDragging = this.match.IsDragging;
+        if (isDragging && !this.wasMatchDragging) {
+            this.ApplyMatchDragRotation();
+        } else if (!isDragging && this.wasMatchDragging) {
+            this.RestoreMatchRotation();
+        }
+        this.wasMatchDragging = isDragging;
+        if (isDragging) {
+            this.ShowMatchboxCollisionLabel(this.isMatchInMatchboxArea);
+        } else {
+            if (this.isMatchInMatchboxArea && !this.isMatchLit) {
+                this.OnMatchLit();
+            }
+        }
+    }
+
+    private void UpdateWoodenStickCollisionLabel() {
+        if (this.currentStep != AluminumReactionExperimentStep.Step05) {
+            return;
+        }
+        if (this.match == null || !this.isMatchLit || this.isWoodenStickLit) {
+            return;
+        }
+        bool isDragging = this.match.IsDragging;
+        if (isDragging && !this.wasMatchDragging) {
+            this.ApplyMatchDragRotation();
+        } else if (!isDragging && this.wasMatchDragging) {
+            this.RestoreMatchRotation();
+        }
+        this.wasMatchDragging = isDragging;
+        if (isDragging) {
+            this.ShowWoodenStickCollisionLabel(this.isMatchInWoodenStickArea);
+        } else {
+            if (this.isMatchInWoodenStickArea && !this.isWoodenStickLit) {
+                this.OnWoodenStickLit();
+            }
+        }
+    }
+
+    private void UpdateTestTubeCollisionLabel() {
+        if (this.woodenStick1 == null || !this.isWoodenStickLit) {
+            return;
+        }
+        bool isDragging = this.woodenStick1.IsDragging;
+        bool isInArea = false;
+        bool isDetected = false;
+        if (this.currentStep == AluminumReactionExperimentStep.Step06) {
+            isInArea = this.isWoodenStickInTestTube1Area;
+            isDetected = this.isTestTube1Detected;
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+            isInArea = this.isWoodenStickInTestTube2Area;
+            isDetected = this.isTestTube2Detected;
+        }
+        if (isDragging) {
+            if (this.currentStep == AluminumReactionExperimentStep.Step06) {
+                this.ShowTestTube1CollisionLabel(isInArea);
+            } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+                this.ShowTestTube2CollisionLabel(isInArea);
+            }
+        } else {
+            if (isInArea && !isDetected) {
+                this.OnTestTubeDetected();
+            }
+        }
+    }
+
+    private void OnMatchLit() {
+        if (this.isMatchLit) {
+            return;
+        }
+        this.ShowMatchboxCollisionLabel(false);
+        this.isMatchLit = true;
+        if (this.match != null) {
+            this.match.SwitchToSwitched();
+        }
+    }
+
+    private void OnWoodenStickLit() {
+        if (this.isWoodenStickLit) {
+            return;
+        }
+        this.ShowWoodenStickCollisionLabel(false);
+        this.isWoodenStickLit = true;
+        if (this.woodenStick1 != null) {
+            this.woodenStick1.SwitchToSwitched();
+            this.woodenStick1.IsDraggable = true;
+        }
+        if (this.match != null) {
+            this.match.SwitchToNormal();
+            this.match.GlobalTransform = this.matchInitialTransform;
+            this.RestoreMatchRotation();
+        }
+        this.isMatchLit = false;
+        this.wasMatchDragging = false;
+        if (this.currentStep == AluminumReactionExperimentStep.Step05) {
+            this.CompleteCurrentStep();
         }
     }
 
@@ -389,6 +579,40 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     this.ShowCollisionLabel(true);
                 }
             }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step05) {
+            if (triggerArea == this.triggerAreaMatchbox) {
+                if (this.IsNodePartOfItem(node, this.match) && !this.isMatchLit) {
+                    this.isMatchInMatchboxArea = true;
+                    if (this.match != null && this.match.IsDragging) {
+                        this.ShowMatchboxCollisionLabel(true);
+                    }
+                }
+            } else if (triggerArea == this.triggerAreaWoodenStick) {
+                if (this.IsNodePartOfItem(node, this.match) && this.isMatchLit && !this.isWoodenStickLit) {
+                    this.isMatchInWoodenStickArea = true;
+                    if (this.match != null && this.match.IsDragging) {
+                        this.ShowWoodenStickCollisionLabel(true);
+                    }
+                }
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step06) {
+            if (triggerArea == this.triggerAreaTestTube1) {
+                if (this.IsNodePartOfItem(node, this.woodenStick1) && this.isWoodenStickLit && !this.isTestTube1Detected) {
+                    this.isWoodenStickInTestTube1Area = true;
+                    if (this.woodenStick1 != null && this.woodenStick1.IsDragging) {
+                        this.ShowTestTube1CollisionLabel(true);
+                    }
+                }
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+            if (triggerArea == this.triggerAreaTestTube2) {
+                if (this.IsNodePartOfItem(node, this.woodenStick1) && this.isWoodenStickLit && !this.isTestTube2Detected) {
+                    this.isWoodenStickInTestTube2Area = true;
+                    if (this.woodenStick1 != null && this.woodenStick1.IsDragging) {
+                        this.ShowTestTube2CollisionLabel(true);
+                    }
+                }
+            }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (triggerArea == this.triggerArea3) {
                 if (this.IsNodePartOfItem(node, this.tweezers) && !this.isPickupAluminum) {
@@ -430,6 +654,34 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             if (this.IsNodePartOfItem(node, this.sodiumHydroxideSolution)) {
                 this.isSodiumHydroxideInArea = false;
                 this.ShowCollisionLabel(false);
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step05) {
+            if (triggerArea == this.triggerAreaMatchbox) {
+                if (this.IsNodePartOfItem(node, this.match) && !this.isMatchLit) {
+                    this.isMatchInMatchboxArea = false;
+                    this.ShowMatchboxCollisionLabel(false);
+                }
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step05) {
+            if (triggerArea == this.triggerAreaWoodenStick) {
+                if (this.IsNodePartOfItem(node, this.match) && this.isMatchLit) {
+                    this.isMatchInWoodenStickArea = false;
+                    this.ShowWoodenStickCollisionLabel(false);
+                }
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step06) {
+            if (triggerArea == this.triggerAreaTestTube1) {
+                if (this.IsNodePartOfItem(node, this.woodenStick1) && this.isWoodenStickLit) {
+                    this.isWoodenStickInTestTube1Area = false;
+                    this.ShowTestTube1CollisionLabel(false);
+                }
+            }
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+            if (triggerArea == this.triggerAreaTestTube2) {
+                if (this.IsNodePartOfItem(node, this.woodenStick1) && this.isWoodenStickLit) {
+                    this.isWoodenStickInTestTube2Area = false;
+                    this.ShowTestTube2CollisionLabel(false);
+                }
             }
         } else if (this.currentStep == AluminumReactionExperimentStep.Step03) {
             if (triggerArea == this.triggerArea3) {
@@ -508,6 +760,47 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                 this.collisionLabel4Reagent.Visible = isShow;
             }
         }
+    }
+
+    private void ShowMatchboxCollisionLabel(bool isShow) {
+        if (this.collisionLabelMatchbox != null) {
+            this.collisionLabelMatchbox.Visible = isShow;
+        }
+    }
+
+    private void ShowWoodenStickCollisionLabel(bool isShow) {
+        if (this.collisionLabelWoodenStick != null) {
+            this.collisionLabelWoodenStick.Visible = isShow;
+        }
+    }
+
+    private void ShowTestTube1CollisionLabel(bool isShow) {
+        if (this.collisionLabelTestTube1 != null) {
+            this.collisionLabelTestTube1.Visible = isShow;
+        }
+    }
+
+    private void ShowTestTube2CollisionLabel(bool isShow) {
+        if (this.collisionLabelTestTube2 != null) {
+            this.collisionLabelTestTube2.Visible = isShow;
+        }
+    }
+
+    private void OnTestTubeDetected() {
+        if (this.currentStep == AluminumReactionExperimentStep.Step06) {
+            if (this.isTestTube1Detected) {
+                return;
+            }
+            this.ShowTestTube1CollisionLabel(false);
+            this.isTestTube1Detected = true;
+        } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+            if (this.isTestTube2Detected) {
+                return;
+            }
+            this.ShowTestTube2CollisionLabel(false);
+            this.isTestTube2Detected = true;
+        }
+        this.CompleteCurrentStep();
     }
 
     private void SetupStepTwoCollision() {
@@ -595,6 +888,85 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.triggerArea4.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerArea4);
             this.triggerArea4.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerArea4);
             this.triggerArea4.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerArea4);
+        }
+    }
+
+    private void SetupStepFiveCollision() {
+        this.isMatchLit = false;
+        this.isMatchInMatchboxArea = false;
+        this.isMatchInWoodenStickArea = false;
+        this.isWoodenStickLit = false;
+        this.wasMatchDragging = false;
+        if (this.collisionLabelMatchbox != null) {
+            this.collisionLabelMatchbox.Visible = false;
+        }
+        if (this.collisionLabelWoodenStick != null) {
+            this.collisionLabelWoodenStick.Visible = false;
+        }
+        if (this.match != null) {
+            this.match.StopDragging();
+            this.match.SwitchToNormal();
+            this.match.GlobalTransform = this.matchInitialTransform;
+            this.RestoreMatchRotation();
+        }
+        if (this.woodenStick1 != null) {
+            this.woodenStick1.SwitchToNormal();
+            this.woodenStick1.IsDraggable = false;
+            this.woodenStick1.StopDragging();
+        }
+        if (this.triggerAreaMatchbox != null) {
+            this.triggerAreaMatchbox.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerAreaMatchbox);
+            this.triggerAreaMatchbox.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerAreaMatchbox);
+            this.triggerAreaMatchbox.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerAreaMatchbox);
+            this.triggerAreaMatchbox.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerAreaMatchbox);
+        }
+        if (this.triggerAreaWoodenStick != null) {
+            this.triggerAreaWoodenStick.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerAreaWoodenStick);
+            this.triggerAreaWoodenStick.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerAreaWoodenStick);
+            this.triggerAreaWoodenStick.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerAreaWoodenStick);
+            this.triggerAreaWoodenStick.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerAreaWoodenStick);
+        }
+    }
+
+    private void SetupStepSixCollision() {
+        this.isWoodenStickInTestTube1Area = false;
+        this.isTestTube1Detected = false;
+        if (this.collisionLabelTestTube1 != null) {
+            this.collisionLabelTestTube1.Visible = false;
+        }
+        if (this.woodenStick1 != null) {
+            this.woodenStick1.StopDragging();
+            if (this.isWoodenStickLit) {
+                this.woodenStick1.SwitchToSwitched();
+                this.woodenStick1.IsDraggable = true;
+            }
+        }
+        if (this.triggerAreaTestTube1 != null) {
+            this.triggerAreaTestTube1.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerAreaTestTube1);
+            this.triggerAreaTestTube1.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerAreaTestTube1);
+            this.triggerAreaTestTube1.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerAreaTestTube1);
+            this.triggerAreaTestTube1.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerAreaTestTube1);
+        }
+    }
+
+    private void SetupStepSevenCollision() {
+        this.isWoodenStickInTestTube2Area = false;
+        this.isTestTube2Detected = false;
+        if (this.collisionLabelTestTube2 != null) {
+            this.collisionLabelTestTube2.Visible = false;
+        }
+        if (this.woodenStick1 != null) {
+            this.woodenStick1.StopDragging();
+            if (this.isWoodenStickLit) {
+                this.woodenStick1.SwitchToSwitched();
+                this.woodenStick1.IsDraggable = true;
+            }
+        }
+        if (this.triggerAreaTestTube2 != null) {
+            this.triggerAreaTestTube2.BodyEntered += (body) => this.HandleTriggerAreaCollision(body, this.triggerAreaTestTube2);
+            this.triggerAreaTestTube2.BodyExited += (body) => this.HandleTriggerAreaExit(body, this.triggerAreaTestTube2);
+            this.triggerAreaTestTube2.AreaEntered += (area) => this.HandleTriggerAreaCollision(area, this.triggerAreaTestTube2);
+            this.triggerAreaTestTube2.AreaExited += (area) => this.HandleTriggerAreaExit(area, this.triggerAreaTestTube2);
         }
     }
 
