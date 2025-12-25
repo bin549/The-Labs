@@ -93,6 +93,8 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Label3D collisionLabelTestTube1;
     [Export] private Area3D triggerAreaTestTube2;
     [Export] private Label3D collisionLabelTestTube2;
+    [ExportGroup("实验结束UI")]
+    [Export] private Control endUIControl;
     private bool isWoodenStickInTestTube1Area = false;
     private bool isWoodenStickInTestTube2Area = false;
     private bool isTestTube1Detected = false;
@@ -117,6 +119,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.woodenStick != null) {
             this.woodenStick.SwitchToNormal();
             this.woodenStick.IsDraggable = false;
+        }
+        if (this.endUIControl != null) {
+            this.endUIControl.Visible = false;
         }
         if (this.animationPlayer != null) {
             this.animationPlayer.AnimationFinished += OnAnimationFinished;
@@ -787,13 +792,14 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     }
 
     private void OnTestTubeDetected() {
+        bool isStepSeven = this.currentStep == AluminumReactionExperimentStep.Step07;
         if (this.currentStep == AluminumReactionExperimentStep.Step06) {
             if (this.isTestTube1Detected) {
                 return;
             }
             this.ShowTestTube1CollisionLabel(false);
             this.isTestTube1Detected = true;
-        } else if (this.currentStep == AluminumReactionExperimentStep.Step07) {
+        } else if (isStepSeven) {
             if (this.isTestTube2Detected) {
                 return;
             }
@@ -801,6 +807,15 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.isTestTube2Detected = true;
         }
         this.CompleteCurrentStep();
+        if (isStepSeven && this.currentStep == AluminumReactionExperimentStep.Step08) {
+            this.ShowEndUI();
+        }
+    }
+
+    private void ShowEndUI() {
+        if (this.endUIControl != null) {
+            this.endUIControl.Visible = true;
+        }
     }
 
     private void SetupStepTwoCollision() {
