@@ -14,11 +14,15 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
     protected Dictionary<TStep, AudioStream> stepVoices = new Dictionary<TStep, AudioStream>();
     protected Dictionary<TStep, float> stepHintDisplayDurations = new Dictionary<TStep, float>();
     private Timer hintHideTimer;
+    protected bool isExperimentCompleted = false;
     protected abstract TStep currentStep { get; set; }
     protected abstract TStep SetupStep { get; }
     protected abstract TStep CompletedStep { get; }
     
     public override void EnterInteraction() {
+        if (this.isExperimentCompleted) {
+            return;
+        }
         base.EnterInteraction();
         this.ShowExperimentButtons(true);
     }
@@ -222,5 +226,13 @@ public abstract partial class StepExperimentLabItem<TStep, TItem> : LabItem
         if (this.playVoiceButton != null) {
             this.playVoiceButton.Visible = visible;
         }
+    }
+
+    public void MarkExperimentAsCompleted() {
+        this.isExperimentCompleted = true;
+    }
+
+    public bool IsExperimentCompleted() {
+        return this.isExperimentCompleted;
     }
 }

@@ -31,6 +31,12 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Node3D fillObjects;
     [Export] private Node3D dropObjects;
     [Export] private float tweezersDragRotationAngle = 45.0f;
+    [Export] private AudioStreamPlayer3D audioPlayer;
+    [Export] private AudioStream pourWaterSound;
+    [Export] private AudioStream aluminumCollisionSound;
+    [Export] private AudioStream matchIgniteSound;
+    [Export] private AudioStream woodenStickBurnSound;
+    [Export] private AudioStream gasExplosionSound;
     private Transform3D sodiumHydroxideSolutionInitialTransform;
     private Transform3D tweezersInitialTransform;
     private Transform3D matchInitialTransform;
@@ -95,6 +101,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Label3D collisionLabelTestTube2;
     [ExportGroup("实验结束UI")]
     [Export] private Control endUIControl;
+    [Export] private Button completeButton;
     private bool isWoodenStickInTestTube1Area = false;
     private bool isWoodenStickInTestTube2Area = false;
     private bool isTestTube1Detected = false;
@@ -122,6 +129,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.endUIControl != null) {
             this.endUIControl.Visible = false;
+        }
+        if (this.completeButton != null) {
+            this.completeButton.Pressed += OnCompleteButtonPressed;
         }
         if (this.animationPlayer != null) {
             this.animationPlayer.AnimationFinished += OnAnimationFinished;
@@ -158,6 +168,15 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     public override void ExitInteraction() {
         base.isInteracting = false;
         base.ExitInteraction();
+    }
+
+    protected override void OnStepChanged(AluminumReactionExperimentStep previousStep, AluminumReactionExperimentStep newStep) {
+        base.OnStepChanged(previousStep, newStep);
+        if (newStep == AluminumReactionExperimentStep.Step08) {
+            if (base.playVoiceButton != null) {
+                base.playVoiceButton.Visible = false;
+            }
+        }
     }
 
     public override void _Input(InputEvent @event) {
@@ -418,6 +437,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.match != null) {
             this.match.SwitchToSwitched();
         }
+        this.PlayMatchIgniteSound();
     }
 
     private void OnWoodenStickLit() {
@@ -437,6 +457,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         this.isMatchLit = false;
         this.wasMatchDragging = false;
+        this.PlayWoodenStickBurnSound();
         if (this.currentStep == AluminumReactionExperimentStep.Step05) {
             this.CompleteCurrentStep();
         }
@@ -457,6 +478,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         this.fillObjects.Visible = true;
         this.animationPlayer.Play("fill");
+        this.PlayPourWaterSound();
     }
 
     private void OnAluminumPickedUp() {
@@ -571,6 +593,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     this.aluminumStripInTube2.Visible = true;
                 }
             }
+            this.PlayAluminumCollisionSound();
         }
         this.CompleteCurrentStep();
     }
@@ -806,6 +829,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.ShowTestTube2CollisionLabel(false);
             this.isTestTube2Detected = true;
         }
+        this.PlayGasExplosionSound();
         this.CompleteCurrentStep();
         if (isStepSeven && this.currentStep == AluminumReactionExperimentStep.Step08) {
             this.ShowEndUI();
@@ -816,6 +840,17 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.endUIControl != null) {
             this.endUIControl.Visible = true;
         }
+        if (base.playVoiceButton != null) {
+            base.playVoiceButton.Visible = false;
+        }
+    }
+
+    private void OnCompleteButtonPressed() {
+        base.MarkExperimentAsCompleted();
+        if (this.endUIControl != null) {
+            this.endUIControl.Visible = false;
+        }
+        this.ExitInteraction();
     }
 
     private void SetupStepTwoCollision() {
@@ -1002,6 +1037,41 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             "步骤 7：将点燃的木条靠近第二支试管口，检测生成的气体";
         base.stepHints[AluminumReactionExperimentStep.Step08] =
             "实验完成";
+    }
+
+    private void PlayPourWaterSound() {
+        if (this.audioPlayer != null && this.pourWaterSound != null) {
+            this.audioPlayer.Stream = this.pourWaterSound;
+            this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayAluminumCollisionSound() {
+        if (this.audioPlayer != null && this.aluminumCollisionSound != null) {
+            this.audioPlayer.Stream = this.aluminumCollisionSound;
+            this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayMatchIgniteSound() {
+        if (this.audioPlayer != null && this.matchIgniteSound != null) {
+            this.audioPlayer.Stream = this.matchIgniteSound;
+            this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayWoodenStickBurnSound() {
+        if (this.audioPlayer != null && this.woodenStickBurnSound != null) {
+            this.audioPlayer.Stream = this.woodenStickBurnSound;
+            this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayGasExplosionSound() {
+        if (this.audioPlayer != null && this.gasExplosionSound != null) {
+            this.audioPlayer.Stream = this.gasExplosionSound;
+            this.audioPlayer.Play();
+        }
     }
 
     protected override AluminumReactionExperimentStep SetupStep => AluminumReactionExperimentStep.Step01;
