@@ -593,7 +593,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
                     this.aluminumStripInTube2.Visible = true;
                 }
             }
-            this.PlayAluminumCollisionSound();
         }
         this.CompleteCurrentStep();
     }
@@ -1041,12 +1040,16 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     private void PlayPourWaterSound() {
         if (this.audioPlayer != null && this.pourWaterSound != null) {
-            this.audioPlayer.Stream = this.pourWaterSound;
-            this.audioPlayer.Play();
+            this.GetTree().CreateTimer(0.5f).Timeout += () => {
+                if (this.audioPlayer != null && this.pourWaterSound != null) {
+                    this.audioPlayer.Stream = this.pourWaterSound;
+                    this.audioPlayer.Play();
+                }
+            };
         }
     }
 
-    private void PlayAluminumCollisionSound() {
+    public void PlayAluminumCollisionSound() {
         if (this.audioPlayer != null && this.aluminumCollisionSound != null) {
             this.audioPlayer.Stream = this.aluminumCollisionSound;
             this.audioPlayer.Play();
