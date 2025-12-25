@@ -30,6 +30,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private AnimationPlayer animationPlayer;
     [Export] private Node3D fillObjects;
     [Export] private Node3D dropObjects;
+    [Export] private Node3D igniteObjects;
     [Export] private float tweezersDragRotationAngle = 45.0f;
     [Export] private AudioStreamPlayer3D audioPlayer;
     [Export] private AudioStream pourWaterSound;
@@ -41,6 +42,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     private Transform3D tweezersInitialTransform;
     private Transform3D matchInitialTransform;
     private AluminumReactionExperimentStep stepWhenFillAnimationStarted = AluminumReactionExperimentStep.Step01;
+    private AluminumReactionExperimentStep stepWhenIgniteAnimationStarted = AluminumReactionExperimentStep.Step01;
 
     [ExportGroup("步骤 1-2: 氢氧化钠溶液")]
     [Export] private PlacableItem sodiumHydroxideSolution;
@@ -129,6 +131,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.endUIControl != null) {
             this.endUIControl.Visible = false;
+        }
+        if (this.igniteObjects != null) {
+            this.igniteObjects.Visible = false;
         }
         if (this.completeButton != null) {
             this.completeButton.Pressed += OnCompleteButtonPressed;
@@ -538,6 +543,8 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.OnItemPlacedDone();
         } else if (animName == "drop") {
             this.OnAluminumDroppedDone();
+        } else if (animName == "ignite") {
+            this.OnIgniteDone();
         }
     }
 
@@ -821,17 +828,53 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             }
             this.ShowTestTube1CollisionLabel(false);
             this.isTestTube1Detected = true;
+            if (this.emptyReagent1 != null) {
+                this.emptyReagent1.Visible = false;
+            }
+            this.stepWhenIgniteAnimationStarted = AluminumReactionExperimentStep.Step06;
         } else if (isStepSeven) {
             if (this.isTestTube2Detected) {
                 return;
             }
             this.ShowTestTube2CollisionLabel(false);
             this.isTestTube2Detected = true;
+            if (this.emptyReagent2 != null) {
+                this.emptyReagent2.Visible = false;
+            }
+            this.stepWhenIgniteAnimationStarted = AluminumReactionExperimentStep.Step07;
+        }
+        if (this.igniteObjects != null) {
+            this.igniteObjects.Visible = true;
+        }
+        if (this.animationPlayer != null) {
+            this.animationPlayer.Play("ignite");
         }
         this.PlayGasExplosionSound();
-        this.CompleteCurrentStep();
-        if (isStepSeven && this.currentStep == AluminumReactionExperimentStep.Step08) {
-            this.ShowEndUI();
+    }
+
+    private void OnIgniteDone() {
+        if (this.stepWhenIgniteAnimationStarted == AluminumReactionExperimentStep.Step06 ||
+            this.stepWhenIgniteAnimationStarted == AluminumReactionExperimentStep.Step07) {
+            if (this.currentStep != this.stepWhenIgniteAnimationStarted) {
+                return;
+            }
+            if (this.igniteObjects != null) {
+                this.igniteObjects.Visible = false;
+            }
+            bool isStepSeven = this.stepWhenIgniteAnimationStarted == AluminumReactionExperimentStep.Step07;
+            if (this.stepWhenIgniteAnimationStarted == AluminumReactionExperimentStep.Step06) {
+                if (this.emptyReagent1 != null) {
+                    this.emptyReagent1.Visible = true;
+                }
+            } else if (isStepSeven) {
+                if (this.emptyReagent2 != null) {
+                    this.emptyReagent2.Visible = true;
+                }
+            }
+            this.CompleteCurrentStep();
+            if (isStepSeven && this.currentStep == AluminumReactionExperimentStep.Step08) {
+                this.ShowEndUI();
+            }
         }
     }
 
