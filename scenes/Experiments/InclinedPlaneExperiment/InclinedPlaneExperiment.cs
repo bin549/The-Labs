@@ -56,6 +56,10 @@ public partial class InclinedPlaneExperiment : LabItem {
     private List<ExperimentData> experimentDataList = new List<ExperimentData>();
     private int experimentCount = 0;
     private DataBoard dataBoard;
+    [ExportGroup("Audio")]
+    [Export] private AudioStreamPlayer3D audioPlayer;
+    [Export] private AudioStream cubePlaceSound;
+    [Export] private AudioStream cubeSlideSound;
      
     public override void _Ready() {
         base._Ready();
@@ -422,6 +426,7 @@ public partial class InclinedPlaneExperiment : LabItem {
         this.HideCollisionLabel(config);
         config.IsCubeInTriggerArea = false;
         this.DisableOtherCubesDrag(config);
+        this.PlayCubePlaceSound();
     }
     
     private void ResetCubeToInitialPosition(CubeObjectConfig config) {
@@ -633,6 +638,7 @@ public partial class InclinedPlaneExperiment : LabItem {
             this.SetArrowHover(config, false);
         }
         this.EnableAllCubesDrag();
+        this.PlayCubeSlideSound();
     }
     
     private void OnObjectMoveCompleted(CubeObjectConfig config) {
@@ -671,6 +677,20 @@ public partial class InclinedPlaneExperiment : LabItem {
             }
             label.Text = displayText;
             label.Visible = true;
+        }
+    }
+
+    private void PlayCubePlaceSound() {
+        if (this.audioPlayer != null && this.cubePlaceSound != null) {
+            this.audioPlayer.Stream = this.cubePlaceSound;
+            this.audioPlayer.Play();
+        }
+    }
+
+    private void PlayCubeSlideSound() {
+        if (this.audioPlayer != null && this.cubeSlideSound != null) {
+            this.audioPlayer.Stream = this.cubeSlideSound;
+            this.audioPlayer.Play();
         }
     }
 }
