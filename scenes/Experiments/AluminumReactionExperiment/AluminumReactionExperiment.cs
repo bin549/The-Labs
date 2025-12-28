@@ -31,6 +31,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
     [Export] private Node3D fillObjects;
     [Export] private Node3D dropObjects;
     [Export] private Node3D igniteObjects;
+    [Export] private Node3D strikeObjects;
     [Export] private float tweezersDragRotationAngle = 45.0f;
     [Export] private AudioStreamPlayer3D audioPlayer;
     [Export] private AudioStream pourWaterSound;
@@ -86,7 +87,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
 
     [ExportGroup("步骤 5: 火柴和木棍")]
     [Export] private SwitchablePlacableItem match;
-    [Export] private Node3D matchbox;
     [Export] private Area3D triggerAreaMatchbox;
     [Export] private Label3D collisionLabelMatchbox;
     [Export] private SwitchablePlacableItem woodenStick;
@@ -138,6 +138,9 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
         if (this.igniteObjects != null) {
             this.igniteObjects.Visible = false;
+        }
+        if (this.strikeObjects != null) {
+            this.strikeObjects.Visible = false;
         }
         if (this.completeButton != null) {
             this.completeButton.Pressed += OnCompleteButtonPressed;
@@ -447,12 +450,30 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.isMatchLit) {
             return;
         }
+        this.PlayMatchIgniteSound();
         this.ShowMatchboxCollisionLabel(false);
+        if (this.match != null) {
+            this.match.Visible = false;
+        }
+        if (this.strikeObjects != null) {
+            this.strikeObjects.Visible = true;
+        }
+        if (this.animationPlayer != null) {
+            this.animationPlayer.Play("strike");
+        }
+    }
+
+    private void OnStrikeDone() {
+        if (this.strikeObjects != null) {
+            this.strikeObjects.Visible = false;
+        }
         this.isMatchLit = true;
         if (this.match != null) {
+            this.match.GlobalTransform = this.matchInitialTransform;
+            this.match.Visible = true;
             this.match.SwitchToSwitched();
+            this.RestoreMatchRotation();
         }
-        this.PlayMatchIgniteSound();
     }
 
     private void OnWoodenStickLit() {
@@ -555,6 +576,8 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
             this.OnAluminumDroppedDone();
         } else if (animName == "ignite") {
             this.OnIgniteDone();
+        } else if (animName == "strike") {
+            this.OnStrikeDone();
         }
     }
 
