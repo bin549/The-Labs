@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://ceiflr1hdi1o4"
-path="res://.godot/imported/wood_slide.wav-5ec0a40636085c2590fab5a7699f1d4c.sample"
+path="res://.godot/imported/wood_slide.wav-79c1714f12fb9dc450768320a21cd094.sample"
 
 [deps]
 
-source_file="res://scenes/Experiments/AluminumReactionExperiment/sfx/wood_slide.wav"
-dest_files=["res://.godot/imported/wood_slide.wav-5ec0a40636085c2590fab5a7699f1d4c.sample"]
+source_file="res://scenes/Experiments/OhmsLawExperiment/voice/wood_slide.wav"
+dest_files=["res://.godot/imported/wood_slide.wav-79c1714f12fb9dc450768320a21cd094.sample"]
 
 [params]
 
