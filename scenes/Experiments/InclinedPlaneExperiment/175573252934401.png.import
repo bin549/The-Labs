@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cq8q72hx0nyrg"
-path.s3tc="res://.godot/imported/175573252934401.png-e04eefe3c55b0e6d41be52ef947c4245.s3tc.ctex"
+path.s3tc="res://.godot/imported/175573252934401.png-3a51f0cf149d45f38be2a594849b18de.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://175573252934401.png"
-dest_files=["res://.godot/imported/175573252934401.png-e04eefe3c55b0e6d41be52ef947c4245.s3tc.ctex"]
+source_file="res://scenes/Experiments/InclinedPlaneExperiment/175573252934401.png"
+dest_files=["res://.godot/imported/175573252934401.png-3a51f0cf149d45f38be2a594849b18de.s3tc.ctex"]
 
 [params]
 
