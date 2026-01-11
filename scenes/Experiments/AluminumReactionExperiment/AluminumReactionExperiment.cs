@@ -450,7 +450,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.isMatchLit) {
             return;
         }
-        this.PlayMatchIgniteSound();
+        this.isMatchLit = true;
         this.ShowMatchboxCollisionLabel(false);
         if (this.match != null) {
             this.match.Visible = false;
@@ -1148,7 +1148,7 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         }
     }
 
-    private void PlayMatchIgniteSound() {
+    public void PlayMatchIgniteSound() {
         if (this.audioPlayer != null && this.matchIgniteSound != null) {
             this.audioPlayer.Stream = this.matchIgniteSound;
             this.audioPlayer.Play();
