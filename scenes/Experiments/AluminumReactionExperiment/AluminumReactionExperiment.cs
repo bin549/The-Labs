@@ -891,7 +891,6 @@ public partial class AluminumReactionExperiment : StepExperimentLabItem<Aluminum
         if (this.animationPlayer != null) {
             this.animationPlayer.Play("ignite");
         }
-        this.PlayGasExplosionSound();
     }
 
     private void OnIgniteDone() {
