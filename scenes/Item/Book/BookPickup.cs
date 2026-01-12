@@ -76,20 +76,20 @@ public partial class BookPickup : Interactable {
 
 	private void ResolvePlayerAndCamera() {
 		if (this.playerNode == null || !GodotObject.IsInstanceValid(this.playerNode)) {
-			this.playerNode = ResolveNodePath(NodePathIsValid(PlayerPath) ? PlayerPath : default, this) ??
+			this.playerNode = this.ResolveNodePath(NodePathIsValid(PlayerPath) ? PlayerPath : default, this) ??
 				GetTree().Root.GetNodeOrNull<Node3D>("World/Player") ??
 				GetTree().Root.FindChild("Player", true, false) as Node3D;
 		}
 		if (this.playerNode != null && (this.playerBook == null || !GodotObject.IsInstanceValid(this.playerBook))) {
 			if (NodePathIsValid(PlayerBookPath)) {
-				this.playerBook = ResolveNodePath(PlayerBookPath, this.playerNode);
+				this.playerBook = this.ResolveNodePath(PlayerBookPath, this.playerNode);
 			}
 			this.playerBook ??= this.playerNode.FindChild("Book", true, false) as Node3D;
 		}
 		if (this.playerBook != null && (this.phantomCamera == null || !GodotObject.IsInstanceValid(this.phantomCamera.Node3D))) {
 			Node3D phantomNode = null;
 			if (NodePathIsValid(PhantomCameraPath)) {
-				phantomNode = ResolveNodePath(PhantomCameraPath, this.playerBook) ?? ResolveNodePath(PhantomCameraPath, this);
+				phantomNode = this.ResolveNodePath(PhantomCameraPath, this.playerBook) ?? this.ResolveNodePath(PhantomCameraPath, this);
 			}
 			phantomNode ??= this.playerBook.FindChild("PhantomCamera3D", true, false) as Node3D;
 			this.phantomCamera = phantomNode.AsPhantomCamera3D();
@@ -99,7 +99,7 @@ public partial class BookPickup : Interactable {
 	private void ResolvePickupVisual() {
 		if (this.pickupVisualRoot != null && GodotObject.IsInstanceValid(this.pickupVisualRoot)) return;
 		if (NodePathIsValid(PickupVisualRootPath)) {
-			this.pickupVisualRoot = ResolveNodePath(PickupVisualRootPath, this);
+			this.pickupVisualRoot = this.ResolveNodePath(PickupVisualRootPath, this);
 		}
 		this.pickupVisualRoot ??= this;
 	}

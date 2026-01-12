@@ -71,7 +71,7 @@ public partial class MoviePlayer : Interactable {
         }
         if (this.isPlaying) {
             if (Input.IsActionJustPressed("ui_down")) {
-                PausePlayback();
+                this.PausePlayback();
             } else if (Input.IsActionJustPressed("ui_left")) {
                 this.SwitchVideo(-1);
             } else if (Input.IsActionJustPressed("ui_right")) {
@@ -112,7 +112,7 @@ public partial class MoviePlayer : Interactable {
         this.ConnectVideoSignals();
         this.videoPlayer.Autoplay = false;
         this.videoPlayer.Stop();
-        if (ResetOnStop) {
+        if (this.ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
         this.originalStream = this.videoPlayer.Stream;
@@ -248,10 +248,10 @@ public partial class MoviePlayer : Interactable {
             this.AssignStream(targetIndex, true);
         } else if (this.videoPlayer.Stream == null && this.originalStream != null) {
             this.videoPlayer.Stream = this.originalStream;
-            if (ResetOnStop) {
+            if (this.ResetOnStop) {
                 this.videoPlayer.StreamPosition = 0;
             }
-        } else if (ResetOnStop) {
+        } else if (this.ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
     }
@@ -302,7 +302,7 @@ public partial class MoviePlayer : Interactable {
         if (needUpdate) {
             this.videoPlayer.Stream = stream;
         }
-        if (resetPosition || ResetOnStop) {
+        if (resetPosition || this.ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
         this.currentStreamIndexh = wrappedIndex;
@@ -312,7 +312,7 @@ public partial class MoviePlayer : Interactable {
 
     private void ClearVideoFrame() {
         if (this.videoPlayer == null) return;
-        if (ResetOnStop) {
+        if (this.ResetOnStop) {
             this.videoPlayer.StreamPosition = 0;
         }
         this.videoPlayer.Paused = false;

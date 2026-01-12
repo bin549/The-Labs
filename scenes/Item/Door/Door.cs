@@ -21,7 +21,7 @@ public partial class Door : Node3D {
         this.ResolveDoorPivot();
         this.ResolveTriggerArea();
         this.disOpen = this.StartsOpen;
-        this.ApplyDoorRotation(this.disOpen ? OpenRotationDegrees : ClosedRotationDegrees);
+        this.ApplyDoorRotation(this.disOpen ? this.OpenRotationDegrees : this.ClosedRotationDegrees);
     }
 
     private void ResolveTriggerArea() {
@@ -76,8 +76,8 @@ public partial class Door : Node3D {
     private void AnimateDoor(bool open) {
         this.disOpen = open;
         this.KillTween();
-        var targetRotation = open ? OpenRotationDegrees : ClosedRotationDegrees;
-        if (TransitionDuration <= Mathf.Epsilon) {
+        var targetRotation = open ? this.OpenRotationDegrees : this.ClosedRotationDegrees;
+        if (this.TransitionDuration <= Mathf.Epsilon) {
             this.ApplyDoorRotation(targetRotation);
             return;
         }
@@ -85,8 +85,8 @@ public partial class Door : Node3D {
         tween.SetParallel(false);
         tween.SetEase(EaseType);
         tween.SetTrans(TransitionType);
-        tween.TweenProperty(this.doorPivot, "rotation_degrees", targetRotation, TransitionDuration);
-        tween.Finished += OnTweenFinished;
+        tween.TweenProperty(this.doorPivot, "rotation_degrees", targetRotation, this.TransitionDuration);
+        tween.Finished += this.OnTweenFinished;
         this.rotationTween = tween;
     }
 
@@ -108,7 +108,7 @@ public partial class Door : Node3D {
     }
 
     private void PlaySound(bool opening) {
-        var player = opening ? OpenSound : CloseSound;
+        var player = opening ? this.OpenSound : this.CloseSound;
         if (player == null) return;
         player.Stop();
         player.Play();
@@ -116,7 +116,7 @@ public partial class Door : Node3D {
 
     private void KillTween() {
         if (this.rotationTween == null) return;
-        this.rotationTween.Finished -= OnTweenFinished;
+        this.rotationTween.Finished -= this.OnTweenFinished;
         this.rotationTween.Kill();
         this.rotationTween = null;
     }

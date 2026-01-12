@@ -35,11 +35,11 @@ public partial class PlayerMovement : CharacterBody3D {
         Vector3 velocity = Velocity;
         bool onFloor = IsOnFloor();
         if (!onFloor)
-            velocity.Y -= gravity * (float)delta;
+            velocity.Y -= this.gravity * (float)delta;
         bool interacting = IsInteracting;
         if (onFloor) {
             if (Input.IsActionJustPressed("jump")) {
-                velocity.Y = JUMP_VELOCITY;
+                velocity.Y = this.JUMP_VELOCITY;
                 this.isJumping = true;
                 this.PlayAnimation("jump");
             } else if (this.isJumping) {
@@ -52,7 +52,7 @@ public partial class PlayerMovement : CharacterBody3D {
             ? Vector2.Zero
             : Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         bool isRunning = !interacting && Input.IsActionPressed("run");
-        float speed = isRunning ? RunSpeed : WalkSpeed;
+        float speed = isRunning ? this.RunSpeed : this.WalkSpeed;
         Node3D cameraPivot = GetNode<Node3D>("CameraPivot");
         Basis camBasis = cameraPivot.GlobalTransform.Basis;
         Vector3 forward = camBasis.Z;
@@ -78,7 +78,7 @@ public partial class PlayerMovement : CharacterBody3D {
             this.PlayAnimation(isRunning ? "run" : "walk");
         } else {
             this.PlayAnimation("idle");
-            float stopSpeed = interacting ? Mathf.Max(WalkSpeed, RunSpeed) : speed;
+            float stopSpeed = interacting ? Mathf.Max(this.WalkSpeed, this.RunSpeed) : speed;
             velocity.X = Mathf.MoveToward(velocity.X, 0, stopSpeed);
             velocity.Z = Mathf.MoveToward(velocity.Z, 0, stopSpeed);
         }

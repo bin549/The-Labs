@@ -60,9 +60,9 @@ public partial class Interactable : Node3D {
     public override void _Process(double delta) {
         if (this.useCurvedArrow) {
             this.UpdateCurvedArrow();
-            if (lineRoot != null) lineRoot.Visible = false;
+            if (this.lineRoot != null) this.lineRoot.Visible = false;
         } else {
-            if (curveRoot != null) curveRoot.Visible = false;
+            if (this.curveRoot != null) this.curveRoot.Visible = false;
             this.UpdateLineSegment();
         }
         if (Input.IsActionJustPressed("interact") && this.isFocus &&
@@ -142,32 +142,32 @@ public partial class Interactable : Node3D {
 
     private void InitLineSegment() {
         var parent = this.lineNode ?? (Node3D)this;
-        lineRoot = new Node3D();
-        lineRoot.Name = "AutoLine";
-        parent.AddChild(lineRoot);
-        lineMeshInstance = new MeshInstance3D();
-        lineMeshInstance.Name = "AutoLineMesh";
-        lineBoxMesh = new BoxMesh();
-        lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
-        lineMeshInstance.Mesh = lineBoxMesh;
-        lineMaterial = new StandardMaterial3D();
-        lineMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-        lineMaterial.AlbedoColor = lineColor;
-        lineMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
-        lineMaterial.EmissionEnabled = true;
-        lineMaterial.Emission = lineColor;
-        lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
-        lineMeshInstance.MaterialOverride = lineMaterial;
-        lineMeshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
-        lineRoot.AddChild(lineMeshInstance);
+        this.lineRoot = new Node3D();
+        this.lineRoot.Name = "AutoLine";
+        parent.AddChild(this.lineRoot);
+        this.lineMeshInstance = new MeshInstance3D();
+        this.lineMeshInstance.Name = "AutoLineMesh";
+        this.lineBoxMesh = new BoxMesh();
+        this.lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
+        this.lineMeshInstance.Mesh = this.lineBoxMesh;
+        this.lineMaterial = new StandardMaterial3D();
+        this.lineMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+        this.lineMaterial.AlbedoColor = lineColor;
+        this.lineMaterial.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+        this.lineMaterial.EmissionEnabled = true;
+        this.lineMaterial.Emission = lineColor;
+        this.lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
+        this.lineMeshInstance.MaterialOverride = this.lineMaterial;
+        this.lineMeshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+        this.lineRoot.AddChild(this.lineMeshInstance);
     }
 
     private void UpdateLineSegment() {
         var a = GetNodeOrNull<Node3D>(linePointAPath);
         var b = GetNodeOrNull<Node3D>(linePointBPath);
-        if (lineRoot == null || lineMeshInstance == null) return;
+        if (this.lineRoot == null || this.lineMeshInstance == null) return;
         if (a == null || b == null) {
-            lineRoot.Visible = false;
+            this.lineRoot.Visible = false;
             return;
         }
         Vector3 start = a.GlobalTransform.Origin;
@@ -175,37 +175,37 @@ public partial class Interactable : Node3D {
         Vector3 dir = end - start;
         float len = dir.Length();
         if (len < 0.001f) {
-            lineRoot.Visible = false;
+            this.lineRoot.Visible = false;
             return;
         }
-        lineRoot.Visible = true;
+        this.lineRoot.Visible = true;
         Vector3 mid = (start + end) * 0.5f;
-        lineRoot.GlobalPosition = mid;
-        lineRoot.LookAt(mid + dir, Vector3.Up);
-        lineMeshInstance.Scale = new Vector3(1.0f, 1.0f, len);
-        if (lineBoxMesh != null) {
-            lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
+        this.lineRoot.GlobalPosition = mid;
+        this.lineRoot.LookAt(mid + dir, Vector3.Up);
+        this.lineMeshInstance.Scale = new Vector3(1.0f, 1.0f, len);
+        if (this.lineBoxMesh != null) {
+            this.lineBoxMesh.Size = new Vector3(this.lineThickness * 2.0f, this.lineThickness * 2.0f, 1.0f);
         }
-        if (lineMaterial != null) {
-            lineMaterial.AlbedoColor = lineColor;
-            lineMaterial.Emission = lineColor;
-            lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
+        if (this.lineMaterial != null) {
+            this.lineMaterial.AlbedoColor = lineColor;
+            this.lineMaterial.Emission = lineColor;
+            this.lineMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
         }
     }
 
     private void InitCurvedArrow() {
         var parent = this.lineNode ?? (Node3D)this;
-        curveRoot = new Node3D();
-        curveRoot.Name = "AutoCurvedArrow";
-        parent.AddChild(curveRoot);
-        curveBodyInstance = new MultiMeshInstance3D();
-        curveBody = new MultiMesh();
+        this.curveRoot = new Node3D();
+        this.curveRoot.Name = "AutoCurvedArrow";
+        parent.AddChild(this.curveRoot);
+        this.curveBodyInstance = new MultiMeshInstance3D();
+        this.curveBody = new MultiMesh();
         this.curveSegmentMesh = new BoxMesh();
         this.curveSegmentMesh.Size = new Vector3(this.lineThickness * curveThicknessMultiplier, 1.0f,
             this.lineThickness * curveThicknessMultiplier);
-        curveBody.Mesh = this.curveSegmentMesh;
-        curveBody.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
-        curveBodyInstance.Multimesh = curveBody;
+        this.curveBody.Mesh = this.curveSegmentMesh;
+        this.curveBody.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
+        this.curveBodyInstance.Multimesh = this.curveBody;
         this.curveMaterial = new StandardMaterial3D();
         this.curveMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
         this.curveMaterial.AlbedoColor = lineColor;
@@ -213,9 +213,9 @@ public partial class Interactable : Node3D {
         this.curveMaterial.EmissionEnabled = true;
         this.curveMaterial.Emission = lineColor;
         this.curveMaterial.EmissionEnergyMultiplier = this.lineGlowStrength;
-        curveBodyInstance.MaterialOverride = this.curveMaterial;
-        curveBodyInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
-        curveRoot.AddChild(curveBodyInstance);
+        this.curveBodyInstance.MaterialOverride = this.curveMaterial;
+        this.curveBodyInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+        this.curveRoot.AddChild(this.curveBodyInstance);
         this.arrowHeadInstance = new MeshInstance3D();
         this.arrowConeMesh = new CylinderMesh();
         var arrowRadius = Mathf.Max(this.lineThickness * this.arrowThicknessMultiplier, 0.002f);
@@ -233,7 +233,7 @@ public partial class Interactable : Node3D {
         headMat.Emission = lineColor;
         headMat.EmissionEnergyMultiplier = this.lineGlowStrength;
         this.arrowHeadInstance.MaterialOverride = headMat;
-        curveRoot.AddChild(this.arrowHeadInstance);
+        this.curveRoot.AddChild(this.arrowHeadInstance);
     }
 
     private static Vector3 BezierQuadratic(Vector3 a, Vector3 c, Vector3 b, float t) {
@@ -258,23 +258,23 @@ public partial class Interactable : Node3D {
     }
 
     private void UpdateCurvedArrow() {
-        if (curveRoot == null || curveBodyInstance == null) return;
+        if (this.curveRoot == null || this.curveBodyInstance == null) return;
         var a = GetNodeOrNull<Node3D>(linePointAPath);
         var b = GetNodeOrNull<Node3D>(linePointBPath);
         if (a == null || b == null) {
-            curveRoot.Visible = false;
+            this.curveRoot.Visible = false;
             return;
         }
-        curveRoot.Visible = true;
+        this.curveRoot.Visible = true;
         Vector3 start = a.GlobalTransform.Origin;
         Vector3 end = b.GlobalTransform.Origin;
         Vector3 mid = (start + end) * 0.5f;
         Vector3 control = mid + Vector3.Up * bendHeight;
         int segs = Mathf.Clamp(segmentCount, 2, 256);
-        curveBody.InstanceCount = segs;
+        this.curveBody.InstanceCount = segs;
         float dt = 1.0f / segs;
         var up = Vector3.Up;
-        var invRoot = curveRoot.GlobalTransform.AffineInverse();
+        var invRoot = this.curveRoot.GlobalTransform.AffineInverse();
         for (int i = 0; i < segs; i++) {
             float t0 = i * dt;
             float t1 = (i + 1) * dt;
@@ -289,7 +289,7 @@ public partial class Interactable : Node3D {
             var basis = len < 0.0001f ? Basis.Identity : BuildBasisYAligned(segDir, up);
             var scaled = basis.Scaled(new Vector3(this.lineThickness, Mathf.Max(len, 0.0001f), this.lineThickness));
             var globalXform = new Transform3D(scaled, segMid);
-            curveBody.SetInstanceTransform(i, invRoot * globalXform);
+            this.curveBody.SetInstanceTransform(i, invRoot * globalXform);
         }
         if (this.curveSegmentMesh != null) {
             this.curveSegmentMesh.Size = new Vector3(this.lineThickness * curveThicknessMultiplier, 1.0f,

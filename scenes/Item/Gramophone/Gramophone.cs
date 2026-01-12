@@ -41,12 +41,12 @@ public partial class Gramophone : Interactable {
     private void ResolveAudioPlayer() {
         var previousPlayer = this.audioPlayer;
         AudioStreamPlayer3D resolvedPlayer = null;
-        if (AudioPlayerPath.GetNameCount() == 0) {
+        if (this.AudioPlayerPath.GetNameCount() == 0) {
             resolvedPlayer = GetNodeOrNull<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         } else {
-            resolvedPlayer = GetNodeOrNull<AudioStreamPlayer3D>(AudioPlayerPath);
+            resolvedPlayer = GetNodeOrNull<AudioStreamPlayer3D>(this.AudioPlayerPath);
             if (resolvedPlayer == null) {
-                resolvedPlayer = GetTree().Root.GetNodeOrNull<AudioStreamPlayer3D>(AudioPlayerPath);
+                resolvedPlayer = GetTree().Root.GetNodeOrNull<AudioStreamPlayer3D>(this.AudioPlayerPath);
             }
         }
         if (previousPlayer != null && previousPlayer != resolvedPlayer) {

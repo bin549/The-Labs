@@ -50,8 +50,8 @@ public partial class Picture : Interactable {
     private void ShowTexture(bool visible) {
         if (this.textureRect == null) return;
         if (visible) {
-            if (PhotoTexture != null) {
-                this.textureRect.Texture = PhotoTexture;
+            if (this.PhotoTexture != null) {
+                this.textureRect.Texture = this.PhotoTexture;
             }
         } else {
             this.textureRect.Texture = this.originalTexture;

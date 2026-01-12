@@ -28,7 +28,7 @@ public partial class ConnectionManager : Node3D {
     }
 
     private void HandleLeftClick(Vector2 mousePos) {
-        var rayResult = PerformRaycast(mousePos);
+        var rayResult = this.PerformRaycast(mousePos);
         if (rayResult == null || rayResult.Count == 0 || !rayResult.ContainsKey("collider")) {
             if (this.selectedNode != null) {
                 this.selectedNode.IsSelected = false;
