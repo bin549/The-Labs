@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=3 format=4 uid="uid://chhc4lqp3v58i"]
+[gd_resource type="ArrayMesh" format=4 uid="uid://chhc4lqp3v58i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a56v0"]
 resource_name = "vidrio"
