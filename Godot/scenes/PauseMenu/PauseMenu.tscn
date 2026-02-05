@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3 uid="uid://bigqesy83pc7m"]
+
+[ext_resource type="Script" uid="uid://bdmar3sn531o0" path="res://scenes/PauseMenu/PauseMenu.cs" id="1_slfc8"]
+
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("_panel", "ResumeBtn", "QuitBtn")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_slfc8")
+_panel = NodePath(".")
+ResumeBtn = NodePath("Panel/VBox/Resume")
+QuitBtn = NodePath("Panel/VBox/Quit")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 300.0
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 380.0
+offset_bottom = 280.0
+
+[node name="Resume" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "继续"
+
+[node name="Quit" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "退出"

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Godot.NET.Sdk/4.6.0">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>TheLabs</RootNamespace>
+    <DefineConstants>$(DefineConstants);TEXT_ANIMATOR_ENABLED</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Shared">
+      <HintPath>addons/TextAnimatorForGodot/Library/Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
