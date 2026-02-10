@@ -5,15 +5,5 @@
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>TheLabs</RootNamespace>
-    <DefineConstants>$(DefineConstants);TEXT_ANIMATOR_ENABLED</DefineConstants>
   </PropertyGroup>
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup>
-    <Reference Include="Shared">
-      <HintPath>addons/TextAnimatorForGodot/Library/Shared.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
