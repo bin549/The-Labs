@@ -21,7 +21,7 @@ public partial class ConnectableNode : Node3D {
             }
         }
     }
-
+    
     public bool IsHovered {
         get => this.isHovered;
         set {

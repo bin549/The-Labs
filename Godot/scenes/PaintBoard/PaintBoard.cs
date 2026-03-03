@@ -30,7 +30,6 @@ public partial class PaintBoard : Interactable {
             this.painterImage = GetNodeOrNull<PainterImage>(this.painterImagePath);
         }
         if (this.painterImage == null) return;
-        
         var clearButton = this.painterImage.GetNodeOrNull<Button>("../Panel/ClearButton");
         if (clearButton != null) {
             clearButton.Pressed += OnClearButtonPressed;
